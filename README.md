@@ -12,5 +12,6 @@ When you pull code, within _/client_ and _/server_ run `npm i`
 
 # Running code
 
-To run the client, run `npm start` within /client
+To run the client, run `npm start` within /client.
+
 To run the server, run `nodemon index.js` within /server
