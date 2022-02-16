@@ -8,7 +8,7 @@ You will need node, npm, and nodemon to run this project.
 
 # Setup
 
-When you pull code, within /client and /server run `npm i`
+When you pull code, within _/client_ and _/server_ run `npm i`
 
 # Running code
 
