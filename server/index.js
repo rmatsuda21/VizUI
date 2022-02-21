@@ -1,26 +1,50 @@
 // server/index.js
 const express = require("express");
+const { Server } = require("socket.io");
+const http = require("http");
 require("dotenv").config();
+
+const dbo = require("./db/conn");
+
+const dbCleanup = () => {
+    dbo.cleanUpServer();
+};
 
 const PORT = process.env.PORT || 3001;
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 
-const dbo = require("./db/conn");
-const cors = require("cors");
+var SOCKET;
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
-
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
     dbo.connectToServer(() => {
         console.log("Success!");
     });
+})
+
+io.on("connection", (socket) => {
+    console.log("User connected");
+    SOCKET = socket
 });
+
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+    next();
+});
+
+// app.listen(PORT, () => {
+//     console.log(`Server listening on ${PORT}`);
+//     dbo.connectToServer(() => {
+//         console.log("Success!");
+//     });
+// });
 
 app.get("/", async (req, res) => {
     const dbConnect = dbo.getDb();
@@ -36,3 +60,8 @@ app.get("/", async (req, res) => {
             }
         });
 });
+
+app.get('/test', async (req, res) => {
+    console.log('DKWNAJD')
+    SOCKET.emit('TEST')
+})
