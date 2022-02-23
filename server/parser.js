@@ -1,19 +1,20 @@
 const {XMLParser, XMLBuilder, XMLValidator} = require('fast-xml-parser')
 const fs = require('fs')
 
-try {
-	const xmlDataStr = fs.readFileSync('test.xml', 'utf8')
-	console.log(xmlDataStr)
+const options = {ignoreAttributes: false}
 
-	const parser = new XMLParser()
-	let jsonObj = parser.parse(xmlDataStr)
-	console.log(jsonObj)
+try
+{
+  const xmlDataStr = fs.readFileSync('form.ui', 'utf8')
 
-	const builder = new XMLBuilder()
-	let xmlData = builder.build(jsonObj)
-	console.log(xmlData)
-} catch (err) {
-	console.error(err)
+  const parser = new XMLParser(options)
+  let jsonObj = parser.parse(xmlDataStr)
+
+  fs.writeFileSync('test.json', JSON.stringify(jsonObj))
+}
+catch (err)
+{
+  console.error(err)
 }
 
 
