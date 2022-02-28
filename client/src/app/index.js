@@ -4,7 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from "../components/Home";
 import View from "../components/View";
 
-function App() {
+export function App() {
     return (
         <Routes>
             <Route exact path="/" element={<Home />} />
@@ -13,4 +13,4 @@ function App() {
     );
 }
 
-export default App;
+// export default App;
