@@ -1,7 +1,7 @@
 import '../stylesheets/view.css';
 import React from 'react'
 
-import App from "../template/src/App"
+import App from "./AppView"
 
 import apis from "../api";
 
