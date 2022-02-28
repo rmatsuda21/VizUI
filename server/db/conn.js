@@ -22,6 +22,12 @@ module.exports = {
     });
   },
 
+  cleanUpServer: function () {
+      client.close(() => {
+          console.log('Client Closed!')
+      });
+  },
+
   getDb: function () {
     return dbConnection;
   },
