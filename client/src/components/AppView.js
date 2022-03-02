@@ -25,7 +25,7 @@ function parseProperties(properties) {
         obj[key] = property.enum;
         break;
       default:
-        // console.log("New property type: " + key)
+        console.log("New property type: " + key)
         break;
     }
   })
