@@ -10,6 +10,7 @@ function parseProperties(properties) {
     console.log("Property type: " + key)
     switch (key) {
       case "geometry":
+        obj["geometry"] = true
         obj["x"] = property.rect.x
         obj["y"] = property.rect.y
         obj["width"] = property.rect.width
@@ -36,40 +37,30 @@ function App() {
 
   const data = require("../test.json");
 
-
-  const widgets_data = data.ui.widget.widget
-
-  // console.log(widgets_data)
-
-  // app.push(<MySlider key={1} label="Test Slider" interval={5} position={0}/>)
-  // app.push(<br />)
-  // app.push(<><MyButton key={1} label="Test Button"></MyButton><br /></>)
-
-  var widgets = widgets_data.map(function(object, i){
+  var widgets = data.ui.widget.widget.map(function(object, i){
     let name = object["@_name"];
     let className = object["@_class"];
     let properties = parseProperties(object.property);
-    // console.log(properties)
 
     switch (className) {
       case 'QSlider':
         let interval = properties.singleStep || 1
         let min = properties.minimum || 0
         let max = properties.maximum || 100
-        return <MySlider key={i} label={name} name={name} interval={interval} min={min} max={max} position={0}/>
+        return <MySlider key={i} label={name} name={name} interval={interval} min={min} max={max} position={0}
+                          x={properties.x ? properties.x : undefined} y={properties.y ? properties.y : undefined}
+                          width={properties.width ? properties.width : undefined}
+                          height={properties.height ? properties.height : undefined}/>
       case 'QPushButton':
-        return <MyButton key={i} label={name} name={name}></MyButton>
+        return <MyButton key={i} label={name} name={name} 
+                  x={properties.x ? properties.x : undefined} 
+                  y={properties.y ? properties.y : undefined} 
+                  width={properties.width ? properties.width : undefined} 
+                  height={properties.height ? properties.height : undefined}></MyButton>
       default:
         return <p key={i}>{object["@_class"]}</p>
     }
-    // return <div className={"row"} key={i}> 
-    //           {if}
-    //        </div>; 
   })
-
-  // console.log(data)
-
-
 
   return (
 
