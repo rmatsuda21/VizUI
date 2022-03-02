@@ -16,6 +16,8 @@ function MySlider(props) {
       <Slider 
           defaultValue = {props.position}
           step = {props.interval}
+          min = {props.min}
+          max = {props.max}
           style = {sliderStyle}
           valueLabelDisplay="on"
           sx={{
