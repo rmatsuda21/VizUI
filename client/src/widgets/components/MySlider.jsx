@@ -11,11 +11,14 @@ function MySlider(props) {
 
   return (
     <>
+    {/* props.geometry contains props.geometry.x, y, width, and height */}
     <div id="wrapper">
-      <Typography gutterBottom>{props.label}</Typography>
+      <Typography gutterBottom>{props.name}</Typography>
       <Slider 
           defaultValue = {props.position}
           step = {props.interval}
+          min = {props.min}
+          max = {props.max}
           style = {sliderStyle}
           valueLabelDisplay="on"
           sx={{
