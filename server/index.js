@@ -15,20 +15,24 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-var SOCKET;
-
 server.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
     // dbo.connectToServer(() => {
     //     console.log("Success!");
     // });
-});
+})  
 
 io.on("connection", (socket) => {
     console.log("User connected");
     SOCKET = socket;
 
-    // This is where you can setup socket handlers (socket.on())
+    socket.on('date', () => {
+        socket.emit('date', new Date());
+    });
+
+    socket.on('disconnect', () => {
+      console.log('user disconnected');
+    });
 });
 
 app.use(function (req, res, next) {

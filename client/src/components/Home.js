@@ -8,14 +8,23 @@ import Button from "@mui/material/Button";
 const { Component } = require("react");
 
 class Home extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             selectedFile: {},
         };
     }
 
     render() {
+        this.props.socket.on('date', (date) => {
+            console.log(date)
+        })
+
+        const getDate = (e) => {
+            e.preventDefault();
+            this.props.socket.emit('date')
+        }
+    
         console.log(this.state.selectedFile);
 
         const handleFileInput = (e) => {
