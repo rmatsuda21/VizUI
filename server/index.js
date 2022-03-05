@@ -15,18 +15,23 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-var SOCKET;
-
 server.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
     dbo.connectToServer(() => {
         console.log("Success!");
     });
-})
+})  
 
 io.on("connection", (socket) => {
     console.log("User connected");
-    SOCKET = socket
+
+    socket.on('date', () => {
+        socket.emit('date', new Date());
+    });
+
+    socket.on('disconnect', () => {
+      console.log('user disconnected');
+    });
 });
 
 app.use(function (req, res, next) {
@@ -60,8 +65,3 @@ app.get("/", async (req, res) => {
             }
         });
 });
-
-app.get('/test', async (req, res) => {
-    console.log('DKWNAJD')
-    SOCKET.emit('TEST')
-})

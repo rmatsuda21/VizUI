@@ -6,14 +6,23 @@ import apis from "../api";
 const { Component } = require("react");
 
 class Home extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             selectedFile: {}
         }
     }
 
   render() {
+
+    this.props.socket.on('date', (date) => {
+        console.log(date)
+    })
+
+    const getDate = (e) => {
+        e.preventDefault();
+        this.props.socket.emit('date')
+    }
 
     const handleFileInput = (e) => {
         e.preventDefault();
@@ -37,6 +46,8 @@ class Home extends Component {
         apis.convertXML(formData)
             .then((window.location = "/edit"))
             .catch((err) => console.log(err));
+
+        
     };
 
     return (
@@ -46,6 +57,7 @@ class Home extends Component {
             <input type="file" accept=".xml" onChange={handleFileInput}/>
             <button onClick={handleSubmit}>Submit</button>
         </form>
+        <button onClick={getDate}>date pls</button>
         </div>
     );
   }
