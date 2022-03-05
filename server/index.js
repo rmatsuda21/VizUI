@@ -41,6 +41,21 @@ app.use(function (req, res, next) {
     next();
 });
 
+// add a document to the DB collection recording the click event
+app.post('/clicked', (req, res) => {
+    const click = {clickTime: new Date()};
+    console.log(click);
+    console.log(db);
+  
+    db.collection('clicks').save(click, (err, result) => {
+      if (err) {
+        return console.log(err);
+      }
+      console.log('click added to db');
+      res.sendStatus(400);
+    });
+  });
+
 app.use(
     express.urlencoded({
         extended: true,
