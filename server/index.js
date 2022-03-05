@@ -69,29 +69,36 @@ app.get("/test", (req, res) => {
 
 app.get("/testdb/:dbname?", async (req, res) => {
     try {
-        await dbo.createCollection(req.params.dbname || "DEFROUTEHEHEXD", "JUSTATESTMAN");
+        await dbo.createCollection(
+            req.params.dbname || "DEFROUTEHEHEXD",
+            "JUSTATESTMAN"
+        );
         console.log("GOOD");
         res.send("GOOD");
-    } catch (e){
-        console.log(e)
-        res.send('BAD')
+    } catch (e) {
+        console.log(e);
+        res.send("BAD");
     }
 });
 
 app.get("/dbwrite/:db_name/:collection_name", async (req, res) => {
     try {
-        await dbo.writeToCollection(req.params.db_name, req.params.collection_name, [{name: "test"}]);
+        await dbo.writeToCollection(
+            req.params.db_name,
+            req.params.collection_name,
+            [{ name: "test" }]
+        );
         console.log("GOOD");
         res.send("GOOD");
-    } catch (e){
-        console.log(e)
-        res.send('BAD')
+    } catch (e) {
+        console.log(e);
+        res.send("BAD");
     }
 });
 
 // Uploading UI File
-const UPLOAD_DESTINATION = './uploads/UI'
-const JSON_DESTINATION = './uploads/JSON'
+const UPLOAD_DESTINATION = "./uploads/UI";
+const JSON_DESTINATION = "./uploads/JSON";
 
 const multer = require("multer");
 const { parseUIFile } = require("./parser");
@@ -107,8 +114,18 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.post("/api/convert", upload.single("uiFile"), (req, res) => {
-    let filename = req.file.filename, path = req.file.path;
-    parseUIFile(path, filename, JSON_DESTINATION)
+    let filename = req.file.filename,
+        path = req.file.path;
+    parseUIFile(path, filename, JSON_DESTINATION);
 
-    res.redirect('/view')
+    console.log(filename);
+
+    res.redirect(`/view/${filename}`);
+});
+
+app.get("/api/get-json/:id", (req, res) => {
+    const data = require(JSON_DESTINATION + `/${req.params.id}.json`);
+
+    res.header("Content-Type", "application/json");
+    res.send(JSON.stringify(data));
 });
