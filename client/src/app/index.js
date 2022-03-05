@@ -8,7 +8,7 @@ export function App() {
     return (
         <Routes>
             <Route exact path="/" element={<Home />} />
-            <Route exact path="/view" element={<View />} />
+            <Route exact path="/view/:id" element={<View />} />
         </Routes>
     );
 }
