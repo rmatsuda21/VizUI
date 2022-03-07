@@ -4,8 +4,27 @@ import React from "react";
 import apis from "../api";
 
 import Button from "@mui/material/Button";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Typography from "@mui/material/Typography";
+import { Box, boxSizing } from "@mui/system";
+import { Container } from "@mui/material";
 
 const { Component } = require("react");
+
+const theme = createTheme();
+theme.typography = {
+    fontFamily: "LeagueSpartan",
+    h1: {
+        fontWeight: 1000,
+        fontSize: "3.5em",
+    },
+
+    button: { fontWeight: 800 },
+};
+
+const isEmpty = (file) => {
+    return file.name ? false : true;
+};
 
 class Home extends Component {
     constructor(props) {
@@ -15,17 +34,17 @@ class Home extends Component {
         };
     }
 
-    render() {
-        this.props.socket.on('date', (date) => {
-            console.log(date)
+    componentDidMount() {
+        this.props.socket.on("date", (date) => {
+            console.log(date);
         })
+    }
 
+    render() {
         const getDate = (e) => {
             e.preventDefault();
-            this.props.socket.emit('date')
+            this.props.socket.emit("date");
         }
-    
-        console.log(this.state.selectedFile);
 
         const handleFileInput = (e) => {
             e.preventDefault();
@@ -49,30 +68,79 @@ class Home extends Component {
         };
 
         return (
-            <div className="App">
-                <header>
-                    <h1>XML Converter</h1>
-                </header>
-                <form
-                    action="/api/convert"
-                    encType="multipart/form-data"
-                    method="post"
+            <ThemeProvider theme={theme}>
+                <Box
+                    sx={{
+                        width: "100%",
+                        height: "100vh",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        paddingBlock: "10em",
+                        flexDirection: "column",
+                        border: "3px solid white",
+                        boxSizing: "border-box",
+                        color: "white",
+                    }}
                 >
-                    <Button variant="contained" component="label">
-                        Upload File
-                        <input
-                            type="file"
-                            accept=".ui"
-                            name="uiFile"
-                            onChange={handleFileInput}
-                            hidden
-                        />
+                    <Typography variant="h1">VizUI</Typography>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            padding: "3em 4em",
+                            borderRadius: "15px",
+                            gap: "1em",
+                            backgroundColor: "#102841",
+                            transition: 'box-shadow .1s ease-in-out',
+                            '&:hover': {
+                                boxShadow: '0px 0px 7px 1px #102841'
+                            }
+                        }}
+                    >
+                        <Typography variant="h3">
+                            {isEmpty(this.state.selectedFile)
+                                ? "No File Selected"
+                                : `${this.state.selectedFile.name}`}
+                        </Typography>
+                        <Box
+                            component="form"
+                            action="/api/convert"
+                            encType="multipart/form-data"
+                            method="post"
+                            sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                gap: "2em",
+                            }}
+                        >
+                            <Button variant="contained" component="label">
+                                Select File
+                                <input
+                                    type="file"
+                                    accept=".ui"
+                                    name="uiFile"
+                                    onChange={handleFileInput}
+                                    hidden
+                                    required
+                                />
+                            </Button>
+                            <Button
+                                type="submit"
+                                color="success"
+                                variant="contained"
+                                disabled={isEmpty(this.state.selectedFile)}
+                            >
+                                Submit
+                            </Button>
+                        </Box>
+                    </Box>
+                    <Button variant="outlined" onClick={getDate}>
+                        Date Please :3
                     </Button>
-                    <Button type="submit" variant="contained">
-                        Submit
-                    </Button>
-                </form>
-            </div>
+                </Box>
+            </ThemeProvider>
         );
     }
 }
