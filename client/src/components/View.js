@@ -1,4 +1,5 @@
-import "../stylesheets/view.css";
+// import "../stylesheets/view.css";
+import JSConfetti from "js-confetti";
 import React from "react";
 import { useParams } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -11,7 +12,6 @@ import { Box } from "@mui/system";
 
 const { Component } = require("react");
 
-import JSConfetti from "js-confetti";
 const confetticanvas = new JSConfetti();
 
 const theme = createTheme();
