@@ -27,6 +27,7 @@ io.on("connection", (socket) => {
     SOCKET = socket;
 
     socket.on('date', () => {
+        console.log('GOT DATE')
         socket.emit('date', new Date());
     });
 

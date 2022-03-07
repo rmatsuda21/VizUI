@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import MySlider from "../widgets/components/MySlider.jsx";
 import MyButton from "../widgets/components/MyButton.jsx";
-import { breadcrumbsClasses } from "@mui/material";
+import { Box, breadcrumbsClasses } from "@mui/material";
 
 function parseProperties(properties) {
     var obj = {};
@@ -28,6 +28,9 @@ function parseProperties(properties) {
             case "orientation":
                 obj[key] = property.enum;
                 break;
+            case "toolTip":
+                obj[key] = property.string;
+                break;
             default:
                 console.log("New property type: " + key);
                 break;
@@ -36,7 +39,7 @@ function parseProperties(properties) {
     return obj;
 }
 
-function widgetParser(className, name, properties, i, object) {
+function widgetParser(className, name, properties, i, object, confetti) {
     switch (className) {
         case "QSlider":
             let interval = properties.singleStep || 1;
@@ -58,6 +61,8 @@ function widgetParser(className, name, properties, i, object) {
         case "QPushButton":
             return (
                 <MyButton
+                    tooltip={properties.toolTip}
+                    confetti={confetti}
                     key={i}
                     label={name}
                     name={name}
@@ -73,23 +78,21 @@ function widgetParser(className, name, properties, i, object) {
 
 function App(props) {
     // TODO: Add function to render this page dynamically based on JSON
-    const [data, setData] = useState(null)
+    const [data, setData] = useState(null);
 
-    var widgets =
-        data ?
-        data.ui.widget.widget.map((object, i) => {
-            let name = object["@_name"];
-            let className = object["@_class"];
-            let properties = parseProperties(object.property);
+    var widgets = data
+        ? data.ui.widget.widget.map((object, i) => {
+              let name = object["@_name"];
+              let className = object["@_class"];
+              let properties = parseProperties(object.property);
 
-            return widgetParser(className, name, properties, i, object);
-        }) : null;
+              return widgetParser(className, name, properties, i, object, props.confetti);
+          })
+        : null;
 
     // let pageProps = parseProperties(data.ui.widget.property);
     // let title = pageProps.windowTitle || "Example App";
     // let geometry = pageProps.geometry;
-
-    // console.log(pageProps);
 
     // useEffect(() => {
     //     document.title = title;
@@ -97,15 +100,16 @@ function App(props) {
 
     useEffect(async () => {
         // document.title = title;
-        await new Promise(r => setTimeout(r, 500));
-        await fetch(`/api/get-json/${props.id}`).then((data) => data.json()).then((data) => setData(data));
+        await new Promise((r) => setTimeout(r, 500));
+        await fetch(`/api/get-json/${props.id}`)
+            .then((data) => data.json())
+            .then((data) => setData(data));
     }, []);
 
     return (
-        <div className="App">
-            <header>{/* <h1>Generated App: {title}</h1> */}</header>
+        <>
             {widgets || []}
-        </div>
+        </>
     );
 }
 
