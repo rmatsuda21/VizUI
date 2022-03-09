@@ -1,4 +1,4 @@
-import "../stylesheets/home.css";
+// import "../stylesheets/home.css";
 import React from "react";
 
 import apis from "../api";

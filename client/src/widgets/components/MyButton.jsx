@@ -32,7 +32,8 @@ function MyButton(props) {
                 variant="contained"
                 onClick={() => {
                     countUpdate();
-                    {props.tooltip === 'confetti' ? props.confetti.addConfetti({ confettiNumber: 30 }) : null}
+                    if(props.tooltip === 'confetti')
+                    props.confetti.addConfetti({ confettiNumber: 30 })
                     // PostRequest();
                 }}
                 value={props.label}
