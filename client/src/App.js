@@ -12,7 +12,7 @@ function App() {
         fetch("http://localhost:3001/")
             .then((res) => res.json())
             .then((data) => setData(data[0].name))
-        
+
         const socket = io();
         socket.on('TEST', () => {
             console.log("GOT TEST")
