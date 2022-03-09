@@ -20,19 +20,19 @@ server.listen(PORT, () => {
     // dbo.connectToServer(() => {
     //     console.log("Success!");
     // });
-})  
+});
 
 io.on("connection", (socket) => {
     console.log("User connected");
     SOCKET = socket;
 
-    socket.on('date', () => {
-        console.log('GOT DATE')
-        socket.emit('date', new Date());
+    socket.on("date", () => {
+        console.log("GOT DATE");
+        socket.emit("date", new Date());
     });
 
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
+    socket.on("disconnect", () => {
+        console.log("User disconnected");
     });
 });
 
@@ -47,19 +47,19 @@ app.use(function (req, res, next) {
 });
 
 // add a document to the DB collection recording the click event
-app.post('/clicked', (req, res) => {
-    const click = {clickTime: new Date()};
+app.post("/clicked", (req, res) => {
+    const click = { clickTime: new Date() };
     console.log(click);
     console.log(db);
-  
-    db.collection('clicks').save(click, (err, result) => {
-      if (err) {
-        return console.log(err);
-      }
-      console.log('click added to db');
-      res.sendStatus(400);
+
+    db.collection("clicks").save(click, (err, result) => {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("click added to db");
+        res.sendStatus(400);
     });
-  });
+});
 
 app.use(
     express.urlencoded({
