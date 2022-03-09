@@ -86,7 +86,14 @@ function App(props) {
               let className = object["@_class"];
               let properties = parseProperties(object.property);
 
-              return widgetParser(className, name, properties, i, object, props.confetti);
+              return widgetParser(
+                  className,
+                  name,
+                  properties,
+                  i,
+                  object,
+                  props.confetti
+              );
           })
         : null;
 
@@ -106,11 +113,7 @@ function App(props) {
             .then((data) => setData(data));
     }, []);
 
-    return (
-        <>
-            {widgets || []}
-        </>
-    );
+    return <>{widgets || []}</>;
 }
 
 export default App;

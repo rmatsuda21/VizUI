@@ -26,21 +26,25 @@ function MyButton(props) {
     }
 
     return (
-        <Box sx={{display: 'flex', alignItems: 'center', gap: '1em'}}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: "1em" }}>
             {/* onclick is a listener */}
             <Button
                 variant="contained"
                 onClick={() => {
                     countUpdate();
-                    if(props.tooltip === 'confetti')
-                    props.confetti.addConfetti({ confettiNumber: 30 })
+                    if (props.tooltip === "confetti")
+                        props.confetti.addConfetti({ confettiNumber: 30 });
                     // PostRequest();
                 }}
                 value={props.label}
             >
                 {props.label}
             </Button>
-            {props.tooltip === 'confetti' ? <></> : <Typography variant="h4">{count}</Typography>}
+            {props.tooltip === "confetti" ? (
+                <></>
+            ) : (
+                <Typography variant="h4">{count}</Typography>
+            )}
         </Box>
     );
 }

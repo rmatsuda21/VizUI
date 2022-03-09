@@ -14,7 +14,13 @@ function MySlider(props) {
         <>
             {/* props.geometry contains props.geometry.x, y, width, and height */}
             <Box id="wrapper">
-                <Typography variant="h3" gutterBottom sx={{textAlign: 'center'}}>{props.name}</Typography>
+                <Typography
+                    variant="h3"
+                    gutterBottom
+                    sx={{ textAlign: "center" }}
+                >
+                    {props.name}
+                </Typography>
                 <Slider
                     defaultValue={props.position}
                     step={props.interval}
