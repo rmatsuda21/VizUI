@@ -120,6 +120,15 @@ app.get("/dbwrite/:db_name/:collection_name", async (req, res) => {
 const UPLOAD_DESTINATION = "./uploads/UI";
 const JSON_DESTINATION = "./uploads/JSON";
 
+// Ensure that upload dest/json dest exists
+const fs = require('fs');
+
+if (!fs.existsSync(UPLOAD_DESTINATION))
+    fs.mkdirSync(UPLOAD_DESTINATION, {recursive: true});
+
+if (!fs.existsSync(JSON_DESTINATION))
+    fs.mkdirSync(JSON_DESTINATION, {recursive: true});
+
 const multer = require("multer");
 const { parseUIFile } = require("./parser");
 const storage = multer.diskStorage({

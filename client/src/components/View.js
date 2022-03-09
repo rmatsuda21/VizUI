@@ -45,9 +45,9 @@ function View(props) {
                             alignItems: "center",
                             justifyContent: "space-around",
                             backgroundColor: "#102841",
-                            width: '75%', 
-                            marginInline: 'auto',
-                            padding: '3em',
+                            width: "75%",
+                            marginInline: "auto",
+                            padding: "3em",
                         }}
                     >
                         <AppView id={id} confetti={confetticanvas} />
