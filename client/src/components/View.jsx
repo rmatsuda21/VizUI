@@ -6,7 +6,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import AppView from "./AppView";
 
-import apis from "../api";
+import apis from "../js/api";
 import { CssBaseline, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 
