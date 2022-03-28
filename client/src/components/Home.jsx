@@ -1,7 +1,7 @@
 // import "../stylesheets/home.css";
 import React from "react";
 
-import apis from "../api";
+import apis from "../js/api";
 
 import Button from "@mui/material/Button";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
