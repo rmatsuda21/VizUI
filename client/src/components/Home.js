@@ -37,14 +37,18 @@ class Home extends Component {
     componentDidMount() {
         this.props.socket.on("date", (date) => {
             console.log(date);
-        })
+        });
+    }
+
+    componentWillUnmount() {
+        this.props.socket.close()
     }
 
     render() {
         const getDate = (e) => {
             e.preventDefault();
             this.props.socket.emit("date");
-        }
+        };
 
         const handleFileInput = (e) => {
             e.preventDefault();
@@ -93,10 +97,10 @@ class Home extends Component {
                             borderRadius: "15px",
                             gap: "1em",
                             backgroundColor: "#102841",
-                            transition: 'box-shadow .1s ease-in-out',
-                            '&:hover': {
-                                boxShadow: '0px 0px 7px 1px #102841'
-                            }
+                            transition: "box-shadow .1s ease-in-out",
+                            "&:hover": {
+                                boxShadow: "0px 0px 7px 1px #102841",
+                            },
                         }}
                     >
                         <Typography variant="h3">

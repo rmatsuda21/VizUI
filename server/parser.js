@@ -10,10 +10,13 @@ function parseUIFile(path, filename, outpath) {
         const parser = new XMLParser(options);
         let jsonObj = parser.parse(xmlDataStr);
 
-        fs.writeFileSync(`${outpath}/${filename}.json`, JSON.stringify(jsonObj));
+        fs.writeFileSync(
+            `${outpath}/${filename}.json`,
+            JSON.stringify(jsonObj)
+        );
     } catch (err) {
         console.error(err);
     }
 }
 
-module.exports = { parseUIFile }
+module.exports = { parseUIFile };
