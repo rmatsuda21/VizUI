@@ -90,7 +90,7 @@ function widgetParser(className, name, properties, i, object, confetti) {
             let curRow = null;  
             object.item.map((tableData, i) => {  
                 if ( curRow == tableData["@_row"] ) {
-                    console.log(tableData);
+                    // console.log(tableData);
                     tableInfo[rowName[curRow]].push(tableData["property"].string);
                 }
                 else{
@@ -98,7 +98,7 @@ function widgetParser(className, name, properties, i, object, confetti) {
                     tableInfo[rowName[curRow]] = [tableData["property"].string];
                 }
             })
-            console.log(tableInfo);
+            // console.log(tableInfo);
 
             return (
                 <MyTable
@@ -167,7 +167,9 @@ function App(props) {
                 else{ 
                     buttonGroups[object.attribute.string["#text"]] = [[className, name, properties, i, object]];
                 }
-            }
+
+                return  
+            } 
 
             return widgetParser(
                 className,
@@ -181,6 +183,8 @@ function App(props) {
         : null;
 
         console.log(buttonGroups)
+
+        console.log(widgets) 
 
     // let pageProps = parseProperties(data.ui.widget.property);
     // let title = pageProps.windowTitle || "Example App";

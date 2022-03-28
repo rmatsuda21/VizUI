@@ -18,6 +18,8 @@ function MyRadio(props) {
                 <FormLabel> Radio Button </FormLabel>
                 <RadioGroup value={category} onChange={(e) => setCategory(e.target.value)}>
                     <FormControlLabel value = { props.label } control={<Radio />} label = { props.label } />
+                    <FormControlLabel value = { "big money" } control={<Radio />} label = { props.label } />
+                    <FormControlLabel value = { props.label } control={<Radio />} label = { props.label } />
                 </RadioGroup>
             </FormControl>
         </Box>
