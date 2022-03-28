@@ -1,6 +1,6 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import { MyButton, MyRadio, MySlider, MyTable } from "../widgets/components";
+import { MyButton, MyRadio, MySlider, MyTable, MyDial } from "../widgets/components";
 
 var curButtonInfo = {
     name: null,
@@ -140,6 +140,23 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     }
                 ></MyRadio>
             );
+        case "QDial": {
+            let min = properties.minimum || 0;
+            let max = properties.maximum || 100;
+            return (
+                <MyDial
+                    key={key}
+                    name={name}
+                    min={min}
+                    max={max}
+                    position={0}
+                    geometry={
+                        properties.geometry ? properties.geometry : undefined
+                    }
+                />
+            );
+        }
+    
         default:
             return <p key={key}>{object["@_class"]}</p>;
     }
