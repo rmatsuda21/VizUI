@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import MySlider from "../widgets/components/MySlider.jsx";
+import MyTable from "../widgets/components/MyTable.jsx";
 import MyButton from "../widgets/components/MyButton.jsx";
+import MyRadio from "../widgets/components/MyRadio.jsx";
 import { Box, breadcrumbsClasses } from "@mui/material";
 
 function parseProperties(properties) {
@@ -26,7 +28,17 @@ function parseProperties(properties) {
                 obj[key] = property.number;
                 break;
             case "orientation":
-                obj[key] = property.enum;
+              switch (property.enum) {
+                case "Qt::Horizontal":
+                  obj[key] = "horizontal";
+                  break;
+                case "Qt::Vertical":
+                  obj[key] = "vertical";
+                  break;
+              }
+              break;
+            case "text":
+                obj[key] = property.string;
                 break;
             case "toolTip":
                 obj[key] = property.string;
@@ -45,6 +57,7 @@ function widgetParser(className, name, properties, i, object, confetti) {
             let interval = properties.singleStep || 1;
             let min = properties.minimum || 0;
             let max = properties.maximum || 100;
+            let orientation = properties.orientation || "horizontal"
             return (
                 <MySlider
                     key={i}
@@ -53,10 +66,50 @@ function widgetParser(className, name, properties, i, object, confetti) {
                     min={min}
                     max={max}
                     position={0}
+                    marks = {false} 
+                    orientation={orientation}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
                 />
+            );
+        case "QTableWidget":
+            // name of each column 
+            let columnName = [];
+            // name of each row 
+            let rowName = [];
+            // dictionary of each row (key) with its data (value) 
+            let tableInfo = {} 
+
+            object.column.map((column) => {
+                columnName.push(column["property"].string);
+            }) 
+            object.row.map((row) => {
+                rowName.push(row["property"].string);
+            })
+            let curRow = null;  
+            object.item.map((tableData, i) => {  
+                if ( curRow == tableData["@_row"] ) {
+                    console.log(tableData);
+                    tableInfo[rowName[curRow]].push(tableData["property"].string);
+                }
+                else{
+                    curRow = tableData["@_row"];
+                    tableInfo[rowName[curRow]] = [tableData["property"].string];
+                }
+            })
+            console.log(tableInfo);
+
+            return (
+                <MyTable
+                    key={i}
+                    name={name}  
+                    columns={columnName}
+                    data={tableInfo} 
+                    geometry={
+                        properties.geometry ? properties.geometry : undefined
+                    }
+                ></MyTable>
             );
         case "QPushButton":
             return (
@@ -66,10 +119,28 @@ function widgetParser(className, name, properties, i, object, confetti) {
                     key={i}
                     label={name}
                     name={name}
+                    variant = {"contained"} 
+                    size = {"medium"} 
+                    disabled = {false} 
+                    disabledElevation= {false}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
                 ></MyButton>
+            );
+        case "QRadioButton":
+            return (
+                <MyRadio 
+                    key={i}
+                    label={properties.text} 
+                    name={name} 
+                    size = {"medium"} 
+                    disabled = {false} 
+                    row = {false}
+                    geometry={
+                        properties.geometry ? properties.geometry : undefined
+                    }
+                ></MyRadio>
             );
         default:
             return <p key={i}>{object["@_class"]}</p>;
@@ -80,15 +151,30 @@ function App(props) {
     // TODO: Add function to render this page dynamically based on JSON
     const [data, setData] = useState(null);
 
+    var buttonGroups = {}
+
     var widgets = data
         ? data.ui.widget.widget.map((object, i) => {
-              let name = object["@_name"];
-              let className = object["@_class"];
-              let properties = parseProperties(object.property);
+            let name = object["@_name"];
+            let className = object["@_class"];
+            let properties = parseProperties(object.property);
+            
 
-              return widgetParser(className, name, properties, i, object, props.confetti);
+            if ( className == "QRadioButton" ) { 
+                if ( object.attribute.string["#text"] in buttonGroups ) {
+                    buttonGroups[object.attribute.string["#text"]].push([className, name, properties, i, object]);
+                }
+                else{ 
+                    buttonGroups[object.attribute.string["#text"]] = [[className, name, properties, i, object]];
+                }
+            }
+              
+            return widgetParser(className, name, properties, i, object, props.confetti);
+              
           })
         : null;
+
+        console.log(buttonGroups)
 
     // let pageProps = parseProperties(data.ui.widget.property);
     // let title = pageProps.windowTitle || "Example App";
@@ -110,6 +196,10 @@ function App(props) {
         <>
             {widgets || []}
         </>
+        // <div className="App" style = {{position: "relative"}}>
+        //   <header><h1>Generated App: {title}</h1></header>
+        //   {widgets}
+        // </div>
     );
 }
 
