@@ -20,19 +20,19 @@ server.listen(PORT, () => {
     // dbo.connectToServer(() => {
     //     console.log("Success!");
     // });
-})  
+});
 
 io.on("connection", (socket) => {
     console.log("User connected");
     SOCKET = socket;
 
-    socket.on('date', () => {
-        console.log('GOT DATE')
-        socket.emit('date', new Date());
+    socket.on("date", () => {
+        console.log("GOT DATE");
+        socket.emit("date", new Date());
     });
 
-    socket.on('disconnect', () => {
-      console.log('user disconnected');
+    socket.on("disconnect", () => {
+        console.log("User disconnected");
     });
 });
 
@@ -47,19 +47,19 @@ app.use(function (req, res, next) {
 });
 
 // add a document to the DB collection recording the click event
-app.post('/clicked', (req, res) => {
-    const click = {clickTime: new Date()};
+app.post("/clicked", (req, res) => {
+    const click = { clickTime: new Date() };
     console.log(click);
     console.log(db);
-  
-    db.collection('clicks').save(click, (err, result) => {
-      if (err) {
-        return console.log(err);
-      }
-      console.log('click added to db');
-      res.sendStatus(400);
+
+    db.collection("clicks").save(click, (err, result) => {
+        if (err) {
+            return console.log(err);
+        }
+        console.log("click added to db");
+        res.sendStatus(400);
     });
-  });
+});
 
 app.use(
     express.urlencoded({
@@ -119,6 +119,15 @@ app.get("/dbwrite/:db_name/:collection_name", async (req, res) => {
 // Uploading UI File
 const UPLOAD_DESTINATION = "./uploads/UI";
 const JSON_DESTINATION = "./uploads/JSON";
+
+// Ensure that upload dest/json dest exists
+const fs = require('fs');
+
+if (!fs.existsSync(UPLOAD_DESTINATION))
+    fs.mkdirSync(UPLOAD_DESTINATION, {recursive: true});
+
+if (!fs.existsSync(JSON_DESTINATION))
+    fs.mkdirSync(JSON_DESTINATION, {recursive: true});
 
 const multer = require("multer");
 const { parseUIFile } = require("./parser");

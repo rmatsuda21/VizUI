@@ -18,7 +18,13 @@ function MySlider(props) {
             {/* props.geometry contains props.geometry.x, y, width, and height */}
             {/* style = {{position: "absolute", left: props.geometry.x, top: props.geometry.y}} */}
             <Box id="wrapper">
-                <Typography variant="h3" gutterBottom sx={{textAlign: 'center'}}>{props.name}</Typography>
+                <Typography
+                    variant="h3"
+                    gutterBottom
+                    sx={{ textAlign: "center" }}
+                >
+                    {props.name}
+                </Typography>
                 <Slider
                     aria-label = {props.name} 
                     style = {sliderStyle}

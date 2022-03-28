@@ -168,9 +168,15 @@ function App(props) {
                     buttonGroups[object.attribute.string["#text"]] = [[className, name, properties, i, object]];
                 }
             }
-              
-            return widgetParser(className, name, properties, i, object, props.confetti);
-              
+
+            return widgetParser(
+                className,
+                name,
+                properties,
+                i,
+                object,
+                props.confetti
+            );
           })
         : null;
 
@@ -192,15 +198,7 @@ function App(props) {
             .then((data) => setData(data));
     }, []);
 
-    return (
-        <>
-            {widgets || []}
-        </>
-        // <div className="App" style = {{position: "relative"}}>
-        //   <header><h1>Generated App: {title}</h1></header>
-        //   {widgets}
-        // </div>
-    );
+    return <>{widgets || []}</>;
 }
 
 export default App;
