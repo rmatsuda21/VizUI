@@ -2,7 +2,7 @@
 import JSConfetti from "js-confetti";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 
 import AppView from "./AppView";
 
@@ -20,6 +20,9 @@ theme.typography = {
     h1: {
         fontWeight: 1000,
         fontSize: "3.5em",
+    },
+    h3: {
+        fontSize: "1.5rem",
     },
     button: { fontWeight: 800 },
 };
