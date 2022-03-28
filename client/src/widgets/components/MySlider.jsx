@@ -44,7 +44,7 @@ function MySlider(props) {
         return;
         });
     
-        setForm({position: ""});
+        setForm({position: 0});
         navigate("/");
     }
  //test--------------------------------------------
@@ -79,7 +79,8 @@ function MySlider(props) {
                     min={props.min}
                     max={props.max}
                     style={sliderStyle}
-                    onChange={valueUpdate}
+                    //onChange={valueUpdate}
+                    onChange = {(e) => updatePos({ position: e.target.value })}
                     valueLabelDisplay="on"
                     sx={{
                         "& .MuiSlider-thumb": {
