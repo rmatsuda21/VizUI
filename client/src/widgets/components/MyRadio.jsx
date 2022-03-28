@@ -15,11 +15,11 @@ function MyRadio(props) {
     return (
         <Box sx={{display: 'flex', alignItems: 'center', gap: '1em'}}>
             <FormControl>
-                <FormLabel> Radio Button </FormLabel>
+                <FormLabel> { props.label } </FormLabel>
                 <RadioGroup value={category} onChange={(e) => setCategory(e.target.value)}>
-                    <FormControlLabel value = { props.label } control={<Radio />} label = { props.label } />
-                    <FormControlLabel value = { "big money" } control={<Radio />} label = { props.label } />
-                    <FormControlLabel value = { props.label } control={<Radio />} label = { props.label } />
+                    {props.buttons.map((button, index) => (  
+                        <FormControlLabel value = { button[1] } control={<Radio />} label = { button[1] } /> 
+                    ))} 
                 </RadioGroup>
             </FormControl>
         </Box>
