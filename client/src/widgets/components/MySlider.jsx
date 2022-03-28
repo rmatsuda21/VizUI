@@ -1,14 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import "../stylesheets/MySlider.css";
 import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 
 function MySlider(props) {
+    var [value, setValue] = useState(0);
     let sliderStyle = {
         width: "200px",
         margin: "10px 5px 0px 5px",
     };
+
+    const valueUpdate = (position) => {
+        setValue(value = position);
+    };
+
+    function PostRequest() {
+        fetch("/clicked", { method: "POST" })
+            .then(function (response) {
+                if (response.ok) {
+                    console.log("Slider was changed");
+                    return;
+                }
+                throw new Error("Slider request failed.");
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
 
     return (
         <>
