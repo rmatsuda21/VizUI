@@ -5,14 +5,53 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 
 function MySlider(props) {
-    var [value, setValue] = useState(0);
+    const [value, setValue] = useState({
+        position: 0
+    });
     let sliderStyle = {
         width: "200px",
         margin: "10px 5px 0px 5px",
     };
 
+    //test-------------------------------------
+    //creates a new DB entry for each time the slider is changed, allowing user to keep track of historical changes
+    // These methods will update the state properties.
+    function updatePos(position) {
+        return setPos((prev) => {
+        return { ...prev, ...position };
+        });
+    }
+
+    // When a post request is sent to the create url, we'll add a new record to the database.
+   const newPosition = { ...value };
+
+    // This function will handle the submission.
+    async function onSubmit(e) {
+        e.preventDefault();
+    
+        // When a post request is sent to the create url, we'll add a new record to the database.
+        const newPosition = { ...value };
+    
+        await fetch("/changed", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newPosition),
+        })
+        .catch(error => {
+        window.alert(error);
+        return;
+        });
+    
+        setForm({position: ""});
+        navigate("/");
+    }
+ //test--------------------------------------------
+
     const valueUpdate = (position) => {
-        setValue(value = position);
+        setValue(position);
+        props.onChange(position)
     };
 
     function PostRequest() {
@@ -40,6 +79,7 @@ function MySlider(props) {
                     min={props.min}
                     max={props.max}
                     style={sliderStyle}
+                    onChange={valueUpdate}
                     valueLabelDisplay="on"
                     sx={{
                         "& .MuiSlider-thumb": {
