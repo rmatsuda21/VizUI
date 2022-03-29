@@ -4,10 +4,6 @@ import { Radio, RadioGroup } from "@mui/material";
 import { FormControl, FormLabel, FormControlLabel } from "@mui/material"; 
 import { Box } from "@mui/system";
 
-// import { Radio, RadioGroup } from "@material-ui/core";
-// import { FormControl, FormLabel, FormControlLabel } from "@material-ui/core"; 
-// import { Box } from "@material-ui/core";
-
 function MyRadio(props) { 
 
     const [category, setCategory] = useState('')

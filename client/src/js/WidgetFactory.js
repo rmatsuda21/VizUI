@@ -1,19 +1,26 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import { MyButton, MyRadio, MySlider, MyTable, MyDial } from "../widgets/components";
+import {
+    MyButton,
+    MyRadio,
+    MySlider,
+    MyTable,
+    MyDial,
+} from "../widgets/components";
 
 var curButtonInfo = {
     name: null,
-    buttons: []
-}
+    buttons: [],
+};
 // Get child widgets from parent
 // If parent.layout exists, then it has a layout
 export function getWidgets(parent, key = 0) {
+    if (!parent) return []
+
     if (key == 0) {
         key = Math.floor(Math.random() * 100);
-    };
+    }
     // Is Layout
-    console.log(parent)
     if ("layout" in parent) {
         let className = parent.layout["@_class"];
 
@@ -35,21 +42,17 @@ export function getWidgets(parent, key = 0) {
         }
 
         let items = parseItems(parent.layout.item);
-        
-        console.log(parent)
-
         return (
             <Stack
                 key={key}
                 direction={className === "QHBoxLayout" ? "row" : "column"}
-                sx={{ width: "100%" }}
+                sx={{ width: 'auto', justifyContent: 'space-around' }}
                 gap={2}
             >
                 {items}
             </Stack>
         );
     }
-    console.log("hi")
     let widgets = parseWidgets(parent);
     return <>{widgets}</>;
 }
@@ -75,39 +78,40 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 />
             );
         case "QTableWidget":
-            console.log("found table!")
-            // name of each column 
+            console.log("found table!");
+            // name of each column
             let columnName = [];
-            // name of each row 
+            // name of each row
             let rowName = [];
-            // dictionary of each row (key) with its data (value) 
-            let tableInfo = {} 
+            // dictionary of each row (key) with its data (value)
+            let tableInfo = {};
 
             object.column.map((column) => {
                 columnName.push(column["property"].string);
-            }) 
+            });
             object.row.map((row) => {
                 rowName.push(row["property"].string);
-            })
-            let curRow = null;  
-            object.item.map((tableData, i) => {  
-                if ( curRow == tableData["@_row"] ) {
+            });
+            let curRow = null;
+            object.item.map((tableData, i) => {
+                if (curRow == tableData["@_row"]) {
                     // console.log(tableData);
-                    tableInfo[rowName[curRow]].push(tableData["property"].string);
-                }
-                else{
+                    tableInfo[rowName[curRow]].push(
+                        tableData["property"].string
+                    );
+                } else {
                     curRow = tableData["@_row"];
                     tableInfo[rowName[curRow]] = [tableData["property"].string];
                 }
-            })
+            });
             // console.log(tableInfo);
 
             return (
                 <MyTable
                     key={key}
-                    name={name}  
+                    name={name}
                     columns={columnName}
-                    data={tableInfo} 
+                    data={tableInfo}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -124,17 +128,18 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
+                    variant={"contained"}
                 />
             );
         case "QRadioButton":
             return (
-                <MyRadio 
+                <MyRadio
                     key={properties[0][3]}
-                    label={name} 
+                    label={name}
                     name={name}
-                    buttons={properties} 
-                    size = {"medium"}  
-                    row = {false}
+                    buttons={properties}
+                    size={"medium"}
+                    row={false}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -156,7 +161,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 />
             );
         }
-    
+
         default:
             return <p key={key}>{object["@_class"]}</p>;
     }
@@ -183,7 +188,7 @@ function parseProperties(properties) {
                 break;
             case "orientation":
                 obj[key] = property.enum;
-                break; 
+                break;
             case "toolTip":
                 obj[key] = property.string;
                 break;
@@ -204,38 +209,61 @@ function parseWidget(widget, key = 0) {
     // let curButtonName = curButtonInfo.name;
     // let curButtons = curButtonInfo.buttons;
 
-
-    if ( className == "QRadioButton" ) { 
+    if (className == "QRadioButton") {
         let ret_val = null;
         // check if first button in group
         // console.log(attributes.string["#text"])
         // console.log(curButtonInfo.name)
-        if ( attributes.string["#text"] != curButtonInfo.name ) {
+        if (attributes.string["#text"] != curButtonInfo.name) {
             // first button in group: initialize
-            console.log("new QRadioButton")
+            console.log("new QRadioButton");
 
             // check if prev group exists
             if (curButtonInfo.name != null) {
                 // output button group
-                console.log(curButtonInfo.buttons[0][0])
-                ret_val = widgetParser(className, curButtonInfo.buttons[0][0], curButtonInfo.buttons, "", "", "");
+                console.log(curButtonInfo.buttons[0][0]);
+                ret_val = widgetParser(
+                    className,
+                    curButtonInfo.buttons[0][0],
+                    curButtonInfo.buttons,
+                    "",
+                    "",
+                    ""
+                );
                 console.log(ret_val);
             }
             curButtonInfo.name = attributes.string["#text"];
             curButtonInfo.buttons = [];
-            console.log(curButtonInfo.name)
+            console.log(curButtonInfo.name);
         }
 
-        curButtonInfo.buttons.push([curButtonInfo.name, widget.property.string, properties, key, widget]);
+        curButtonInfo.buttons.push([
+            curButtonInfo.name,
+            widget.property.string,
+            properties,
+            key,
+            widget,
+        ]);
 
-        return ret_val
-    } 
-    else if (curButtonInfo.name != null) {
+        return ret_val;
+    } else if (curButtonInfo.name != null) {
         // output button group
-        let ret_val = widgetParser("QRadioButton", curButtonInfo.buttons[0][0], curButtonInfo.buttons, "", "", "");
-        curButtonInfo.name = null
+        let ret_val = widgetParser(
+            "QRadioButton",
+            curButtonInfo.buttons[0][0],
+            curButtonInfo.buttons,
+            "",
+            "",
+            ""
+        );
+        curButtonInfo.name = null;
         curButtonInfo.buttons = [];
-        return <>{ret_val}{widgetParser(className, name, properties, key, widget, "")}</>;
+        return (
+            <>
+                {ret_val}
+                {widgetParser(className, name, properties, key, widget, "")}
+            </>
+        );
     }
 
     return widgetParser(className, name, properties, key, widget, "");
@@ -243,22 +271,20 @@ function parseWidget(widget, key = 0) {
 
 // Parse widgets within widget w/ no layout
 function parseWidgets(parent) {
-    
-    
     // Is single widget, not container
-    if (!("widget" in parent)){
-        console.log("chi")
-        return parseWidget(parent, Math.floor(Math.random() * 100), curButtonInfo);
+    if (!("widget" in parent)) {
+        return parseWidget(
+            parent,
+            Math.floor(Math.random() * 100),
+            curButtonInfo
+        );
     }
 
-    console.log(parent)
-    // const widgets = parent.widget.map((widget, key) => {
-    //     console.log("here2")
-        
-    // });
-    return parseWidget(parent.widget, Math.floor(Math.random() * 100), curButtonInfo);
-
-    // return widgets;
+    return parseWidget(
+        parent.widget,
+        Math.floor(Math.random() * 100),
+        curButtonInfo
+    );
 }
 
 // Parse items for grid

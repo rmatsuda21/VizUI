@@ -2,7 +2,7 @@
 import JSConfetti from "js-confetti";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { createTheme, ThemeProvider } from "@material-ui/core/styles";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import AppView from "./AppView";
 
@@ -42,11 +42,6 @@ function View(props) {
                     </Typography>
                     <Box
                         sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "1em",
-                            alignItems: "center",
-                            justifyContent: "space-around",
                             backgroundColor: "#102841",
                             width: "75%",
                             marginInline: "auto",

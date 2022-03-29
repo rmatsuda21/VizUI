@@ -9,9 +9,9 @@ function MySlider(props) {
         margin: '10px 5px 0px 5px'
     };
     
-    props.orientation == 'horizontal' 
-        ? sliderStyle = Object.assign(sliderStyle, {width: props.geometry.width}) 
-        : sliderStyle = Object.assign(sliderStyle, {height: props.geometry.height});
+    // props.orientation === 'horizontal'
+    //     ? sliderStyle = Object.assign(sliderStyle, {width: props.geometry.width}) 
+    //     : sliderStyle = Object.assign(sliderStyle, {height: props.geometry.height});
 
     return (
         <>
