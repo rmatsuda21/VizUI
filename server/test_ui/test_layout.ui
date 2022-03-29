@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Widget</class>
+ <widget class="QWidget" name="Widget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Widget</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QDial" name="Servings"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QRadioButton" name="radioButton_2">
+         <property name="text">
+          <string>Frozen yoghurt</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">Desserts</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton">
+         <property name="text">
+          <string>Ice cream sandwich</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">Desserts</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton_4">
+         <property name="text">
+          <string>Eclair</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">Desserts</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton_3">
+         <property name="text">
+          <string>Cupcake</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">Desserts</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioButton_5">
+         <property name="text">
+          <string>Gingerbread</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">Desserts</string>
+         </attribute>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QDial" name="dial"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QTableWidget" name="tableWidget">
+       <row>
+        <property name="text">
+         <string>Frozen yoghurt</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>Ice cream sandwich</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>Eclair</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>Cupcake</string>
+        </property>
+       </row>
+       <row>
+        <property name="text">
+         <string>Gingerbread</string>
+        </property>
+       </row>
+       <column>
+        <property name="text">
+         <string>Calories</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Fat (g)</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Carbs (g)</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Protein (g)</string>
+        </property>
+       </column>
+       <item row="0" column="0">
+        <property name="text">
+         <string>159</string>
+        </property>
+       </item>
+       <item row="0" column="1">
+        <property name="text">
+         <string>6</string>
+        </property>
+       </item>
+       <item row="0" column="2">
+        <property name="text">
+         <string>24</string>
+        </property>
+       </item>
+       <item row="0" column="3">
+        <property name="text">
+         <string>4</string>
+        </property>
+       </item>
+       <item row="1" column="0">
+        <property name="text">
+         <string>237</string>
+        </property>
+       </item>
+       <item row="1" column="1">
+        <property name="text">
+         <string>9</string>
+        </property>
+       </item>
+       <item row="1" column="2">
+        <property name="text">
+         <string>37</string>
+        </property>
+       </item>
+       <item row="1" column="3">
+        <property name="text">
+         <string>4.3</string>
+        </property>
+       </item>
+       <item row="2" column="0">
+        <property name="text">
+         <string>262</string>
+        </property>
+       </item>
+       <item row="2" column="1">
+        <property name="text">
+         <string>16</string>
+        </property>
+       </item>
+       <item row="2" column="2">
+        <property name="text">
+         <string>24</string>
+        </property>
+       </item>
+       <item row="2" column="3">
+        <property name="text">
+         <string>6</string>
+        </property>
+       </item>
+       <item row="3" column="0">
+        <property name="text">
+         <string>305</string>
+        </property>
+       </item>
+       <item row="3" column="1">
+        <property name="text">
+         <string>3.7</string>
+        </property>
+       </item>
+       <item row="3" column="2">
+        <property name="text">
+         <string>67</string>
+        </property>
+       </item>
+       <item row="3" column="3">
+        <property name="text">
+         <string>4.3</string>
+        </property>
+       </item>
+       <item row="4" column="0">
+        <property name="text">
+         <string>356</string>
+        </property>
+       </item>
+       <item row="4" column="1">
+        <property name="text">
+         <string>16</string>
+        </property>
+       </item>
+       <item row="4" column="2">
+        <property name="text">
+         <string>49</string>
+        </property>
+       </item>
+       <item row="4" column="3">
+        <property name="text">
+         <string>3.9</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+ <buttongroups>
+  <buttongroup name="Desserts"/>
+  <buttongroup name="potato"/>
+ </buttongroups>
+</ui>

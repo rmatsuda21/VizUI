@@ -7,7 +7,6 @@ import Button from "@mui/material/Button";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
 import { Box, boxSizing } from "@mui/system";
-import { Container } from "@mui/material";
 
 const { Component } = require("react");
 
@@ -20,6 +19,7 @@ theme.typography = {
     },
 
     button: { fontWeight: 800 },
+    pxToRem: size => `${(size / htmlFontSize) * coef}rem`,
 };
 
 const isEmpty = (file) => {

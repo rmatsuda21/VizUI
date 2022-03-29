@@ -26,6 +26,7 @@ function MyDial(props) {
                     label={props.name}
                     min={props.min}
                     max={props.max}
+                    labelColor="#848ccf"
                 />
             </Box>
         </>

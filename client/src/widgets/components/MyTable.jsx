@@ -10,6 +10,7 @@ import Paper from '@mui/material/Paper';
 
 function MyTable(props) {
     return (
+        <>
         <TableContainer component={Paper} >
           <Table sx={{ minWidth: 650 }}>
             <TableHead> 
@@ -37,6 +38,7 @@ function MyTable(props) {
             </TableBody>
           </Table>
         </TableContainer>
+        </>
     );
 }
 
