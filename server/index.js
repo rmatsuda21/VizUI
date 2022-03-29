@@ -45,6 +45,20 @@ app.use(function (req, res, next) {
     );
     next();
 });
+// add a document to the DB collection recording the click event
+app.post('/changed', (req, res) => {
+    const position = {PosChangeTime: new Date()};
+    console.log(position);
+    console.log(db);
+  
+    db.collection('SliderChanges').save(position, (err, result) => {
+      if (err) {
+        return console.log(err);
+      }
+      console.log('slider position change added to db');
+      res.sendStatus(400);
+    });
+  });
 
 // add a document to the DB collection recording the click event
 app.post('/clicked', (req, res) => {
