@@ -24,10 +24,13 @@ server.listen(PORT, () => {
 
 io.on("connection", (socket) => {
     console.log("User connected");
-
-    socket.on('date', () => {
-        socket.emit('date', new Date());
-    });
+    
+    const db = dbo.getDb()
+    watchCursor = db.collection("sockets").watch()
+    
+    watchCursor.on('change', next => {
+        socket.emit("update", next)
+      });
 
     socket.on('disconnect', () => {
       console.log('user disconnected');

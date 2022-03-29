@@ -15,8 +15,8 @@ class Home extends Component {
 
   render() {
 
-    this.props.socket.on('date', (date) => {
-        console.log(date)
+    this.props.socket.on('update', (data) => {
+        console.log(data)
     })
 
     const getDate = (e) => {
