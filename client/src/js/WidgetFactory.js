@@ -13,7 +13,7 @@ export function getWidgets(parent, key = 0) {
         key = Math.floor(Math.random() * 100);
     };
     // Is Layout
-    console.log(parent)
+    // console.log(parent)
     if ("layout" in parent) {
         let className = parent.layout["@_class"];
 
@@ -35,9 +35,14 @@ export function getWidgets(parent, key = 0) {
         }
 
         let items = parseItems(parent.layout.item);
+        console.log(items.length);
+        console.log(items);
         
         console.log(parent)
-
+        if (items[0] == null) {
+            console.log("yay");
+            return null;
+        }
         return (
             <Stack
                 key={key}
@@ -51,6 +56,11 @@ export function getWidgets(parent, key = 0) {
     }
     console.log("hi")
     let widgets = parseWidgets(parent);
+    console.log(widgets)
+    console.log(parent)
+    if (widgets == null) {
+        return null;
+    }
     return <>{widgets}</>;
 }
 
@@ -127,18 +137,18 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 />
             );
         case "QRadioButton":
+            let group = object.attribute.string["#text"] || Math.random().toString(36).slice(2);
             return (
                 <MyRadio 
-                    key={properties[0][3]}
-                    label={name} 
+                    key={key}
+                    group={group} 
                     name={name}
-                    buttons={properties} 
                     size = {"medium"}  
                     row = {false}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
-                ></MyRadio>
+                >hi</MyRadio>
             );
         case "QDial": {
             let min = properties.minimum || 0;
@@ -204,40 +214,6 @@ function parseWidget(widget, key = 0) {
     // let curButtonName = curButtonInfo.name;
     // let curButtons = curButtonInfo.buttons;
 
-
-    if ( className == "QRadioButton" ) { 
-        let ret_val = null;
-        // check if first button in group
-        // console.log(attributes.string["#text"])
-        // console.log(curButtonInfo.name)
-        if ( attributes.string["#text"] != curButtonInfo.name ) {
-            // first button in group: initialize
-            console.log("new QRadioButton")
-
-            // check if prev group exists
-            if (curButtonInfo.name != null) {
-                // output button group
-                console.log(curButtonInfo.buttons[0][0])
-                ret_val = widgetParser(className, curButtonInfo.buttons[0][0], curButtonInfo.buttons, "", "", "");
-                console.log(ret_val);
-            }
-            curButtonInfo.name = attributes.string["#text"];
-            curButtonInfo.buttons = [];
-            console.log(curButtonInfo.name)
-        }
-
-        curButtonInfo.buttons.push([curButtonInfo.name, widget.property.string, properties, key, widget]);
-
-        return ret_val
-    } 
-    else if (curButtonInfo.name != null) {
-        // output button group
-        let ret_val = widgetParser("QRadioButton", curButtonInfo.buttons[0][0], curButtonInfo.buttons, "", "", "");
-        curButtonInfo.name = null
-        curButtonInfo.buttons = [];
-        return <>{ret_val}{widgetParser(className, name, properties, key, widget, "")}</>;
-    }
-
     return widgetParser(className, name, properties, key, widget, "");
 }
 
@@ -251,7 +227,7 @@ function parseWidgets(parent) {
         return parseWidget(parent, Math.floor(Math.random() * 100), curButtonInfo);
     }
 
-    console.log(parent)
+    // console.log(parent)
     // const widgets = parent.widget.map((widget, key) => {
     //     console.log("here2")
         
