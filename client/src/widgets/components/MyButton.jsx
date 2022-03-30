@@ -4,7 +4,7 @@ import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 
 function MyButton(props) {
-    var [count, setCount] = useState(0);
+    const [count, setCount] = useState(0);
 
     const countUpdate = () => {
         // Dealing with name field changes to update our state

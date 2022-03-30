@@ -106,7 +106,22 @@ app.get("/dbwrite/:db_name/:collection_name", async (req, res) => {
         await dbo.writeToCollection(
             req.params.db_name,
             req.params.collection_name,
-            [{ name: "test" }]
+            req.body,
+        );
+        console.log("GOOD");
+        res.send("GOOD");
+    } catch (e) {
+        console.log(e);
+        res.send("BAD");
+    }
+});
+
+app.post("/dbwrite/:db_name/:collection_name", async (req, res) => {
+    try {
+        await dbo.writeToCollection(
+            req.params.db_name,
+            req.params.collection_name,
+            req.body,
         );
         console.log("GOOD");
         res.send("GOOD");
@@ -142,6 +157,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+//route for uploding XML file
 app.post("/api/convert", upload.single("uiFile"), (req, res) => {
     let filename = req.file.filename,
         path = req.file.path;
