@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 
 function MyDial(props) {
-    const [value, setValue] = useState(props.position);
+    const [value, setValue] = useState(props.dataIndex);
 
     let sliderStyle = {
         width: "200px",
@@ -16,7 +16,7 @@ function MyDial(props) {
     }
 
     // This function will handle the submission once the slider is released
-    async function onSubmit() {
+    async function onSubmit(e) {
         e.preventDefault();
     
         // When a post request is sent to the create url, we'll add a new record to the database.
@@ -49,10 +49,10 @@ function MyDial(props) {
                 <CircularSlider
                     // defaultValue={props.position}
                     onChange = {updatePos}
-                    onChangeCommitted = {onSubmit}
                     label={props.name}
                     min={props.min}
                     max={props.max}
+                    onMouseUp = {onSubmit}
                     labelColor="#848ccf"
                 />
             </Box>
