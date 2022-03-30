@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getWidgets } from "../js/WidgetFactory";
+import { RadioContextProvider } from "../widgets/contexts/RadioContext";
 
 function AppView(props) {
-    // TODO: Add function to render this page dynamically based on JSON
     const [data, setData] = useState(null);
 
     useEffect(async () => {
@@ -14,6 +14,9 @@ function AppView(props) {
 
     var widgets = data ? getWidgets(data.ui.widget) : [];
 
-    return <>{widgets}</>;
+    return (
+    <RadioContextProvider>
+        {widgets}
+    </RadioContextProvider>);
 }
 export default AppView;
