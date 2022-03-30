@@ -11,11 +11,11 @@ function MyButton(props) {
         setCount(count + 1);
     };
 
-    function PostRequest() {
-        fetch("/clicked", { method: "POST" })
+    async function onSubmit() {
+        fetch("/test", { method: "POST" })
             .then(function (response) {
                 if (response.ok) {
-                    console.log("Click was recorded");
+                    console.log("Click clack");
                     return;
                 }
                 throw new Error("Request failed.");
@@ -30,7 +30,7 @@ function MyButton(props) {
             {/* onclick is a listener */}
             <Button
                 aria-label = {props.label}
-                value={props.label}
+                value={props.value}
                 variant = {props.variant}
                 size = {props.size} // small, medium, or large
                 disabled = {props.disable}

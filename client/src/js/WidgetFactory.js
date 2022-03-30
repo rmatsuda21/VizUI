@@ -125,6 +125,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     confetti={confetti}
                     label={name}
                     name={name}
+                    value={value}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
