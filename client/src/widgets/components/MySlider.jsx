@@ -10,21 +10,13 @@ function MySlider(props) {
         margin: '10px 5px 0px 5px'
     };
     
-    // props.orientation === 'horizontal'
-    //     ? sliderStyle = Object.assign(sliderStyle, {width: props.geometry.width}) 
-    //     : sliderStyle = Object.assign(sliderStyle, {height: props.geometry.height});
-
-    //db connection test-------------------------------------
     //creates a new DB entry for each time the slider is changed, allowing user to keep track of historical changes
-    // These methods will update the state properties.
+    // These methods will update the position real time as it is being manipulated
     function updatePos(e) {
         set.value(e.target.value)
     }
 
-    // When a post request is sent to the create url, we'll add a new record to the database.
-   const newPosition = { ...value };
-
-    // This function will handle the submission.
+    // This function will handle the submission once the slider is released
     async function onSubmit() {
         e.preventDefault();
     
@@ -42,29 +34,6 @@ function MySlider(props) {
         window.alert(error);
         return;
         });
-    
-
-    }
- //end db connection test--------------------------------------------
-
-    const valueUpdate = (position) => {
-        setValue(position);
-        props.onChange(position)
-        console.log(position)
-    };
-
-    function PostRequest() {
-        fetch("/changed", { method: "POST" })
-            .then(function (response) {
-                if (response.ok) {
-                    console.log("Slider was changed");
-                    return;
-                }
-                throw new Error("Slider request failed.");
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
     }
 
     return (
