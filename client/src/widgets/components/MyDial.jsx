@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../stylesheets/MyDial.css";
 import CircularSlider from '@fseehawer/react-circular-slider';
 import Typography from "@mui/material/Typography";
@@ -47,12 +47,10 @@ function MyDial(props) {
                     {props.name}
                 </Typography>
                 <CircularSlider
-                    // defaultValue={props.position}
-                    onChange = {updatePos}
+                    // defaultValue={props.poatePos}
                     label={props.name}
                     min={props.min}
                     max={props.max}
-                    onMouseUp = {onSubmit}
                     labelColor="#848ccf"
                 />
             </Box>
