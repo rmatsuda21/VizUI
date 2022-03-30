@@ -25,13 +25,13 @@ function MySlider(props) {
    const newPosition = { ...value };
 
     // This function will handle the submission.
-    async function onSubmit(e) {
+    async function onSubmit() {
         e.preventDefault();
     
         // When a post request is sent to the create url, we'll add a new record to the database.
         const newPosition = { data : value };
     
-        await fetch("/dbwrite/:db_name/:collection_name", {
+        await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
