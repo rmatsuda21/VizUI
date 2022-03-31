@@ -2,10 +2,11 @@ import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import {
     MyButton,
+    MyCheckbox,
+    MyDial,
     MyRadio,
     MySlider,
     MyTable,
-    MyDial,
 } from "../widgets/components";
 
 var curButtonInfo = {
@@ -83,13 +84,9 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 />
             );
         case "QTableWidget":
-            console.log("found table!");
-            // name of each column
-            let columnName = [];
-            // name of each row
-            let rowName = [];
-            // dictionary of each row (key) with its data (value)
-            let tableInfo = {};
+            let columnName = []; // name of each column
+            let rowName = []; // name of each row
+            let tableInfo = {}; // dictionary of each row (key) with its data (value)
 
             object.column.map((column) => {
                 columnName.push(column["property"].string);
@@ -100,7 +97,6 @@ function widgetParser(className, name, properties, key, object, confetti) {
             let curRow = null;
             object.item.map((tableData, i) => {
                 if (curRow == tableData["@_row"]) {
-                    // console.log(tableData);
                     tableInfo[rowName[curRow]].push(
                         tableData["property"].string
                     );
@@ -109,7 +105,6 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     tableInfo[rowName[curRow]] = [tableData["property"].string];
                 }
             });
-            // console.log(tableInfo);
 
             return (
                 <MyTable
@@ -120,7 +115,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
-                ></MyTable>
+                />
             );
         case "QPushButton":
             return (
@@ -137,20 +132,40 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     variant={"contained"}
                 />
             );
-        case "QRadioButton":
+        case "QRadioButton": {
             let group = object.attribute.string["#text"] || Math.random().toString(36).slice(2);
+            let label = properties.text || name;
             return (
                 <MyRadio 
                     key={key}
                     group={group} 
                     name={name}
+                    label={label}
                     size = {"medium"}  
                     row = {false}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
-                >hi</MyRadio>
+                />
             );
+        }
+        case "QCheckBox": {
+            let label = properties.text || name;
+            let disabled = false;
+            if (typeof properties.checkable !== 'undefined') {
+                disabled = !properties.checkable;
+            }
+            return (
+                <MyCheckbox
+                    key={key}
+                    label={label}
+                    disabled={disabled}
+                    geometry={
+                        properties.geometry ? properties.geometry : undefined
+                    }
+                />
+            );
+        }
         case "QDial": {
             let min = properties.minimum || 0;
             let max = properties.maximum || 100;
@@ -177,6 +192,10 @@ function widgetParser(className, name, properties, key, object, confetti) {
 function parseProperties(properties) {
     if (!properties) return {};
 
+    if (!Array.isArray(properties)) {
+        properties = [properties];
+    }
+
     var obj = {};
     Array.prototype.forEach.call(properties, (property) => {
         let key = property["@_name"];
@@ -184,7 +203,13 @@ function parseProperties(properties) {
             case "geometry":
                 obj[key] = property.rect;
                 break;
+            case "checkable":
+                console.log(property.bool);
+                obj[key] = property.bool;
+                break;
             case "windowTitle":
+            case "toolTip":
+            case "text":
                 obj[key] = property.string;
                 break;
             case "singleStep":
@@ -194,9 +219,6 @@ function parseProperties(properties) {
                 break;
             case "orientation":
                 obj[key] = property.enum;
-                break;
-            case "toolTip":
-                obj[key] = property.string;
                 break;
             default:
                 console.log("New property type: " + key);
