@@ -15,18 +15,6 @@ Through the power of [Qt Creator](https://www.qt.io/), an interactive GUI design
 - Database I/O (MongoDB)
 - Full route control through Express
 
-## 📋 To Do 📋
-
-- Connect all widgets to Mongo tables dynamically
-- Create functional server/client communication with database I/O
-- Create widgets specifically for data visualization
-  - Graphs 📊
-- Support layouts/containers + more widget types
-  - Tables 📄
-  - Check boxes ✅
-  - Dials 🧭
-  - etc...
-
 ## 💻 Setup 💻
 ### Requirements
 
