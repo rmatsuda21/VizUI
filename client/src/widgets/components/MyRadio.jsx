@@ -26,7 +26,7 @@ const MyRadio = React.memo(({
                 name={props.group}
                 inputProps={{ "aria-label": props.name }}
             />
-            <label htmlFor={props.name}>{props.name}</label>
+            <label htmlFor={props.name}>{props.label}</label>
         </Box>
     );
 })
