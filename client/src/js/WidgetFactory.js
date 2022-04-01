@@ -1,11 +1,14 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
+// import { SetTabContextValue, GetTabContextValue } from "../widgets/contexts/TabContext";
 import {
     MyButton,
     MyCheckbox,
     MyDial,
     MyRadio,
     MySlider,
+    MyTab,
+    MyTabHeader,
     MyTable,
 } from "../widgets/components";
 
@@ -54,9 +57,8 @@ export function getWidgets(parent, key = 0, dbname = '') {
             </Stack>
         );
     }
+
     let widgets = parseWidgets(parent);
-    console.log(widgets)
-    console.log(parent)
     if (widgets == null) {
         return null;
     }
@@ -182,6 +184,22 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 />
             );
         }
+        case "QTabWidget":
+            // set default tab for tab context
+
+            let [tabs, tabNames] = parseTabs(object.widget, name);
+            console.log(tabNames)
+            console.log(tabs)
+            return (
+                <>
+                    <MyTabHeader
+                        key={key}
+                        name={name}
+                        tabNames={tabNames}
+                    />
+                    {tabs}
+                </>
+            )
 
         default:
             return <p key={key}>{object["@_class"]}</p>;
@@ -192,9 +210,8 @@ function widgetParser(className, name, properties, key, object, confetti) {
 function parseProperties(properties) {
     if (!properties) return {};
 
-    if (!Array.isArray(properties)) {
-        properties = [properties];
-    }
+    // single property
+    if (!Array.isArray(properties)) properties = [properties];
 
     var obj = {};
     Array.prototype.forEach.call(properties, (property) => {
@@ -204,7 +221,6 @@ function parseProperties(properties) {
                 obj[key] = property.rect;
                 break;
             case "checkable":
-                console.log(property.bool);
                 obj[key] = property.bool;
                 break;
             case "windowTitle":
@@ -215,6 +231,7 @@ function parseProperties(properties) {
             case "singleStep":
             case "minimum":
             case "maximum":
+            case "currentIndex":
                 obj[key] = property.number;
                 break;
             case "orientation":
@@ -246,15 +263,13 @@ function parseWidgets(parent) {
     if (!("widget" in parent)) {
         return parseWidget(
             parent,
-            Math.floor(Math.random() * 100),
-            curButtonInfo
+            Math.floor(Math.random() * 100)
         );
     }
 
     return parseWidget(
         parent.widget,
-        Math.floor(Math.random() * 100),
-        curButtonInfo
+        Math.floor(Math.random() * 100)
     );
 }
 
@@ -290,7 +305,29 @@ function parseItems(items) {
 
     let ret = [];
     items.forEach((item, key) => {
-        ret.push(getWidgets(item, Math.floor(Math.random() * 100)));
+        ret.push(getWidgets(item));
     });
     return ret;
+}
+
+// Parse tabs in containers
+function parseTabs(tabs, tabWidgetName) {
+    if (!Array.isArray(tabs)) tabs = [tabs]; // Single item
+
+    let parsedTabs = [];
+    let tabNames = [];
+    tabs.forEach((tab, index) => {
+        let tabContents = tab.widget ? getWidgets(tab.widget) : null;
+        parsedTabs.push(
+            <MyTab
+                key={`${tabWidgetName}-${index}`}
+                group={tabWidgetName}
+                index={index}
+            >
+                {tabContents}
+            </MyTab>
+        );
+        tabNames.push(tab.attribute.string);
+    });
+    return [parsedTabs, tabNames];
 }

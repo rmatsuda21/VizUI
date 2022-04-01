@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getWidgets } from "../js/WidgetFactory";
 import { RadioContextProvider } from "../widgets/contexts/RadioContext";
+import { TabContextProvider } from "../widgets/contexts/TabContext";
 
 function AppView(props) {
     const [data, setData] = useState(null);
@@ -15,8 +16,11 @@ function AppView(props) {
     var widgets = data ? getWidgets(data.ui.widget) : [];
 
     return (
-    <RadioContextProvider>
-        {widgets}
-    </RadioContextProvider>);
+    <TabContextProvider>
+        <RadioContextProvider>
+            {widgets}
+        </RadioContextProvider>
+    </TabContextProvider>
+    );
 }
 export default AppView;
