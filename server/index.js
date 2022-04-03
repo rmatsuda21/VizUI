@@ -17,14 +17,14 @@ const io = new Server(server);
 
 server.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
-    // dbo.connectToServer(() => {
-    //     console.log("Success!");
-    // });
+    dbo.connectToServer(() => {
+        console.log("DB connected");
+    });
 });
 
-io.on("connection", (socket) => {
-    console.log("User connected");
-    
+io.on("connection", socket => {
+    console.log("Socket connected");
+
     const db = dbo.getDb()
     watchCursor = db.collection("sockets").watch()
     
@@ -34,7 +34,7 @@ io.on("connection", (socket) => {
 
     socket.on("disconnect", () => {
         console.log("User disconnected");
-    });
+    }); 
 });
 
 app.use(function (req, res, next) {

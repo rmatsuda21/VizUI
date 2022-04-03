@@ -34,21 +34,7 @@ class Home extends Component {
         };
     }
 
-    componentDidMount() {
-        this.props.socket.on("date", (date) => {
-            console.log(date);
-        });
-    }
-
-    componentWillUnmount() {
-        this.props.socket.close()
-    }
-
     render() {
-        const getDate = (e) => {
-            e.preventDefault();
-            this.props.socket.emit("date");
-        };
 
         const handleFileInput = (e) => {
             e.preventDefault();
@@ -140,9 +126,6 @@ class Home extends Component {
                             </Button>
                         </Box>
                     </Box>
-                    <Button variant="outlined" onClick={getDate}>
-                        Date Please :3
-                    </Button>
                 </Box>
             </ThemeProvider>
         );
