@@ -4,7 +4,12 @@ import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 
+import { useContext } from "react";
+import WidgetContext from "../widget-context";
+
 function MySlider(props) {
+  const { widgetVal, setWidgetVal } = useContext(WidgetContext);
+
     let sliderStyle = {
         margin: '10px 5px 0px 5px'
     };
@@ -30,6 +35,7 @@ function MySlider(props) {
                     style = {sliderStyle}
                     min = {props.min}
                     max = {props.max} 
+                    value = {widgetVal[props.name]}
                     orientation = {props.orientation} 
                     defaultValue = {props.position}
                     step = {props.interval} 
