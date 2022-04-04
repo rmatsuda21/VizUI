@@ -4,8 +4,10 @@ import CircularSlider from '@fseehawer/react-circular-slider';
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 
+import { HighContrast  } from 'react-dial-knob'
+
 function MyDial(props) {
-    const [value, setValue] = useState(props.dataIndex);
+    const [value, setValue] = useState(0);
 
     let sliderStyle = {
         width: "200px",
@@ -46,7 +48,7 @@ function MyDial(props) {
                 >
                     {props.name}
                 </Typography>
-                <CircularSlider
+                {/* <CircularSlider
                     // defaultValue={props.position}
                     onChange = {updatePos}
                     label={props.name}
@@ -54,7 +56,22 @@ function MyDial(props) {
                     max={props.max}
                     onMouseUp = {onSubmit}
                     labelColor="#848ccf"
-                />
+                /> */}
+                <HighContrast
+                    diameter={200}
+                    min={props.min}
+                    max={props.max}
+                    step={1}
+                    value={value}
+                    theme={{
+                        defaultColor: '#848ccf',
+                        activeColor: 'blue'
+                    }}
+                    onValueChange={setValue}
+                    ariaLabelledBy={'my-label'}
+                >
+                    <label id={'my-label'}>Some label</label>
+                </HighContrast>
             </Box>
         </>
     );
