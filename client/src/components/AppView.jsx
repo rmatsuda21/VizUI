@@ -13,7 +13,7 @@ function AppView(props) {
             .then((data) => setData(data));
     }, []);
 
-    var widgets = data ? getWidgets(data.ui.widget) : [];
+    var widgets = data ? getWidgets(data.ui.widget, 0, 'hello') : [];
 
     return (
     <TabContextProvider>
