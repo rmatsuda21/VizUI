@@ -5,8 +5,6 @@ const db = require("../utils/db");
 const { dirname } = require("path");
 const appDir = dirname(require.main.filename);
 
-console.log(appDir);
-
 // Uploading UI File
 const UPLOAD_DESTINATION = appDir + "/uploads/UI";
 const JSON_DESTINATION = appDir + "/uploads/JSON";
