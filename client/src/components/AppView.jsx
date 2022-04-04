@@ -1,10 +1,14 @@
 import React, { useEffect, useState, createContext } from "react";
 import { getWidgets } from "../js/WidgetFactory";
+<<<<<<< HEAD
 const { io } = require("socket.io-client");
 import WidgetContext from "../widgets/widget-context";
+=======
+import { RadioContextProvider } from "../widgets/contexts/RadioContext";
+import { TabContextProvider } from "../widgets/contexts/TabContext";
+>>>>>>> develop
 
 function AppView(props) {
-    // TODO: Add function to render this page dynamically based on JSON
     const [data, setData] = useState(null);
     const [widgetVal, setWidgetVal] = useState({})
 
@@ -15,6 +19,7 @@ function AppView(props) {
             .then((data) => data.json())
             .then((data) => setData(data));
 
+<<<<<<< HEAD
         const socket = io();
 
         socket.on("update", res => {
@@ -29,5 +34,16 @@ function AppView(props) {
     return (<WidgetContext.Provider value={{widgetVal, setWidgetVal}}>
                 {widgets}
             </WidgetContext.Provider>);
+=======
+    console.log(data);
+
+    var widgets = data ? getWidgets(data.ui.widget, 0, "hello") : [];
+
+    return (
+        <TabContextProvider>
+            <RadioContextProvider>{widgets}</RadioContextProvider>
+        </TabContextProvider>
+    );
+>>>>>>> develop
 }
 export default AppView;
