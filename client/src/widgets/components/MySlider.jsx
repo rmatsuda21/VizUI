@@ -3,11 +3,31 @@ import "../stylesheets/MySlider.css";
 import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
+import { useState } from "react";
 
 function MySlider(props) {
+    const [value, setValue] = useState(props.position)
+
     let sliderStyle = {
         margin: '10px 5px 0px 5px'
     };
+
+    async function handleChangeCommit() {
+        const body = { data: value }
+        await fetch(`http://localhost:3001/testwrite/${test}`,
+          {
+            method: "POST",
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body),
+          }
+        )
+    }
+
+    function handleOnChange(e) {
+        setValue(e.target.value)
+    }
     
     // props.orientation === 'horizontal'
     //     ? sliderStyle = Object.assign(sliderStyle, {width: props.geometry.width}) 
@@ -23,7 +43,7 @@ function MySlider(props) {
                     gutterBottom
                     sx={{ textAlign: "center" }}
                 >
-                    {props.name}
+                    {props.name} {value}
                 </Typography>
                 <Slider
                     aria-label = {props.name} 
@@ -35,6 +55,8 @@ function MySlider(props) {
                     step = {props.interval} 
                     valueLabelDisplay = "auto"
                     marks = {props.marks}
+                    onChange = {handleOnChange}
+                    onChangeCommitted = {handleChangeCommit}
                     sx={{
                         color: '#848ccf', 
                         '& .MuiSlider-track': {

@@ -27,6 +27,7 @@ function MyDial(props) {
                     min={props.min}
                     max={props.max}
                     labelColor="#848ccf"
+                    onChange={e => console.log(e)}
                 />
             </Box>
         </>
