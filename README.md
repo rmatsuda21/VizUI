@@ -1,17 +1,27 @@
-# Getting Started with Create React App
+# VizUI
+### Welcome to VizUI 👋
+Have you ever wanted to create a full-stack GUI application but didn't want to spend countless hours creating the application?
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Then VizUI is the application for you! 🤩** 
 
-# Prereqs
+![Alt Text](https://media.giphy.com/media/TefE1FDoAHciTa4H94/giphy.gif)
 
-You will need node, npm, and nodemon to run this project.
+Through the power of [Qt Creator](https://www.qt.io/), an interactive GUI designer, you can create a fully functional full-stack GUI application from a simple UI (XML) file!
+ 
+## 🚀 Features  🚀
 
-# Setup
+- Clean and customizable UI, created through [MUI](https://mui.com/).
+- Socket communication between client and server
+- Database I/O (MongoDB)
+- Full route control through Express
 
-When you pull code, within _/client_ and _/server_ run `npm i`
+## 💻 Setup 💻
+### Requirements
 
-# Running code
+- Node.js
 
-To run the client, run `npm start` within /client.
+### Install
 
-To run the server, run `nodemon index.js` within /server
+1. Run `npm install` in both `/server` and `/client`.
+2. To run server, run `node index.js` in `/server`.
+3. To run client, run `npm start` in `/client`.

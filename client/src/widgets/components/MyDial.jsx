@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../stylesheets/MyDial.css";
 import CircularSlider from '@fseehawer/react-circular-slider';
 import Typography from "@mui/material/Typography";
@@ -48,16 +48,15 @@ function MyDial(props) {
                 >
                     {props.name}
                 </Typography>
-                {/* <CircularSlider
+                <CircularSlider
                     // defaultValue={props.position}
                     onChange = {updatePos}
                     label={props.name}
                     min={props.min}
                     max={props.max}
-                    onMouseUp = {onSubmit}
                     labelColor="#848ccf"
-                /> */}
-                <HighContrast
+                />
+                {/* <HighContrast
                     diameter={200}
                     min={props.min}
                     max={props.max}
@@ -71,7 +70,7 @@ function MyDial(props) {
                     ariaLabelledBy={'my-label'}
                 >
                     <label id={'my-label'}>Some label</label>
-                </HighContrast>
+                </HighContrast> */}
             </Box>
         </>
     );
