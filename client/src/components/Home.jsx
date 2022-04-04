@@ -19,7 +19,7 @@ theme.typography = {
     },
 
     button: { fontWeight: 800 },
-    pxToRem: size => `${(size / htmlFontSize) * coef}rem`,
+    pxToRem: (size) => `${(size / htmlFontSize) * coef}rem`,
 };
 
 const isEmpty = (file) => {
@@ -32,6 +32,16 @@ class Home extends Component {
         this.state = {
             selectedFile: {},
         };
+    }
+
+    componentDidMount() {
+        this.props.socket.on("date", (date) => {
+            console.log(date);
+        });
+    }
+
+    componentWillUnmount() {
+        this.props.socket.close();
     }
 
     render() {
