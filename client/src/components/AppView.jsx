@@ -13,14 +13,14 @@ function AppView(props) {
             .then((data) => setData(data));
     }, []);
 
-    var widgets = data ? getWidgets(data.ui.widget, 0, 'hello') : [];
+    console.log(data);
+
+    var widgets = data ? getWidgets(data.ui.widget, 0, "hello") : [];
 
     return (
-    <TabContextProvider>
-        <RadioContextProvider>
-            {widgets}
-        </RadioContextProvider>
-    </TabContextProvider>
+        <TabContextProvider>
+            <RadioContextProvider>{widgets}</RadioContextProvider>
+        </TabContextProvider>
     );
 }
 export default AppView;

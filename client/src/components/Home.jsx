@@ -19,7 +19,7 @@ theme.typography = {
     },
 
     button: { fontWeight: 800 },
-    pxToRem: size => `${(size / htmlFontSize) * coef}rem`,
+    pxToRem: (size) => `${(size / htmlFontSize) * coef}rem`,
 };
 
 const isEmpty = (file) => {
@@ -41,7 +41,7 @@ class Home extends Component {
     }
 
     componentWillUnmount() {
-        this.props.socket.close()
+        this.props.socket.close();
     }
 
     render() {

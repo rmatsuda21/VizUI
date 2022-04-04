@@ -1,4 +1,4 @@
-import React, { useState, useContext }  from "react";
+import React, { useState, useContext } from "react";
 
 export const TabContext = React.createContext({
     values: {},
@@ -6,16 +6,16 @@ export const TabContext = React.createContext({
 });
 
 export function TabContextProvider(props) {
-  const [tabValues, setTabValues] = useState({});
+    const [tabValues, setTabValues] = useState({});
 
-  const context = {
-    values: tabValues,
-    setValues: setTabValues,
-  }
+    const context = {
+        values: tabValues,
+        setValues: setTabValues,
+    };
 
-  return (
-    <TabContext.Provider value={context}>
-      {props.children}
-    </TabContext.Provider>
-  );
+    return (
+        <TabContext.Provider value={context}>
+            {props.children}
+        </TabContext.Provider>
+    );
 }
