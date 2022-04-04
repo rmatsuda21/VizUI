@@ -5,22 +5,16 @@ import { RadioContext } from "../contexts/RadioContext";
 import connectToContext from "../contexts/ConnectContext";
 
 // use memo so it reloads on prop or context change
-const MyRadio = React.memo(({
-    props,
-    values,
-    setValues
-}) => { 
+const MyRadio = React.memo(({ props, values, setValues }) => {
     return (
-        <Box sx={{display: 'flex', alignItems: 'center', gap: '1em'}}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: "1em" }}>
             <Radio
                 checked={values[props.group] === props.name}
-                onChange={
-                (event) => {
+                onChange={(event) => {
                     let newValues = Object.assign({}, values);
                     newValues[props.group] = event.target.value;
                     setValues(newValues);
-                    }
-                }
+                }}
                 value={props.name}
                 id={props.name}
                 name={props.group}
@@ -29,15 +23,15 @@ const MyRadio = React.memo(({
             <label htmlFor={props.name}>{props.label}</label>
         </Box>
     );
-})
+});
 
 // return radio context parameters
-function select(){
+function select() {
     const { values, setValues } = useContext(RadioContext);
     return {
-      values: values,
-      setValues: setValues
-    }
+        values: values,
+        setValues: setValues,
+    };
 }
 
 // use to pass context and props to MyRadio

@@ -18,8 +18,8 @@ var curButtonInfo = {
 };
 // Get child widgets from parent
 // If parent.layout exists, then it has a layout
-export function getWidgets(parent, key = 0, dbName = '') {
-    if (!parent) return []
+export function getWidgets(parent, key = 0, dbName = "") {
+    if (!parent) return [];
 
     if (key == 0) {
         key = Math.floor(Math.random() * 100);
@@ -50,7 +50,7 @@ export function getWidgets(parent, key = 0, dbName = '') {
             <Stack
                 key={key}
                 direction={className === "QHBoxLayout" ? "row" : "column"}
-                sx={{ width: 'auto', justifyContent: 'space-around' }}
+                sx={{ width: "auto", justifyContent: "space-around" }}
                 gap={2}
             >
                 {items}
@@ -127,7 +127,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     confetti={confetti}
                     label={name}
                     name={name}
-                    value={value}
+                    value={"IDK"}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -135,7 +135,9 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 />
             );
         case "QRadioButton": {
-            let group = object.attribute.string["#text"] || Math.random().toString(36).slice(2);
+            let group =
+                object.attribute.string["#text"] ||
+                Math.random().toString(36).slice(2);
             let label = properties.text || name;
             return (
                 <MyRadio
@@ -143,8 +145,8 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     group={group}
                     name={name}
                     label={label}
-                    size = {"medium"}
-                    row = {false}
+                    size={"medium"}
+                    row={false}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -154,7 +156,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
         case "QCheckBox": {
             let label = properties.text || name;
             let disabled = false;
-            if (typeof properties.checkable !== 'undefined') {
+            if (typeof properties.checkable !== "undefined") {
                 disabled = !properties.checkable;
             }
             return (
@@ -188,18 +190,14 @@ function widgetParser(className, name, properties, key, object, confetti) {
             // set default tab for tab context
 
             let [tabs, tabNames] = parseTabs(object.widget, name);
-            console.log(tabNames)
-            console.log(tabs)
+            console.log(tabNames);
+            console.log(tabs);
             return (
                 <>
-                    <MyTabHeader
-                        key={key}
-                        name={name}
-                        tabNames={tabNames}
-                    />
+                    <MyTabHeader key={key} name={name} tabNames={tabNames} />
                     {tabs}
                 </>
-            )
+            );
 
         default:
             return <p key={key}>{object["@_class"]}</p>;
@@ -261,16 +259,10 @@ function parseWidget(widget, key = 0) {
 function parseWidgets(parent) {
     // Is single widget, not container
     if (!("widget" in parent)) {
-        return parseWidget(
-            parent,
-            Math.floor(Math.random() * 100)
-        );
+        return parseWidget(parent, Math.floor(Math.random() * 100));
     }
 
-    return parseWidget(
-        parent.widget,
-        Math.floor(Math.random() * 100)
-    );
+    return parseWidget(parent.widget, Math.floor(Math.random() * 100));
 }
 
 // Parse items for grid

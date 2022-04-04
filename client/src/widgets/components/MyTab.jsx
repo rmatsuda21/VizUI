@@ -4,14 +4,9 @@ import { TabContext } from "../contexts/TabContext";
 import connectToContext from "../contexts/ConnectContext";
 
 // use memo so it reloads on prop or context change
-const MyTab = React.memo(({
-    props,
-    values,
-    setValues
-}) => { 
-
+const MyTab = React.memo(({ props, values, setValues }) => {
     const { children, group, index, ...other } = props;
-    
+
     return (
         <div
             role="tabpanel"
@@ -19,20 +14,18 @@ const MyTab = React.memo(({
             id={`simple-tabpanel-${group}-${index}`}
             aria-labelledby={`simple-tab-${group}-${index}`}
         >
-            <Box sx={{ p: 3 }}>
-                {children}
-            </Box>
+            <Box sx={{ p: 3 }}>{children}</Box>
         </div>
     );
-})
+});
 
 // return tab context parameters
-function select(){
+function select() {
     const { values, setValues } = useContext(TabContext);
     return {
-      values: values,
-      setValues: setValues
-    }
+        values: values,
+        setValues: setValues,
+    };
 }
 
 // use to pass context and props to MyTab

@@ -29,24 +29,24 @@ function MyButton(props) {
         <Box sx={{ display: "flex", alignItems: "center", gap: "1em" }}>
             {/* onclick is a listener */}
             <Button
-                aria-label = {props.label}
+                aria-label={props.label}
                 value={props.value}
-                variant = {props.variant}
-                size = {props.size} // small, medium, or large
-                disabled = {props.disable}
-                disableElevation = {props.disableElevation}
+                variant={props.variant}
+                size={props.size} // small, medium, or large
+                disabled={props.disable}
+                disableElevation={props.disableElevation}
                 onClick={() => {
                     countUpdate();
                     if (props.tooltip === "confetti")
                         props.confetti.addConfetti({ confettiNumber: 30 });
                     // PostRequest();
                 }}
-                sx = {{
-                  backgroundColor: '#848ccf',
-                  borderColor: '#848ccf',
-                  '&:hover': {
-                    backgroundColor: '#767EBA',
-                  },
+                sx={{
+                    backgroundColor: "#848ccf",
+                    borderColor: "#848ccf",
+                    "&:hover": {
+                        backgroundColor: "#767EBA",
+                    },
                 }}
             >
                 {props.label}

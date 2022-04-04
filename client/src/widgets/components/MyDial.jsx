@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "../stylesheets/MyDial.css";
-import CircularSlider from '@fseehawer/react-circular-slider';
+import CircularSlider from "@fseehawer/react-circular-slider";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 
-import { HighContrast  } from 'react-dial-knob'
+import { HighContrast } from "react-dial-knob";
 
 function MyDial(props) {
     const [value, setValue] = useState(0);
@@ -14,26 +14,25 @@ function MyDial(props) {
         margin: "10px 5px 0px 5px",
     };
     function updatePos(e) {
-        set.value(e.target.value)
+        set.value(e.target.value);
     }
 
     // This function will handle the submission once the slider is released
     async function onSubmit(e) {
         e.preventDefault();
-    
+
         // When a post request is sent to the create url, we'll add a new record to the database.
-        const newPosition = { data : value };
-    
+        const newPosition = { data: value };
+
         await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(newPosition),
-        })
-        .catch(error => {
-        window.alert(error);
-        return;
+        }).catch((error) => {
+            window.alert(error);
+            return;
         });
     }
 
@@ -50,7 +49,7 @@ function MyDial(props) {
                 </Typography>
                 <CircularSlider
                     // defaultValue={props.position}
-                    onChange = {updatePos}
+                    onChange={updatePos}
                     label={props.name}
                     min={props.min}
                     max={props.max}

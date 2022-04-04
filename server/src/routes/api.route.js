@@ -2,9 +2,14 @@ const express = require("express");
 const router = express.Router();
 const db = require("../utils/db");
 
+const { dirname } = require("path");
+const appDir = dirname(require.main.filename);
+
+console.log(appDir);
+
 // Uploading UI File
-const UPLOAD_DESTINATION = "./uploads/UI";
-const JSON_DESTINATION = "./uploads/JSON";
+const UPLOAD_DESTINATION = appDir + "/uploads/UI";
+const JSON_DESTINATION = appDir + "/uploads/JSON";
 
 // Ensure that upload dest/json dest exists
 const fs = require("fs");
@@ -34,7 +39,6 @@ router.post("/convert", upload.single("uiFile"), (req, res) => {
         path = req.file.path;
     parseUIFile(path, filename, JSON_DESTINATION);
 
-    db.conenctToDB(filename);
     res.redirect(`/view/${filename}`);
 });
 
