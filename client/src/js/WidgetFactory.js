@@ -18,7 +18,7 @@ var curButtonInfo = {
 };
 // Get child widgets from parent
 // If parent.layout exists, then it has a layout
-export function getWidgets(parent, key = 0, dbname = '') {
+export function getWidgets(parent, key = 0, dbName = '') {
     if (!parent) return []
 
     if (key == 0) {
@@ -138,12 +138,12 @@ function widgetParser(className, name, properties, key, object, confetti) {
             let group = object.attribute.string["#text"] || Math.random().toString(36).slice(2);
             let label = properties.text || name;
             return (
-                <MyRadio 
+                <MyRadio
                     key={key}
-                    group={group} 
+                    group={group}
                     name={name}
                     label={label}
-                    size = {"medium"}  
+                    size = {"medium"}
                     row = {false}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
