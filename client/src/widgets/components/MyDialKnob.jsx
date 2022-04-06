@@ -6,6 +6,11 @@ import { HighContrast } from 'react-dial-knob'
 
 function MyDialKnob(props) {
     const [value, setValue] = useState(0);
+    const [count, setCount] = React.useState(0);
+    const countUpdate = () => {
+            // Dealing with name field changes to update our state
+            setCount(count + 1);
+        };
 
     let sliderStyle = {
         width: "200px",
@@ -53,11 +58,28 @@ function MyDialKnob(props) {
                     value={value}
                     theme={{
                         defaultColor: 'black',
-                        activeColor: 'blue'
+                        activeColor: "#848ccf"
                     }}
+                    style={{
+                        position: "relative",
+                        margin: "100px auto",
+                        width: "200px"
+                      }}
                     onValueChange={setValue}
-                    ariaLabelledBy={'my-label'}
+                    onInteractionChange={() => {countUpdate();}}
                     >
+                        <label
+                            id={"my-label"}
+                            style={{
+                            textAlign: "center",
+                            width: "200px",
+                            display: "block",
+                            padding: "10px 0"
+                            }}
+                        >
+                            interaction change ticker:
+                            {count}
+                        </label>
                 </HighContrast>
             </Box>
         </>
