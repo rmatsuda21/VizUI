@@ -5,6 +5,7 @@ import {
     MyButton,
     MyCheckbox,
     MyDial,
+    MyDialKnob,
     MyRadio,
     MySlider,
     MyTab,
@@ -174,7 +175,17 @@ function widgetParser(className, name, properties, key, object, confetti) {
             let min = properties.minimum || 0;
             let max = properties.maximum || 100;
             return (
-                <MyDial
+                // <MyDial
+                //     key={key}
+                //     name={name}
+                //     min={min}
+                //     max={max}
+                //     position={0}
+                //     geometry={
+                //         properties.geometry ? properties.geometry : undefined
+                //     }
+                // />
+                <MyDialKnob
                     key={key}
                     name={name}
                     min={min}
