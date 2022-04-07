@@ -5,6 +5,7 @@ import { TabContextProvider } from "../widgets/contexts/TabContext";
 
 function AppView(props) {
     const [data, setData] = useState(null);
+    const [appName, setAppName] = useState("");
 
     useEffect(async () => {
         await new Promise((r) => setTimeout(r, 500));

@@ -13,6 +13,7 @@ function MyDial(props) {
         width: "200px",
         margin: "10px 5px 0px 5px",
     };
+
     function updatePos(e) {
         set.value(e.target.value);
     }

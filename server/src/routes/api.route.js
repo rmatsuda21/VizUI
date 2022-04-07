@@ -32,18 +32,22 @@ const upload = multer({ storage: storage });
 
 const { parseUIFile } = require("../helpers/parser");
 
-router.post("/convert", upload.single("uiFile"), (req, res) => {
+router.post("/convert", upload.single("uiFile"), async (req, res) => {
     let filename = req.file.filename,
         path = req.file.path;
     parseUIFile(path, filename, JSON_DESTINATION);
 
+    await db.connectToDB('applications');
+    await db.writeToCollection("applications", {filename, modified: new Date().toISOString(), name: req.body.appName}, true);
+    await db.closeDB();
+
     res.redirect(`/view/${filename}`);
 });
 
-router.get("/get-json/:id", (req, res) => {
+router.get("/get-json/:id", async (req, res) => {
     const data = require(JSON_DESTINATION + `/${req.params.id}.json`);
 
-    db.connectToDB(req.params.id);
+    await db.connectToDB(req.params.id);
     res.header("Content-Type", "application/json");
     res.send(JSON.stringify(data));
 });
@@ -64,10 +68,20 @@ router.get("/db/write/:data", async (req, res) => {
     }
 });
 
+router.get("/db/query/:dbName/:collectionName", async (req, res) => {
+    try {
+        await db.connectToDB(req.params.dbName);
+        const data = await db.queryCollection(req.params.collectionName);
+        res.status(200).json(data);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
 router.get("/db/query/:collectionName", async (req, res) => {
     try {
         const data = await db.queryCollection(req.params.collectionName);
-        res.status(200).send(data);
+        res.status(200).json(data);
     } catch (e) {
         res.status(400).send(e);
     }
