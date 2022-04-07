@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../stylesheets/MySlider.css";
 import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
@@ -9,7 +9,14 @@ function MySlider(props) {
     let sliderStyle = {
         margin: '10px 5px 0px 5px'
     };
+
+    // console.log(props.orientation)
+    props.orientation == 'vertical' 
+        ? sliderStyle = Object.assign(sliderStyle, {height: "150px" }) 
+        : "";
     
+    // console.log(sliderStyle)
+
     //creates a new DB entry for each time the slider is changed, allowing user to keep track of historical changes
     // These methods will update the position real time as it is being manipulated
     function updatePos(e) {
@@ -54,8 +61,9 @@ function MySlider(props) {
                     min={props.min}
                     max={props.max}
                     style={sliderStyle}
-                    value = {position}
-                    onChange = {updatePos}
+                    orientation={props.orientation}
+                    // value = {position}
+                    // onChange = {updatePos}
                     onChangeCommitted = {onSubmit}
                     valueLabelDisplay="on"
                     sx={{

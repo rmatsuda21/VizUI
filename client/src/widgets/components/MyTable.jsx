@@ -1,44 +1,83 @@
-import React from "react"; 
-import "../stylesheets/MyTable.css";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import React, { useCallback, useMemo, useState } from "react";
+import { AgGridReact } from "ag-grid-react"; 
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 
-function MyTable(props) {
+import SimpleEditor from "./SimpleEditor";
+import ActionsRenderer from "./ActionsRenderer";
+import AddRowStatusBar from "./AddRowStatusBar"; 
+
+function MyTable(props) { 
+
+    let rowId = [{
+        headerName: 'Row ID', 
+        valueGetter: 'node.id',
+        editable: false
+    }]
+    let buttonActions = [{ 
+        headerName: "action",
+        colId: "actions",
+        cellRenderer: "actionsRenderer",
+        editable: false,
+        filter: false,
+        minWidth: 220
+    }]
+    let colData = [...rowId, ...props.columnDefs, ...buttonActions] 
+
+    const [gridApi, setGridApi] = useState(null);
+    const [columnApi, setColumnApi] = useState(null);
+    const [columnDefs] = useState(colData); 
+    const [rowData] = useState(props.rowData);
+
+    const gridStyle = useMemo(() => ({ height: 400, width: 600 }), []); 
+
+    const defaultColDef = {
+        editable: true,
+        resizable: true,
+        filter: true,
+        floatingFilter: true,
+        suppressKeyboardEvent: params => params.editing
+    };
+
+    const getRowId = useCallback((params) => params.data.id, []);
+
+    const frameworkComponents = {
+        simpleEditor: SimpleEditor, 
+        actionsRenderer: ActionsRenderer
+    }
+
+    console.log(AddRowStatusBar)
+    console.log('addRowStatusBar')
+
+    function onGridReady(params) {
+        setGridApi(params.api);
+        setColumnApi(params.columnApi);     
+    } 
+
     return (
-        <>
-        <TableContainer component={Paper} >
-          <Table sx={{ minWidth: 650 }}>
-            <TableHead> 
-                <TableRow> 
-                    <TableCell>{props.name}</TableCell>
-                    {props.columns.map((columnName, index) => ( 
-                        <TableCell align="right">{columnName}</TableCell> 
-                    ))}
-                </TableRow>
-            </TableHead>
-            <TableBody>
-                {Object.keys(props.data).map((key, index) => (
-                    <TableRow
-                        key={index}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                        <TableCell component="th" scope="row">
-                            {key}
-                        </TableCell>
-                        {props.data[key].map((rowValue) => ( 
-                            <TableCell align="right">{rowValue}</TableCell>
-                        ))} 
-                    </TableRow>
-                ))} 
-            </TableBody>
-          </Table>
-        </TableContainer>
-        </>
+        <div> 
+            <div className="add-btn-container">
+                <button 
+                    color="primary" 
+                >Add Row</button>
+            </div>
+            <div
+                id={props.name}
+                style={gridStyle}
+                className="ag-theme-alpine"
+            >
+                <AgGridReact
+                    columnDefs={columnDefs}
+                    defaultColDef={defaultColDef}
+                    rowData={rowData}
+                    getRowId={getRowId}
+                    onGridReady={onGridReady}
+                    frameworkComponents={frameworkComponents}
+                    editType="fullRow"
+                    suppressClickEdit 
+                ></AgGridReact>
+            </div>
+        </div>
     );
 }
 

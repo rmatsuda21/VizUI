@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>718</width>
-    <height>300</height>
+    <width>871</width>
+    <height>579</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -84,20 +84,114 @@
       <widget class="QDial" name="dial"/>
      </item>
      <item row="2" column="1">
-      <layout class="QVBoxLayout" name="verticalLayout_2"/>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QTableWidget" name="tableWidget">
+         <row>
+          <property name="text">
+           <string>Car 1</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>Car 2</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>Car 3</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>Car 4</string>
+          </property>
+         </row>
+         <column>
+          <property name="text">
+           <string>Make</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Model</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Price</string>
+          </property>
+         </column>
+         <item row="0" column="0">
+          <property name="text">
+           <string>dfsdfdsf</string>
+          </property>
+         </item>
+         <item row="0" column="1">
+          <property name="text">
+           <string>pain</string>
+          </property>
+         </item>
+         <item row="0" column="2">
+          <property name="text">
+           <string>sdfsd</string>
+          </property>
+         </item>
+         <item row="1" column="0">
+          <property name="text">
+           <string>hey there</string>
+          </property>
+         </item>
+         <item row="1" column="1">
+          <property name="text">
+           <string>bain</string>
+          </property>
+         </item>
+         <item row="1" column="2">
+          <property name="text">
+           <string>ayo</string>
+          </property>
+         </item>
+         <item row="2" column="0">
+          <property name="text">
+           <string>sdfsd</string>
+          </property>
+         </item>
+         <item row="2" column="1">
+          <property name="text">
+           <string>wowaj </string>
+          </property>
+         </item>
+         <item row="2" column="2">
+          <property name="text">
+           <string>dsfs</string>
+          </property>
+         </item>
+         <item row="3" column="0">
+          <property name="text">
+           <string>cain</string>
+          </property>
+         </item>
+         <item row="3" column="1">
+          <property name="text">
+           <string>dsfsd</string>
+          </property>
+         </item>
+         <item row="3" column="2">
+          <property name="text">
+           <string>sdf</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item row="2" column="2">
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <widget class="QSlider" name="horizontalSlider">
-         <property name="maximumSize">
-          <size>
-           <width>397</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>cool slider</string>
          </property>
         </widget>
        </item>
@@ -111,6 +205,27 @@
          </property>
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>bad slider</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QSlider" name="verticalSlider">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>fast slider</string>
          </property>
         </widget>
        </item>
@@ -135,7 +250,4 @@
  </widget>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup"/>
- </buttongroups>
 </ui>

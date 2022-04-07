@@ -1,10 +1,12 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
+import OrderedDict from 'js-ordered-dict';
 // import { SetTabContextValue, GetTabContextValue } from "../widgets/contexts/TabContext";
 import {
     MyButton,
     MyCheckbox,
     MyDial,
+    MyLabel,
     MyRadio,
     MySlider,
     MyTab,
@@ -71,12 +73,14 @@ function widgetParser(className, name, properties, key, object, confetti) {
         case "QSlider":
             let interval = properties.singleStep || 1;
             let min = properties.minimum || 0;
-            let max = properties.maximum || 100;
+            let max = properties.maximum || 100; 
             return (
                 <MySlider
                     key={key}
                     name={name}
                     interval={interval}
+                    orientation={properties.orientation}
+                    size={properties.size}
                     min={min}
                     max={max}
                     position={0}
@@ -86,34 +90,43 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 />
             );
         case "QTableWidget":
-            let columnName = []; // name of each column
-            let rowName = []; // name of each row
-            let tableInfo = {}; // dictionary of each row (key) with its data (value)
+            let rowName = []; // name of each row 
+            let columnName = []  // name of each column
+            let rowData = new OrderedDict(); // array of dicts that hold {column: value}
+            let columnDefs = []; // name of columns {field: value}
+            let defaultRow = {}; // holds {column names : ""}   
 
             object.column.map((column) => {
-                columnName.push(column["property"].string);
+                columnDefs.push({
+                    field: column["property"].string, 
+                    cellEditor: "simpleEditor" 
+                });
+                
+                columnName.push( column["property"].string );
+
+                defaultRow[column["property"].string] = ""; 
             });
+
             object.row.map((row) => {
                 rowName.push(row["property"].string);
+                rowData.set(row["property"].string, {"id": row["property"].string, ...defaultRow}) 
             });
-            let curRow = null;
-            object.item.map((tableData, i) => {
-                if (curRow == tableData["@_row"]) {
-                    tableInfo[rowName[curRow]].push(
-                        tableData["property"].string
-                    );
-                } else {
-                    curRow = tableData["@_row"];
-                    tableInfo[rowName[curRow]] = [tableData["property"].string];
-                }
-            });
+
+            if (object.item) { 
+                object.item.map((tableData, i) => {
+                    let curRow = rowName[tableData["@_row"]]
+                    let curCol = columnName[tableData["@_column"]]
+                    let value = tableData.property["string"] 
+                    rowData.get(curRow)[curCol] = value;
+                });
+            }
 
             return (
                 <MyTable
                     key={key}
-                    name={name}
-                    columns={columnName}
-                    data={tableInfo}
+                    name={name} 
+                    columnDefs = {columnDefs}
+                    rowData = {rowData.values()}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -127,7 +140,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     confetti={confetti}
                     label={name}
                     name={name}
-                    value={value}
+                    // value={value}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -165,6 +178,16 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
+                />
+            );
+        }
+        case "QLabel": {
+            let label = properties.text || name; 
+            return (
+                <MyLabel
+                    key={key} 
+                    name={name}
+                    label={label}
                 />
             );
         }
@@ -220,6 +243,9 @@ function parseProperties(properties) {
             case "geometry":
                 obj[key] = property.rect;
                 break;
+            case "maximumSize":
+                obj[key] = property.size;
+                break;
             case "checkable":
                 obj[key] = property.bool;
                 break;
@@ -235,7 +261,12 @@ function parseProperties(properties) {
                 obj[key] = property.number;
                 break;
             case "orientation":
-                obj[key] = property.enum;
+                if (property.enum == "Qt::Horizontal"){
+                    obj[key] = "horizontal";
+                }
+                else{
+                    obj[key] = "vertical";
+                }
                 break;
             default:
                 console.log("New property type: " + key);
