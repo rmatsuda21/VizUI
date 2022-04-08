@@ -14,7 +14,7 @@ function MyCheckbox(props) {
                     disabled={props.disabled}
                     control={<Checkbox value={props.label}
                         onChange={(e) => {
-
+                            
                         }}/>}
                     label={props.label}
                 />
