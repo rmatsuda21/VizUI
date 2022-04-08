@@ -7,25 +7,33 @@ const server = http.createServer(app);
 const io = new Server(server);
 const PORT = process.env.PORT || 3001;
 
-const db = require("./src/utils/db");
+const PouchDB = require("pouchdb");
 const apiRouter = require("./src/routes/api.route");
 
 require("dotenv").config();
 require("./src/config/cleanup.config");
 
-io.on("connection", socket => {
-    console.log("Socket connected");
-    
-    const testDB = db.connectToDB("test")
+const db = new PouchDB('database/test')
 
-    testDB.getDb().changes({
+io.on("connection", socket => {
+    console.log("Socket connected")
+
+    db.changes({
         since: 'now',
         live: true,
         include_docs: true
       }).on('change', function(change) {
-          console.log(change)
-        socket.emit("update", change)
-      })
+            socket.emit("change", change)
+      }) 
+
+    socket.on("update", update => {
+        update._id = new Date().toISOString()
+
+        db.put(update, (err, result) => {
+            if (err) console.log(err)
+            else console.log(result)
+        })
+    })
 
     socket.on("disconnect", () => {
         console.log("User disconnected");

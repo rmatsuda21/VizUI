@@ -1,12 +1,9 @@
 import React, { useEffect, useState, createContext } from "react";
 import { getWidgets } from "../js/WidgetFactory";
-<<<<<<< HEAD
 const { io } = require("socket.io-client");
 import WidgetContext from "../widgets/widget-context";
-=======
-import { RadioContextProvider } from "../widgets/contexts/RadioContext";
-import { TabContextProvider } from "../widgets/contexts/TabContext";
->>>>>>> develop
+
+const socket = io();
 
 function AppView(props) {
     const [data, setData] = useState(null);
@@ -19,31 +16,19 @@ function AppView(props) {
             .then((data) => data.json())
             .then((data) => setData(data));
 
-<<<<<<< HEAD
-        const socket = io();
-
-        socket.on("update", res => {
-            console.log(res.updateDescription.updatedFields)
-            setWidgetVal(res.updateDescription.updatedFields)
+        socket.on("change", res => {
+            delete res.doc._id
+            delete res.doc._rev
+            console.log(res.doc)
+            setWidgetVal(res.doc)
         })
         
     });
 
     let widgets = data ? getWidgets(data.ui.widget) : [];
 
-    return (<WidgetContext.Provider value={{widgetVal, setWidgetVal}}>
+    return (<WidgetContext.Provider value={{widgetVal, setWidgetVal, socket}}>
                 {widgets}
             </WidgetContext.Provider>);
-=======
-    console.log(data);
-
-    var widgets = data ? getWidgets(data.ui.widget, 0, "hello") : [];
-
-    return (
-        <TabContextProvider>
-            <RadioContextProvider>{widgets}</RadioContextProvider>
-        </TabContextProvider>
-    );
->>>>>>> develop
 }
 export default AppView;

@@ -9,25 +9,17 @@ import { useContext } from "react";
 import WidgetContext from "../widget-context";
 
 function MySlider(props) {
-<<<<<<< HEAD
-  const { widgetVal, setWidgetVal } = useContext(WidgetContext);
+    const { widgetVal, setWidgetVal, socket } = useContext(WidgetContext);
 
-=======
     const [value, setValue] = useState(props.position);
->>>>>>> develop
     let sliderStyle = {
         margin: "10px 5px 0px 5px",
     };
 
     async function handleChangeCommit() {
-        const body = { data: value };
-        await fetch(`http://localhost:3001/testwrite/${test}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-        });
+        const slider = {}
+        slider[props.name] = value
+        socket.emit("update", slider)
     }
 
     function handleOnChange(e) {
@@ -72,30 +64,17 @@ function MySlider(props) {
                     {props.name} {value}
                 </Typography>
                 <Slider
-<<<<<<< HEAD
-                    aria-label = {props.name} 
-                    style = {sliderStyle}
-                    min = {props.min}
-                    max = {props.max} 
-                    value = {widgetVal[props.name]}
-                    orientation = {props.orientation} 
-                    defaultValue = {props.position}
-                    step = {props.interval} 
-                    valueLabelDisplay = "auto"
-                    marks = {props.marks}
-=======
                     aria-label={props.name}
                     style={sliderStyle}
                     min={props.min}
                     max={props.max}
                     orientation={props.orientation}
-                    defaultValue={props.position}
+                    defaultValue={widgetVal[props.name]}
                     step={props.interval}
                     valueLabelDisplay="auto"
                     marks={props.marks}
                     onChange={handleOnChange}
                     onChangeCommitted={handleChangeCommit}
->>>>>>> develop
                     sx={{
                         color: "#848ccf",
                         "& .MuiSlider-track": {
