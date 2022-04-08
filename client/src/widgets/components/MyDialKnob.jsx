@@ -4,53 +4,12 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { HighContrast } from 'react-dial-knob'
 
-
 function MyDialKnob(props) {
-
-    var ENTER_KEY = 13;
-    var newTodoDom = document.getElementById('new-todo');
-    var syncDom = document.getElementById('sync-wrapper');
-
     const [value, setValue] = useState(0);
     const [count, setCount] = React.useState(0);
-
-    var db = new PouchDB('test');
-    var remoteCouch = 'http://127.0.0.1:5984/test';
-
-     // Subscribe to DB changes
-    db.changes({
-        since: 'now',
-        live: true
-    }).on('change', showPosition);
-
-    function addtest(text) {
-        var todo = {
-          _id: props.name,
-          title: text,
-          value: value,
-        };
-        db.put(todo, function callback(err, result) {
-          if (!err) {
-            console.log('Successfully posted a todo!');
-          }
-        });
-      }
-    // Show the current list of todos by reading them from the database
-    function showTodos() {
-        db.allDocs({include_docs: true}, function(err, doc) {
-        redrawTodosUI(doc.rows);
-        });
-    }
-
     const countUpdate = () => {
-            // if count is 1: mouseDown
-            //if count is 0: mouseUp
-            if (count == 1) {
-                setCount(count - 1);
-            }
-            else{
-                setCount(count + 1);
-            }
+            // Dealing with name field changes to update our state
+            setCount(count + 1);
         };
 
     let sliderStyle = {
@@ -66,7 +25,7 @@ function MyDialKnob(props) {
         e.preventDefault();
 
         // When a post request is sent to the create url, we'll add a new record to the database.
-        const newPosition = { data: count };
+        const newPosition = { data: value };
 
         await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
             method: "POST",
@@ -93,8 +52,8 @@ function MyDialKnob(props) {
                 </Typography>
                 <HighContrast
                     diameter={200}
-                    min={props.min}
-                    max={props.max}
+                    min={0}
+                    max={100}
                     step={1}
                     value={value}
                     theme={{
@@ -118,11 +77,8 @@ function MyDialKnob(props) {
                             padding: "10px 0"
                             }}
                         >
-                            interaction change count:
+                            interaction change ticker:
                             {count}
-                            value:
-                            {value}
-
                         </label>
                 </HighContrast>
             </Box>
