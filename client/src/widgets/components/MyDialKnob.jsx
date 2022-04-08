@@ -8,36 +8,50 @@ function MyDialKnob(props) {
     const [value, setValue] = useState(0);
     const [count, setCount] = React.useState(0);
     const countUpdate = () => {
-            // Dealing with name field changes to update our state
-            setCount(count + 1);
+            // if count is 1: mouseDown
+            //if count is 0: mouseUp
+            if (count == 1) {
+                setCount(count - 1);
+                onSubmit();
+            }
+            else{
+                setCount(count + 1);
+            }
         };
 
     let sliderStyle = {
         width: "200px",
         margin: "10px 5px 0px 5px",
     };
-    function updatePos(e) {
-        set.value(e.target.value);
+    // function updatePos(e) {
+    //     set.value(e.target.value);
+    // }
+
+    async function onSubmit() {
+        const socket = io();
+        socket.emit("updateDialValue", value);
+        // console.log("socket emit: updated Dial val to ", value)
+
     }
 
-    // This function will handle the submission once the slider is released
-    async function onSubmit(e) {
-        e.preventDefault();
+    // // This function will handle the submission once the slider is released
+    // async function onSubmit(e) {
+    //     e.preventDefault();
 
-        // When a post request is sent to the create url, we'll add a new record to the database.
-        const newPosition = { data: value };
+    //     // When a post request is sent to the create url, we'll add a new record to the database.
+    //     const newPosition = { data: count };
 
-        await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newPosition),
-        }).catch((error) => {
-            window.alert(error);
-            return;
-        });
-    }
+    //     await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify(newPosition),
+    //     }).catch((error) => {
+    //         window.alert(error);
+    //         return;
+    //     });
+    // }
 
     return (
         <>
@@ -52,8 +66,8 @@ function MyDialKnob(props) {
                 </Typography>
                 <HighContrast
                     diameter={200}
-                    min={0}
-                    max={100}
+                    min={props.min}
+                    max={props.max}
                     step={1}
                     value={value}
                     theme={{
@@ -77,8 +91,13 @@ function MyDialKnob(props) {
                             padding: "10px 0"
                             }}
                         >
-                            interaction change ticker:
+                            zero means mouseUp move : 
                             {count}
+
+                            value:
+                            {value}
+
+
                         </label>
                 </HighContrast>
             </Box>

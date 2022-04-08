@@ -31,26 +31,31 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const { parseUIFile } = require("../helpers/parser");
+const { response } = require("express");
 
-router.post("/convert", upload.single("uiFile"), (req, res) => {
+router.post("/convert", upload.single("uiFile"), async (req, res) => {
     let filename = req.file.filename,
         path = req.file.path;
     parseUIFile(path, filename, JSON_DESTINATION);
 
+    await db.connectToDB('applications');
+    await db.appendToCollection("applications", {filename, modified: new Date().toISOString(), name: req.body.appName}, true);
+    await db.closeDB();
+
     res.redirect(`/view/${filename}`);
 });
 
-router.get("/get-json/:id", (req, res) => {
+router.get("/get-json/:id", async (req, res) => {
     const data = require(JSON_DESTINATION + `/${req.params.id}.json`);
 
-    db.connectToDB(req.params.id);
+    await db.connectToDB(req.params.id);
     res.header("Content-Type", "application/json");
     res.send(JSON.stringify(data));
 });
 
 router.get("/db/write/:data", async (req, res) => {
     try {
-        await db.writeToCollection("test", req.params.data, {
+        await db.appendToCollection("test", req.params.data, {
             createIfNotExist: true,
         });
         const data = await db.queryCollection("test");
@@ -64,10 +69,29 @@ router.get("/db/write/:data", async (req, res) => {
     }
 });
 
+router.delete("/db/delete/:filename", async (req, res) => {
+    try {
+        const removeRes = await db.removeFromCollection("applications", req.params.filename);
+        res.status(200).send(removeRes);
+    } catch(e) {
+        res.status(400).send(e)
+    }
+})
+
+router.get("/db/query/:dbName/:collectionName", async (req, res) => {
+    try {
+        await db.connectToDB(req.params.dbName);
+        const data = await db.queryCollection(req.params.collectionName);
+        res.status(200).json(data);
+    } catch (e) {
+        res.status(400).send(e);
+    }
+});
+
 router.get("/db/query/:collectionName", async (req, res) => {
     try {
         const data = await db.queryCollection(req.params.collectionName);
-        res.status(200).send(data);
+        res.status(200).json(data);
     } catch (e) {
         res.status(400).send(e);
     }
@@ -85,7 +109,7 @@ router.get("/db/connect/:dbName", async (req, res) => {
 router.get("/test", async (req, res) => {
     try {
         await db.connectToDB("testDB");
-        await db.writeToCollection("DWALKDMLWKAMDLK", 123, {
+        await db.appendToCollection("DWALKDMLWKAMDLK", 123, {
             createIfNotFound: true,
         });
         const data = await db.queryCollection("DWALKDMLWKAMDLK");

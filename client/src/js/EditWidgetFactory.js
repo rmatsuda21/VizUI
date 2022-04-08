@@ -1,11 +1,9 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
-// import { SetTabContextValue, GetTabContextValue } from "../widgets/contexts/TabContext";
 import {
     MyButton,
     MyCheckbox,
     MyDial,
-    MyDialKnob,
     MyRadio,
     MySlider,
     MyTab,
@@ -18,10 +16,9 @@ var curButtonInfo = {
     name: null,
     buttons: [],
 };
-
 // Get child widgets from parent
 // If parent.layout exists, then it has a layout
-export function getWidgets(parent, key = 0, dbName = "") {
+export function getEditWidgets(parent, key = 0, dbName = "") {
     if (!parent) return [];
 
     if (key == 0) {
@@ -180,22 +177,12 @@ function widgetParser(className, name, properties, key, object, confetti) {
             let min = properties.minimum || 0;
             let max = properties.maximum || 100;
             return (
-                // <MyDial
-                //     key={key}
-                //     name={name}
-                //     min={min}
-                //     max={max}
-                //     position={0}
-                //     geometry={
-                //         properties.geometry ? properties.geometry : undefined
-                //     }
-                // />
-                <MyDialKnob
+                <MyDial
                     key={key}
                     name={name}
                     min={min}
                     max={max}
-                    // position={0}
+                    position={0}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
