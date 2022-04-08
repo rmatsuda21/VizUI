@@ -1,11 +1,13 @@
 import { Button, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useState } from "react";
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
+import { useSnackbar } from "notistack";
 
 const DeleteDialog = (props) => {
     return (
@@ -14,19 +16,47 @@ const DeleteDialog = (props) => {
             onClose={props.handleClose}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
-            PaperProps={{variant: 'elevation', sx: {bgcolor: 'primary.dark', color: 'primary.contrastText', textAlign: 'center', padding: 0, margin: 0}}}
+            PaperProps={{
+                variant: "elevation",
+                sx: {
+                    bgcolor: "primary.dark",
+                    color: "primary.contrastText",
+                    textAlign: "center",
+                    padding: 0,
+                    margin: 0,
+                },
+            }}
         >
-            <DialogTitle id="alert-dialog-title" sx={{fontWeight: 600}}>
+            <DialogTitle id="alert-dialog-title" sx={{ fontWeight: 600 }}>
                 {`Delete "${props.appName}"?`}
             </DialogTitle>
             <DialogContent>
-            <DialogContentText id="alert-dialog-description" sx={{color: "info.main"}}>
-                This action will be permanent!
-            </DialogContentText>
+                <DialogContentText
+                    id="alert-dialog-description"
+                    sx={{ color: "info.main" }}
+                >
+                    This action will be permanent!
+                </DialogContentText>
             </DialogContent>
-            <DialogActions sx={{display: 'flex', justifyContent: "space-evenly"}}>
-                <Button onClick={props.handleDelete} color="error" variant="contained">Delete</Button>
-                <Button onClick={props.handleClose} color="info" variant="contained" autoFocus>
+            <DialogActions
+                sx={{ display: "flex", justifyContent: "space-evenly" }}
+            >
+                <Button
+                    onClick={() => {
+                        props.handleDelete();
+                        props.handleClose();
+                    }}
+                    color="error"
+                    variant="contained"
+                >
+                    Delete
+                </Button>
+                <Button
+                    onClick={props.handleClose}
+                    color="info"
+                    variant="contained"
+                    autoFocus
+                >
                     Cancel
                 </Button>
             </DialogActions>
@@ -37,19 +67,20 @@ const DeleteDialog = (props) => {
 const AppItem = (props) => {
     const { created, data } = props;
     const date = new Date(data.modified);
+    const { enqueueSnackbar } = useSnackbar();
 
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
     const handleDialogOpen = () => {
         setDeleteDialogOpen(true);
-    }
+    };
 
     const handleDialogClose = () => {
         setDeleteDialogOpen(false);
-    }
+    };
 
-    const onDeleteClick = () => {
-        //Delete Item
+    const onDeleteClick = (name) => {
+        enqueueSnackbar(`Deleted "${name}"`, {variant: 'error'})
     };
 
     return (
@@ -66,10 +97,21 @@ const AppItem = (props) => {
                 padding: 3,
                 borderRadius: 2,
                 margin: 2,
+                transition: "all .15s ease-in",
+                "&:hover": {
+                    boxShadow: '0px 0px 8px 1px rgba(255,255,255,.3)'
+                }
             }}
         >
-            <DeleteDialog open={deleteDialogOpen} handleClose={handleDialogClose} handleDelete={onDeleteClick} appName={data.name}/>
-            <Typography variant="h5" sx={{fontWeight: 800}}>{data.name}</Typography>
+            <DeleteDialog
+                open={deleteDialogOpen}
+                handleClose={handleDialogClose}
+                handleDelete={() => {onDeleteClick(data.name)}}
+                appName={data.name}
+            />
+            <Typography variant="h5" sx={{ fontWeight: 800 }}>
+                {data.name}
+            </Typography>
             <Button
                 variant="contained"
                 color={"primary"}
