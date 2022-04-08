@@ -34,16 +34,6 @@ class Home extends Component {
         };
     }
 
-    componentDidMount() {
-        this.props.socket.on("date", (date) => {
-            console.log(date);
-        });
-    }
-
-    componentWillUnmount() {
-        this.props.socket.close();
-    }
-
     render() {
 
         const handleFileInput = (e) => {
