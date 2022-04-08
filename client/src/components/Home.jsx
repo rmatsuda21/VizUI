@@ -233,7 +233,7 @@ function Home(props) {
             {/* <Button variant="outlined" onClick={getDate}>
                 Date Please :3
             </Button> */}
-            <DataGridDemo/>
+            {/* <DataGridDemo/> */}
         </Box>
     );
 }

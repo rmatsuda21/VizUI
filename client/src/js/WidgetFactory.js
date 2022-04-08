@@ -1,5 +1,6 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
+import OrderedDict from 'js-ordered-dict';
 // import { SetTabContextValue, GetTabContextValue } from "../widgets/contexts/TabContext";
 import {
     MyButton,
@@ -86,34 +87,43 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 />
             );
         case "QTableWidget":
-            let columnName = []; // name of each column
-            let rowName = []; // name of each row
-            let tableInfo = {}; // dictionary of each row (key) with its data (value)
+            let rowName = []; // name of each row 
+            let columnName = []  // name of each column
+            let rowData = new OrderedDict(); // array of dicts that hold {column: value}
+            let columnDefs = []; // name of columns {field: value}
+            let defaultRow = {}; // holds {column names : ""}   
 
             object.column.map((column) => {
-                columnName.push(column["property"].string);
+                columnDefs.push({
+                    field: column["property"].string, 
+                    cellEditor: "simpleEditor" 
+                });
+                
+                columnName.push( column["property"].string );
+
+                defaultRow[column["property"].string] = ""; 
             });
+
             object.row.map((row) => {
                 rowName.push(row["property"].string);
+                rowData.set(row["property"].string, {"id": row["property"].string, ...defaultRow}) 
             });
-            let curRow = null;
-            object.item.map((tableData, i) => {
-                if (curRow == tableData["@_row"]) {
-                    tableInfo[rowName[curRow]].push(
-                        tableData["property"].string
-                    );
-                } else {
-                    curRow = tableData["@_row"];
-                    tableInfo[rowName[curRow]] = [tableData["property"].string];
-                }
-            });
+
+            if (object.item) { 
+                object.item.map((tableData, i) => {
+                    let curRow = rowName[tableData["@_row"]]
+                    let curCol = columnName[tableData["@_column"]]
+                    let value = tableData.property["string"] 
+                    rowData.get(curRow)[curCol] = value;
+                });
+            }
 
             return (
                 <MyTable
                     key={key}
-                    name={name}
-                    columns={columnName}
-                    data={tableInfo}
+                    name={name} 
+                    columnDefs = {columnDefs}
+                    rowData = {rowData.values()}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
