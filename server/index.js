@@ -15,16 +15,16 @@ require("./src/config/cleanup.config");
 
 const db = new PouchDB('database/test')
 
+db.changes({
+    since: 'now',
+    live: true,
+    include_docs: true
+  }).on('change', function(change) {
+        io.sockets.emit("change", change)
+  }) 
+
 io.on("connection", socket => {
     console.log("Socket connected")
-
-    db.changes({
-        since: 'now',
-        live: true,
-        include_docs: true
-      }).on('change', function(change) {
-            socket.emit("change", change)
-      }) 
 
     socket.on("update", update => {
         update._id = new Date().toISOString()
@@ -39,6 +39,8 @@ io.on("connection", socket => {
         console.log("User disconnected");
     }); 
 });
+
+
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
