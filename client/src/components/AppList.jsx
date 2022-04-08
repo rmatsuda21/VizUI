@@ -119,7 +119,7 @@ export function AppList(props) {
                 overflow: "scroll",
             }}
         >
-            {props.apps.map((app, idx) => {
+            {props.apps && props.apps.map((app, idx) => {
                 return <AppItem key={idx} {...app} />;
             })}
         </Box>

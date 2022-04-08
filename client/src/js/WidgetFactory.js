@@ -10,6 +10,7 @@ import {
     MyTab,
     MyTabHeader,
     MyTable,
+    MyTextField,
 } from "../widgets/components";
 
 var curButtonInfo = {
@@ -159,11 +160,15 @@ function widgetParser(className, name, properties, key, object, confetti) {
             if (typeof properties.checkable !== "undefined") {
                 disabled = !properties.checkable;
             }
+            let defaultChecked = properties.checked || false;
+            console.log("defaultChecked: ")
+            console.log(defaultChecked);
             return (
                 <MyCheckbox
                     key={key}
                     label={label}
                     disabled={disabled}
+                    defaultChecked={defaultChecked}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -199,6 +204,14 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 </>
             );
 
+        case "QLineEdit":
+            let placeholder = properties.placeholderText || "";
+            return (
+                <>
+                    <MyTextField key={key} label={name} placeholder={placeholder} />
+                </>
+            );
+
         default:
             return <p key={key}>{object["@_class"]}</p>;
     }
@@ -219,11 +232,13 @@ function parseProperties(properties) {
                 obj[key] = property.rect;
                 break;
             case "checkable":
+            case "checked":
                 obj[key] = property.bool;
                 break;
             case "windowTitle":
             case "toolTip":
             case "text":
+            case "placeholderText":
                 obj[key] = property.string;
                 break;
             case "singleStep":
