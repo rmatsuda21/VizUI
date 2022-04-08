@@ -190,7 +190,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     name={name}
                     min={min}
                     max={max}
-                    position={0}
+                    // position={0}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
