@@ -84,7 +84,47 @@
       <widget class="QDial" name="dial"/>
      </item>
      <item row="2" column="1">
-      <layout class="QVBoxLayout" name="verticalLayout_2"/>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QTableWidget" name="tableWidget">
+         <row>
+          <property name="text">
+           <string>car 1</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>car 2</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>car 3</string>
+          </property>
+         </row>
+         <row>
+          <property name="text">
+           <string>car 4</string>
+          </property>
+         </row>
+         <column>
+          <property name="text">
+           <string>model</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>make</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>price</string>
+          </property>
+         </column>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item row="2" column="2">
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -135,7 +175,4 @@
  </widget>
  <resources/>
  <connections/>
- <buttongroups>
-  <buttongroup name="buttonGroup"/>
- </buttongroups>
 </ui>
