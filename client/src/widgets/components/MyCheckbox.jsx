@@ -6,12 +6,18 @@ import { Box } from "@mui/system";
 
 function MyCheckbox(props) {
     console.log(props.disabled);
+    const [checked, setchecked] = React.useState(0); 
     return (
         <Box sx={{ display: "flex", alignItems: "center", gap: "1em" }}>
             <FormGroup>
                 <FormControlLabel
                     disabled={props.disabled}
-                    control={<Checkbox value={props.label} defaultChecked={props.defaultChecked}/>}
+
+                    control={<Checkbox value={props.label}
+                        onChange={(e) => {
+                            
+                        }}
+                        defaultChecked={props.defaultChecked}/>}
                     label={props.label}
                 />
             </FormGroup>
