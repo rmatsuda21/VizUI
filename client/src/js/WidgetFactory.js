@@ -204,13 +204,20 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 </>
             );
 
-        case "QLineEdit":
+        case "QLineEdit": {
             let placeholder = properties.placeholderText || "";
+            let disabled = properties.readOnly || false;
+
             return (
                 <>
-                    <MyTextField key={key} label={name} placeholder={placeholder} />
+                    <MyTextField
+                        key={key}
+                        label={name}
+                        placeholder={placeholder}
+                        disabled={disabled} />
                 </>
             );
+        }
 
         default:
             return <p key={key}>{object["@_class"]}</p>;
@@ -233,6 +240,7 @@ function parseProperties(properties) {
                 break;
             case "checkable":
             case "checked":
+            case "readOnly":
                 obj[key] = property.bool;
                 break;
             case "windowTitle":

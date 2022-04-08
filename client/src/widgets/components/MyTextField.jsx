@@ -13,6 +13,7 @@ function MyTextField(props) {
                 label={props.label}
                 autoComplete="off"
                 placeholder={props.placeholder}
+                disabled={props.disabled}
                 // onChange={}
             />
         </Box>
