@@ -64,6 +64,7 @@ const FileUploadForm = (props) => {
                 flexDirection: "column",
                 alignItems: "center",
                 gap: "2em",
+                width: "100%",
             }}
         >
             <CssTextField
@@ -81,11 +82,12 @@ const FileUploadForm = (props) => {
                     alignItems: "center",
                     gap: 3,
                     backgroundColor: "primary.light",
+                    width: '100%',
                     padding: 2,
                     borderRadius: 3,
                 }}
             >
-                <Typography variant="h5" color={"primary.contrastText"}>
+                <Typography variant="h6" color={"primary.contrastText"}>
                     {isEmpty(props.selectedFile)
                         ? "No File Selected"
                         : `${props.selectedFile.name}`}
@@ -216,11 +218,11 @@ function Home(props) {
                     />
                 </DialogContent>
             </Dialog>
-            <AppList apps={apps} />
+            <AppList apps={apps} deleteApp={props.deleteApp}/>
             {/* <Button variant="outlined" onClick={getDate}>
                 Date Please :3
             </Button> */}
-            <StartEditButtonGrid></StartEditButtonGrid>
+            {/* <StartEditButtonGrid></StartEditButtonGrid> */}
         </Box>
     );
 }

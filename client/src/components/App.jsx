@@ -59,6 +59,16 @@ const theme = createTheme({
 function App() {
     const [apps, setApps] = useState([]);
 
+    console.log(apps)
+
+    const deleteApp = (filename) => {
+        const newApps = apps.filter(app => {
+            return app.data.filename !== filename
+        })
+
+        setApps(newApps);
+    }
+
     useEffect(async () => {
         await new Promise((r) => setTimeout(r, 100));
         await fetch(
@@ -85,7 +95,7 @@ function App() {
                     <Route
                         exact
                         path="/"
-                        element={<Home socket={socket} apps={apps} />}
+                        element={<Home socket={socket} apps={apps} deleteApp={deleteApp}/>}
                     />
                     <Route
                         exact

@@ -31,6 +31,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const { parseUIFile } = require("../helpers/parser");
+const { response } = require("express");
 
 router.post("/convert", upload.single("uiFile"), async (req, res) => {
     let filename = req.file.filename,
@@ -38,7 +39,7 @@ router.post("/convert", upload.single("uiFile"), async (req, res) => {
     parseUIFile(path, filename, JSON_DESTINATION);
 
     await db.connectToDB('applications');
-    await db.writeToCollection("applications", {filename, modified: new Date().toISOString(), name: req.body.appName}, true);
+    await db.appendToCollection("applications", {filename, modified: new Date().toISOString(), name: req.body.appName}, true);
     await db.closeDB();
 
     res.redirect(`/view/${filename}`);
@@ -54,7 +55,7 @@ router.get("/get-json/:id", async (req, res) => {
 
 router.get("/db/write/:data", async (req, res) => {
     try {
-        await db.writeToCollection("test", req.params.data, {
+        await db.appendToCollection("test", req.params.data, {
             createIfNotExist: true,
         });
         const data = await db.queryCollection("test");
@@ -67,6 +68,15 @@ router.get("/db/write/:data", async (req, res) => {
         res.status(400).send(e);
     }
 });
+
+router.delete("/db/delete/:filename", async (req, res) => {
+    try {
+        const removeRes = await db.removeFromCollection("applications", req.params.filename);
+        res.status(200).send(removeRes);
+    } catch(e) {
+        res.status(400).send(e)
+    }
+})
 
 router.get("/db/query/:dbName/:collectionName", async (req, res) => {
     try {
@@ -99,7 +109,7 @@ router.get("/db/connect/:dbName", async (req, res) => {
 router.get("/test", async (req, res) => {
     try {
         await db.connectToDB("testDB");
-        await db.writeToCollection("DWALKDMLWKAMDLK", 123, {
+        await db.appendToCollection("DWALKDMLWKAMDLK", 123, {
             createIfNotFound: true,
         });
         const data = await db.queryCollection("DWALKDMLWKAMDLK");
