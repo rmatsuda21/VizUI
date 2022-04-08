@@ -20,6 +20,7 @@ import { Dialog, DialogContent } from "@mui/material";
 import BasicTable from "./TestTable";
 import BasicRowEditingGrid from "./TestTable";
 import DataGridDemo from "./TestTable";
+import StartEditButtonGrid from "./TestTable";
 
 const FormData = require("form-data");
 
@@ -127,13 +128,13 @@ const FileUploadForm = (props) => {
             </Box>
 
             <Button
-                        type="submit"
-                        color="success"
-                        variant="contained"
-                        disabled={isEmpty(props.selectedFile)}
-                    >
-                        Submit
-                    </Button>
+                type="submit"
+                color="success"
+                variant="contained"
+                disabled={isEmpty(props.selectedFile)}
+            >
+                Submit
+            </Button>
         </Box>
     );
 };
@@ -167,7 +168,7 @@ function Home(props) {
             console.log(date);
         });
 
-        return function closeSocket() {
+        return () => {
             props.socket.close();
         };
     }, []);
@@ -205,7 +206,15 @@ function Home(props) {
 
     return (
         <Box sx={styles.mainContainer}>
-            <Typography variant="h1">VizUI</Typography>
+            <Typography
+                variant="h1"
+                sx={{
+                    transition: "all .2s ease-in-out",
+                    "&:hover": { transform: "scale(1.15)" },
+                }}
+            >
+                VizUI
+            </Typography>
             <Button
                 onClick={handleClickOpen}
                 color="success"
@@ -218,9 +227,9 @@ function Home(props) {
             <Dialog
                 open={dialogOpen}
                 onClose={handleClose}
-                PaperProps={{ sx: { backgroundColor: "primary.dark" } }}
+                PaperProps={{ sx: { borderRadius: 3 } }}
             >
-                <DialogContent>
+                <DialogContent sx={{ padding: 0 }}>
                     <CreateNewApp
                         handleFileInput={handleFileInput}
                         selectedFile={selectedFile}
@@ -233,7 +242,7 @@ function Home(props) {
             {/* <Button variant="outlined" onClick={getDate}>
                 Date Please :3
             </Button> */}
-            {/* <DataGridDemo/> */}
+            <StartEditButtonGrid></StartEditButtonGrid>
         </Box>
     );
 }

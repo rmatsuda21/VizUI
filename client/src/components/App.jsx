@@ -10,6 +10,8 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { useEffect } from "react";
 
+import { SnackbarProvider } from 'notistack';
+
 const socket = io();
 
 const theme = createTheme({
@@ -76,6 +78,7 @@ function App() {
 
     return (
         <ThemeProvider theme={theme}>
+            <SnackbarProvider maxSnack={5}>
             <CssBaseline />
             <BrowserRouter>
                 <Routes>
@@ -96,6 +99,7 @@ function App() {
                     />
                 </Routes>
             </BrowserRouter>
+            </SnackbarProvider>
         </ThemeProvider>
     );
 }
