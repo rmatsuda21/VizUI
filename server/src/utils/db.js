@@ -7,6 +7,13 @@ if (!fs.existsSync("database")) fs.mkdirSync("database", { recursive: true });
 let db;
 
 module.exports = {
+    /**
+     * Connect to specified database.
+     *
+     * @param {string} dbName The name of the database.
+     * @returns {Promise} Response from server.
+     * @throws "Not connected to database"
+     */
     connectToDB: async function (dbName) {
         if (db) await db.close();
 
@@ -14,7 +21,13 @@ module.exports = {
         return Promise.resolve("Connected to DB");
     },
 
-    closeDB: async function (dbName) {
+    /**
+     * Close currently opened db.
+     *
+     * @returns {Promise} Response from server.
+     * @throws "Not connected to database"
+     */
+    closeDB: async function () {
         if (!db) throw "Not connected to database!";
 
         await db.close();
@@ -22,31 +35,42 @@ module.exports = {
         return Promise.resolve("Closed DB");
     },
 
+    /**
+     * Create collection with specific name
+     *
+     * @param {string} collectionName The name of collection.
+     * @returns {Promise} Response from db creation.
+     */
     createCollection: async function (collectionName) {
         if (!db) throw "Not connected to database!";
 
         try {
-            await db.put({
+            const res = await db.put({
                 _id: collectionName,
                 name: collectionName,
                 data: [],
             });
 
-            return Promise.resolve(1);
+            return Promise.resolve(res);
         } catch (e) {
             return Promise.reject(e);
         }
     },
 
-    writeToCollection: async function (collectionName, data, options) {
+    /**
+     * Writes data to specified collection
+     *
+     * @param {string} collectionName The name of collection.
+     * @param {any} data The data to write.
+     * @param {boolean} createIfNotFound Should we create collection if not found?
+     * @return {Promise} Response from db write.
+     */
+    appendToCollection: async function (
+        collectionName,
+        data,
+        createIfNotFound = false
+    ) {
         if (!db) throw "Not connected to database!";
-
-        // Set options
-        const { setDefaults } = require("../helpers/helpers");
-        const defaults = {
-            createIfNotFound: false,
-        };
-        options = setDefaults(options, defaults);
 
         // Does collection exist?
         // If not, should we create it?
@@ -54,7 +78,7 @@ module.exports = {
         try {
             collection = await db.get(collectionName);
         } catch (e) {
-            if (!options.createIfNotFound && e.name === "not_found") {
+            if (!createIfNotFound && e.name === "not_found") {
                 return Promise.reject(e);
             }
 
@@ -68,7 +92,7 @@ module.exports = {
             var res = await db.put({
                 _id: collectionName,
                 _rev: collection._rev,
-                data: [...collection.data, { time: timestamp, data: data }],
+                data: [...collection.data, { created: timestamp, data: data }],
             });
 
             return Promise.resolve(res);
@@ -77,6 +101,48 @@ module.exports = {
         }
     },
 
+    /**
+     * Removes data to specified collection (Only for applications table)
+     *
+     * @param {string} collectionName The name of collection.
+     * @param {any} filename The filename of app to remove.
+     * @return {Promise} Response from db remove.
+     */
+    removeFromCollection: async function (collectionName, filename) {
+        if (!db) throw "Not connected to database!";
+
+        // Does collection exist?
+        // If not, should we create it?
+        let collection;
+        try {
+            collection = await db.get(collectionName);
+        } catch (e) {
+            return Promise.reject(e);
+        }
+
+        // Remove data
+        try {
+            const newData = collection.data.filter((data) => {
+                return filename !== data.data.filename
+            })
+            var res = await db.put({
+                _id: collectionName,
+                _rev: collection._rev,
+                data: [...newData],
+            });
+
+            return Promise.resolve(res);
+        } catch (e) {
+            return Promise.reject(e);
+        }
+    },
+
+    /**
+     * Query collection from database.
+     *
+     * @param {string} collectionName The name of collection.
+     * @return {Promise} Response from query.
+     */
     queryCollection: async function (collectionName) {
         if (!db) throw "Not connected to database!";
 

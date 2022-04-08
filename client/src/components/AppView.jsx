@@ -3,15 +3,16 @@ import { getWidgets } from "../js/WidgetFactory";
 const { io } = require("socket.io-client");
 import WidgetContext from "../widgets/widget-context";
 
-const socket = io();
 
 function AppView(props) {
+    const socket = io();
+
     const [data, setData] = useState(null);
     const [widgetVal, setWidgetVal] = useState({})
+    const [appName, setAppName] = useState("");
 
     useEffect(async () => {
-
-        await new Promise((r) => setTimeout(r, 500));
+        await new Promise((r) => setTimeout(r, 900));
         await fetch(`/api/get-json/${props.id}`)
             .then((data) => data.json())
             .then((data) => setData(data));
@@ -31,4 +32,5 @@ function AppView(props) {
                 {widgets}
             </WidgetContext.Provider>);
 }
+
 export default AppView;

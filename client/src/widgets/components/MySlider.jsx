@@ -16,40 +16,35 @@ function MySlider(props) {
         margin: "10px 5px 0px 5px",
     };
 
-    async function handleChangeCommit() {
-        const slider = {}
-        slider[props.name] = value
-        socket.emit("update", slider)
-    }
-
     function handleOnChange(e) {
         setValue(e.target.value);
+        socket.emit("updateSliderValue", value);
+        console.log("socket emit: updated slider val to ", value)
     }
 
-    //creates a new DB entry for each time the slider is changed, allowing user to keep track of historical changes
-    // These methods will update the position real time as it is being manipulated
-    function updatePos(e) {
-        set.value(e.target.value);
-    }
+    // async function handleChangeCommit() {
+    //   const mouseUpData = { data: value };
+    //   onSubmit();
+    // }
 
-    // This function will handle the submission once the slider is released
-    async function onSubmit() {
-        e.preventDefault();
+    // // This function will handle the submission once the slider is released
+    // async function onSubmit() {
+    //     e.preventDefault();
 
-        // When a post request is sent to the create url, we'll add a new record to the database.
-        const newPosition = { data: value };
+    //     // When a post request is sent to the create url, we'll add a new record to the database.
+    //     const newPosition = { data: value };
 
-        await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newPosition),
-        }).catch((error) => {
-            window.alert(error);
-            return;
-        });
-    }
+    //     await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify(newPosition),
+    //     }).catch((error) => {
+    //         window.alert(error);
+    //         return;
+    //     });
+    // }
 
     return (
         <>
@@ -57,8 +52,7 @@ function MySlider(props) {
             {/* style = {{position: "absolute", left: props.geometry.x, top: props.geometry.y}} */}
             <Box id="wrapper">
                 <Typography
-                    variant="h3"
-                    gutterBottom
+                    variant="h6"
                     sx={{ textAlign: "center" }}
                 >
                     {props.name} {value}
@@ -73,17 +67,16 @@ function MySlider(props) {
                     step={props.interval}
                     valueLabelDisplay="auto"
                     marks={props.marks}
-                    onChange={handleOnChange}
-                    onChangeCommitted={handleChangeCommit}
+                    // onChange={handleOnChange}
+                    onChangeCommitted={handleOnChange}
                     sx={{
-                        color: "#848ccf",
                         "& .MuiSlider-track": {
                             border: "none",
                         },
                         "& .MuiSlider-thumb": {
                             height: 24,
                             width: 24,
-                            backgroundColor: "#fff",
+                            backgroundColor: "primary.light",
                             border: "2px solid currentColor",
                             "&:focus, &:hover, &.Mui-active, &.Mui-focusVisible":
                                 {
@@ -101,7 +94,7 @@ function MySlider(props) {
                             width: 32,
                             height: 32,
                             borderRadius: "50% 50% 50% 0",
-                            backgroundColor: "#848ccf",
+                            backgroundColor: "primary.light",
                             transformOrigin: "bottom left",
                             transform:
                                 "translate(50%, -100%) rotate(-45deg) scale(0)",
