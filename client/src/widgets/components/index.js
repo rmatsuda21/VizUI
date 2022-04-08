@@ -6,3 +6,4 @@ export { default as MySlider } from "./MySlider";
 export { default as MyTab } from "./MyTab";
 export { default as MyTabHeader } from "./MyTabHeader";
 export { default as MyTable } from "./MyTable";
+export { default as MyTextField } from "./MyTextField";

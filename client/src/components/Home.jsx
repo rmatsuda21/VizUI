@@ -5,10 +5,8 @@ import apis from "../js/api";
 
 import Button from "@mui/material/Button";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { withStyles } from "@mui/styles";
 
 import Typography from "@mui/material/Typography";
-import TextField from "@mui/material/TextField";
 import Paper from "@mui/material/Paper";
 
 import { Box, boxSizing } from "@mui/system";
@@ -20,29 +18,9 @@ import { Dialog, DialogContent } from "@mui/material";
 import BasicTable from "./TestTable";
 import BasicRowEditingGrid from "./TestTable";
 import DataGridDemo from "./TestTable";
+import CssTextField from "../mui-styled/CssTextField"
 
 const FormData = require("form-data");
-
-const CssTextField = withStyles({
-    root: {
-        "& .MuiInputBase-input": {
-            color: "white",
-        },
-        "& .MuiInputLabel-root": {
-            color: "white",
-        },
-        "& .MuiOutlinedInput-root": {
-            "& fieldset": {
-                color: "white",
-                borderColor: "#3f51b5",
-            },
-            "&:hover fieldset": {
-                color: "white",
-                borderColor: "#3f51b5",
-            },
-        },
-    },
-})(TextField);
 
 const styles = {
     mainContainer: {
@@ -233,7 +211,6 @@ function Home(props) {
             {/* <Button variant="outlined" onClick={getDate}>
                 Date Please :3
             </Button> */}
-            <DataGridDemo/>
         </Box>
     );
 }
