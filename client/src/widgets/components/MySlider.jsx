@@ -11,19 +11,11 @@ function MySlider(props) {
         margin: "10px 5px 0px 5px",
     };
 
-    async function handleChangeCommit() {
-        const body = { data: value };
-        await fetch(`http://localhost:3001/testwrite/${test}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-        });
-    }
+    
 
     function handleOnChange(e) {
         setValue(e.target.value);
+        onSubmit();
     }
 
     //creates a new DB entry for each time the slider is changed, allowing user to keep track of historical changes
@@ -32,24 +24,29 @@ function MySlider(props) {
         set.value(e.target.value);
     }
 
-    // This function will handle the submission once the slider is released
     async function onSubmit() {
-        e.preventDefault();
+      const socket = io();
+      socket.emit("updateSliderValue", value);
+  }
 
-        // When a post request is sent to the create url, we'll add a new record to the database.
-        const newPosition = { data: value };
+    // // This function will handle the submission once the slider is released
+    // async function onSubmit() {
+    //     e.preventDefault();
 
-        await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newPosition),
-        }).catch((error) => {
-            window.alert(error);
-            return;
-        });
-    }
+    //     // When a post request is sent to the create url, we'll add a new record to the database.
+    //     const newPosition = { data: value };
+
+    //     await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify(newPosition),
+    //     }).catch((error) => {
+    //         window.alert(error);
+    //         return;
+    //     });
+    // }
 
     return (
         <>

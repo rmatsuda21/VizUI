@@ -12,6 +12,7 @@ function MyDialKnob(props) {
             //if count is 0: mouseUp
             if (count == 1) {
                 setCount(count - 1);
+                onSubmit();
             }
             else{
                 setCount(count + 1);
@@ -22,28 +23,33 @@ function MyDialKnob(props) {
         width: "200px",
         margin: "10px 5px 0px 5px",
     };
-    function updatePos(e) {
-        set.value(e.target.value);
+    // function updatePos(e) {
+    //     set.value(e.target.value);
+    // }
+
+    async function onSubmit() {
+        const socket = io();
+        socket.emit("updateDialValue", value);
     }
 
-    // This function will handle the submission once the slider is released
-    async function onSubmit(e) {
-        e.preventDefault();
+    // // This function will handle the submission once the slider is released
+    // async function onSubmit(e) {
+    //     e.preventDefault();
 
-        // When a post request is sent to the create url, we'll add a new record to the database.
-        const newPosition = { data: count };
+    //     // When a post request is sent to the create url, we'll add a new record to the database.
+    //     const newPosition = { data: count };
 
-        await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(newPosition),
-        }).catch((error) => {
-            window.alert(error);
-            return;
-        });
-    }
+    //     await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //         },
+    //         body: JSON.stringify(newPosition),
+    //     }).catch((error) => {
+    //         window.alert(error);
+    //         return;
+    //     });
+    // }
 
     return (
         <>
