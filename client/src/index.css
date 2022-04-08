@@ -5,6 +5,7 @@
 
 * {
     margin: 0;
+    margin-block: 0;
     padding: 0;
     border: 0;
     outline: 0;
@@ -28,7 +29,7 @@ h3 {
 }
 
 body {
-    background-color: #0a1929;
+    /* background-color: #0a1929; */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }

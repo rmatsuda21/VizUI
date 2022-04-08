@@ -57,8 +57,7 @@ function MySlider(props) {
             {/* style = {{position: "absolute", left: props.geometry.x, top: props.geometry.y}} */}
             <Box id="wrapper">
                 <Typography
-                    variant="h3"
-                    gutterBottom
+                    variant="h6"
                     sx={{ textAlign: "center" }}
                 >
                     {props.name} {value}
@@ -76,14 +75,13 @@ function MySlider(props) {
                     onChange={handleOnChange}
                     onChangeCommitted={handleChangeCommit}
                     sx={{
-                        color: "#848ccf",
                         "& .MuiSlider-track": {
                             border: "none",
                         },
                         "& .MuiSlider-thumb": {
                             height: 24,
                             width: 24,
-                            backgroundColor: "#fff",
+                            backgroundColor: "primary.light",
                             border: "2px solid currentColor",
                             "&:focus, &:hover, &.Mui-active, &.Mui-focusVisible":
                                 {
@@ -101,7 +99,7 @@ function MySlider(props) {
                             width: 32,
                             height: 32,
                             borderRadius: "50% 50% 50% 0",
-                            backgroundColor: "#848ccf",
+                            backgroundColor: "primary.light",
                             transformOrigin: "bottom left",
                             transform:
                                 "translate(50%, -100%) rotate(-45deg) scale(0)",
