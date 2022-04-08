@@ -4,11 +4,10 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-import AppView from "./AppView";
-
 import apis from "../js/api";
 import { CssBaseline, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import { EditView } from "./EditView";
 
 const { Component } = require("react");
 
@@ -43,7 +42,7 @@ function View(props) {
                     // padding: "3em",
                 }}
             >
-                <AppView id={id} confetti={confetticanvas} />
+                <EditView id={id} confetti={confetticanvas} />
             </Box>
         </Box>
     );

@@ -11,7 +11,7 @@ function MyCheckbox(props) {
             <FormGroup>
                 <FormControlLabel
                     disabled={props.disabled}
-                    control={<Checkbox value={props.label} />}
+                    control={<Checkbox value={props.label} defaultChecked={props.defaultChecked}/>}
                     label={props.label}
                 />
             </FormGroup>

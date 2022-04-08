@@ -3,12 +3,12 @@ import { getWidgets } from "../js/WidgetFactory";
 import { RadioContextProvider } from "../widgets/contexts/RadioContext";
 import { TabContextProvider } from "../widgets/contexts/TabContext";
 
-function AppView(props) {
+export function EditView(props) {
     const [data, setData] = useState(null);
     const [appName, setAppName] = useState("");
 
     useEffect(async () => {
-        await new Promise((r) => setTimeout(r, 900));
+        await new Promise((r) => setTimeout(r, 500));
         await fetch(`/api/get-json/${props.id}`)
             .then((data) => data.json())
             .then((data) => setData(data));
@@ -16,12 +16,20 @@ function AppView(props) {
 
     console.log(data);
 
-    var widgets = data ? getWidgets(data.ui.widget, 0, "hello") : [];
+    let widgets = data ? getWidgets(data.ui.widget, 0, "hello") : [];
+    console.log('DAWDWA',widgets)
+    const editWidgets = widgets.map(widget => {
+        return (
+            <>
+            <h1>TEST</h1>
+            {widget}
+            </>
+        )
+    })
 
     return (
         <TabContextProvider>
-            <RadioContextProvider>{widgets}</RadioContextProvider>
+            <RadioContextProvider>{editWidgets}</RadioContextProvider>
         </TabContextProvider>
     );
 }
-export default AppView;

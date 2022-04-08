@@ -35,18 +35,15 @@ function MyButton(props) {
                 size={props.size} // small, medium, or large
                 disabled={props.disable}
                 disableElevation={props.disableElevation}
+                sx={{
+                    bgcolor: "primary.light",
+                    "&:hover": { backgroundColor: "primary.light" },
+                }}
                 onClick={() => {
                     countUpdate();
                     if (props.tooltip === "confetti")
                         props.confetti.addConfetti({ confettiNumber: 30 });
                     // PostRequest();
-                }}
-                sx={{
-                    backgroundColor: "#848ccf",
-                    borderColor: "#848ccf",
-                    "&:hover": {
-                        backgroundColor: "#767EBA",
-                    },
                 }}
             >
                 {props.label}
@@ -54,7 +51,7 @@ function MyButton(props) {
             {props.tooltip === "confetti" ? (
                 <></>
             ) : (
-                <Typography variant="h4">{count}</Typography>
+                <Typography variant="h6">{count}</Typography>
             )}
         </Box>
     );
