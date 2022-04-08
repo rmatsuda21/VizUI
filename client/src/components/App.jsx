@@ -12,6 +12,7 @@ function App() {
             <Routes>
                 <Route exact path="/" element={<Home />} />
                 <Route exact path="/view/:id" element={<View />} />
+                <Route exact path="/simulator" element={<Simulator />} />
             </Routes>
         </BrowserRouter>
     );
