@@ -64,6 +64,42 @@ const DeleteDialog = (props) => {
     );
 };
 
+const EmptyItem = (props) => {
+    return (
+        <Box
+            sx={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+            }}
+        >
+            <Paper
+                elevation={4}
+                sx={{
+                    bgcolor: "primary.dark",
+                    color: "primary.contrastText",
+                    display: "flex",
+                    alignItems: "center",
+                    margin: "auto",
+                    gap: 4,
+                    padding: 8,
+                    borderRadius: 2,
+                    margin: 2,
+                    transition: "all .15s ease-in",
+                    "&:hover": {
+                        boxShadow: "0px 0px 8px 1px rgba(255,255,255,.3)",
+                    },
+                }}
+            >
+                <Typography variant="h5" sx={{ fontWeight: 800 }}>
+                    No Apps!
+                </Typography>
+            </Paper>
+        </Box>
+    );
+};
+
 const AppItem = (props) => {
     const { created, data } = props;
     const date = new Date(data.modified);
@@ -79,8 +115,16 @@ const AppItem = (props) => {
         setDeleteDialogOpen(false);
     };
 
-    const onDeleteClick = (name) => {
-        enqueueSnackbar(`Deleted "${name}"`, {variant: 'error'})
+    const onDeleteClick = (filename, name) => {
+        fetch(`http://localhost:3001/api/db/delete/${filename}`, {
+            method: "DELETE",
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                enqueueSnackbar(`Deleted "${name}"`, { variant: "error" });
+                props.deleteApp(filename);
+            })
+            .catch((e) => enqueueSnackbar(e, { variant: "warning" }));
     };
 
     return (
@@ -99,14 +143,16 @@ const AppItem = (props) => {
                 margin: 2,
                 transition: "all .15s ease-in",
                 "&:hover": {
-                    boxShadow: '0px 0px 8px 1px rgba(255,255,255,.3)'
-                }
+                    boxShadow: "0px 0px 8px 1px rgba(255,255,255,.3)",
+                },
             }}
         >
             <DeleteDialog
                 open={deleteDialogOpen}
                 handleClose={handleDialogClose}
-                handleDelete={() => {onDeleteClick(data.name)}}
+                handleDelete={() => {
+                    onDeleteClick(data.filename, data.name);
+                }}
                 appName={data.name}
             />
             <Typography variant="h5" sx={{ fontWeight: 800 }}>
@@ -158,12 +204,31 @@ export function AppList(props) {
                 display: "flex",
                 width: "85%",
                 minHeight: "350px",
-                overflow: "scroll",
+                overflowX: "scroll",
+                overflowY: "hidden",
             }}
         >
-            {props.apps && props.apps.map((app, idx) => {
-                return <AppItem key={idx} {...app} />;
-            })}
+            {props.apps && props.apps.length === 0 ? (
+                <EmptyItem />
+            ) : (
+                props.apps
+                    .sort((a, b) => {
+                        console.log(a, b);
+                        const d1 = new Date(a.data.modified);
+                        const d2 = new Date(b.data.modified);
+
+                        return d1 < d2;
+                    })
+                    .map((app, idx) => {
+                        return (
+                            <AppItem
+                                key={idx}
+                                {...app}
+                                deleteApp={props.deleteApp}
+                            />
+                        );
+                    })
+            )}
         </Box>
     );
 }

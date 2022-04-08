@@ -65,7 +65,11 @@ module.exports = {
      * @param {boolean} createIfNotFound Should we create collection if not found?
      * @return {Promise} Response from db write.
      */
-    writeToCollection: async function (collectionName, data, createIfNotFound = false) {
+    appendToCollection: async function (
+        collectionName,
+        data,
+        createIfNotFound = false
+    ) {
         if (!db) throw "Not connected to database!";
 
         // Does collection exist?
@@ -89,6 +93,42 @@ module.exports = {
                 _id: collectionName,
                 _rev: collection._rev,
                 data: [...collection.data, { created: timestamp, data: data }],
+            });
+
+            return Promise.resolve(res);
+        } catch (e) {
+            return Promise.reject(e);
+        }
+    },
+
+    /**
+     * Removes data to specified collection (Only for applications table)
+     *
+     * @param {string} collectionName The name of collection.
+     * @param {any} filename The filename of app to remove.
+     * @return {Promise} Response from db remove.
+     */
+    removeFromCollection: async function (collectionName, filename) {
+        if (!db) throw "Not connected to database!";
+
+        // Does collection exist?
+        // If not, should we create it?
+        let collection;
+        try {
+            collection = await db.get(collectionName);
+        } catch (e) {
+            return Promise.reject(e);
+        }
+
+        // Remove data
+        try {
+            const newData = collection.data.filter((data) => {
+                return filename !== data.data.filename
+            })
+            var res = await db.put({
+                _id: collectionName,
+                _rev: collection._rev,
+                data: [...newData],
             });
 
             return Promise.resolve(res);
