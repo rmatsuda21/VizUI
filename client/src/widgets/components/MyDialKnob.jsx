@@ -8,8 +8,14 @@ function MyDialKnob(props) {
     const [value, setValue] = useState(0);
     const [count, setCount] = React.useState(0);
     const countUpdate = () => {
-            // Dealing with name field changes to update our state
-            setCount(count + 1);
+            // if count is 1: mouseDown
+            //if count is 0: mouseUp
+            if (count == 1) {
+                setCount(count - 1);
+            }
+            else{
+                setCount(count + 1);
+            }
         };
 
     let sliderStyle = {
@@ -25,7 +31,7 @@ function MyDialKnob(props) {
         e.preventDefault();
 
         // When a post request is sent to the create url, we'll add a new record to the database.
-        const newPosition = { data: value };
+        const newPosition = { data: count };
 
         await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
             method: "POST",
@@ -52,8 +58,8 @@ function MyDialKnob(props) {
                 </Typography>
                 <HighContrast
                     diameter={200}
-                    min={0}
-                    max={100}
+                    min={props.min}
+                    max={props.max}
                     step={1}
                     value={value}
                     theme={{
@@ -77,8 +83,10 @@ function MyDialKnob(props) {
                             padding: "10px 0"
                             }}
                         >
-                            interaction change ticker:
+                            zero means mouseUp move : 
                             {count}
+
+
                         </label>
                 </HighContrast>
             </Box>
