@@ -23,13 +23,15 @@ function MyDialKnob(props) {
         width: "200px",
         margin: "10px 5px 0px 5px",
     };
-    // function updatePos(e) {
-    //     set.value(e.target.value);
-    // }
+    function updatePos(e) {
+        set.value(e.target.value);
+    }
 
     async function onSubmit() {
         const socket = io();
         socket.emit("updateDialValue", value);
+        console.log("socket emit: updated Dial val to ", value)
+
     }
 
     // // This function will handle the submission once the slider is released
@@ -91,6 +93,9 @@ function MyDialKnob(props) {
                         >
                             zero means mouseUp move : 
                             {count}
+
+                            value:
+                            {value}
 
 
                         </label>

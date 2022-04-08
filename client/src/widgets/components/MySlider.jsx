@@ -11,22 +11,19 @@ function MySlider(props) {
         margin: "10px 5px 0px 5px",
     };
 
-    
-
     function handleOnChange(e) {
-        setValue(e.target.value);
-        onSubmit();
-    }
-
-    //creates a new DB entry for each time the slider is changed, allowing user to keep track of historical changes
-    // These methods will update the position real time as it is being manipulated
-    function updatePos(e) {
         set.value(e.target.value);
     }
 
-    async function onSubmit() {
+    async function handleChangeCommit() {
+      const mouseUpData = { data: value };
+      onSubmit(data);
+    }
+
+    async function onSubmit(data) {
       const socket = io();
-      socket.emit("updateSliderValue", value);
+      socket.emit("updateSliderValue", data);
+      console.log("socket emit: updated slider val to ", data)
   }
 
     // // This function will handle the submission once the slider is released
