@@ -14,7 +14,7 @@ const apiRouter = require("./src/routes/api.route");
 require("dotenv").config();
 require("./src/config/cleanup.config");
 
-const db = new PouchDB('database/test')
+const db = new PouchDB('database/applications')
 
 db.changes({
     since: 'now',
