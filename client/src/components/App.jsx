@@ -76,10 +76,18 @@ function App() {
         )
             .then((data) => data.json())
             .then((data) => {
+                if (!data.data) {
+                    setApps([])
+                    return;
+                }
+
                 setApps(data.data);
                 console.log(data.data);
             })
-            .catch((e) => console.log(e));
+            .catch((e) => {
+                console.log(e)
+                setApps([])
+            });
 
         return () => {
             socket.close();
