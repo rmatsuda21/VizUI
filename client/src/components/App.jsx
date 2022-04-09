@@ -87,7 +87,7 @@ function App() {
                 setApps([])
             });
     }, []);
-
+    
     return (
         <ThemeProvider theme={theme}>
             <SnackbarProvider maxSnack={5}>
