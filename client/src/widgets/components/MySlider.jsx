@@ -17,15 +17,14 @@ function MySlider(props) {
     };
 
     function handleOnChange(e) {
+        console.log(e.target.value)
         setValue(e.target.value);
-        socket.emit("updateSliderValue", value);
-        console.log("socket emit: updated slider val to ", value)
     }
 
-    // async function handleChangeCommit() {
-    //   const mouseUpData = { data: value };
-    //   onSubmit();
-    // }
+    function handleOnChangeCommitted() {
+        console.log("socket emit: updated slider val to ", value)
+        socket.emit("updateSliderValue", value);
+    }
 
     // // This function will handle the submission once the slider is released
     // async function onSubmit() {
@@ -63,12 +62,12 @@ function MySlider(props) {
                     min={props.min}
                     max={props.max}
                     orientation={props.orientation}
-                    defaultValue={widgetVal[props.name]}
+                    defaultValue={props.position}
                     step={props.interval}
                     valueLabelDisplay="auto"
                     marks={props.marks}
-                    // onChange={handleOnChange}
-                    onChangeCommitted={handleOnChange}
+                    onChange={handleOnChange}
+                    onChangeCommitted={handleOnChangeCommitted}
                     sx={{
                         "& .MuiSlider-track": {
                             border: "none",

@@ -14,8 +14,9 @@ const apiRouter = require("./src/routes/api.route");
 require("dotenv").config();
 require("./src/config/cleanup.config");
 
-const db = new PouchDB('database/applications')
+//const db = new PouchDB('database/test')
 
+/*
 db.changes({
     since: 'now',
     live: true,
@@ -23,10 +24,12 @@ db.changes({
   }).on('change', function(change) {
         io.sockets.emit("change", change)
   }) 
+*/
 
 io.on("connection", socket => {
     console.log("Socket connected")
 
+    /*
     socket.on("update", update => {
         update._id = new Date().toISOString()
 
@@ -35,6 +38,9 @@ io.on("connection", socket => {
             else console.log(result)
         })
     })
+    */
+   
+    socket.on("updateSliderValue", value => console.log(value))
 
     socket.on("disconnect", () => {
         console.log("User disconnected");

@@ -3,9 +3,9 @@ import { getWidgets } from "../js/WidgetFactory";
 const { io } = require("socket.io-client");
 import WidgetContext from "../widgets/widget-context";
 
+const socket = io();
 
 function AppView(props) {
-    const socket = io();
 
     const [data, setData] = useState(null);
     const [widgetVal, setWidgetVal] = useState({})
