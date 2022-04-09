@@ -23,6 +23,11 @@ io.on("connection", (socket) => {
         socket.emit("date", new Date());
     });
 
+    socket.on("updateSliderValue", (value) => {
+        console.log('server value: ' + value);
+    })
+
+
     socket.on("disconnect", () => {
         console.log("User disconnected");
     });
