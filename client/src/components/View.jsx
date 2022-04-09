@@ -18,7 +18,8 @@ function View(props) {
     const { id } = useParams();
     const [appName, setAppName] = useState("");
 
-    useEffect(() => {
+    useEffect(async () => {
+        await new Promise((r) => setTimeout(r, 500));
         props.apps.forEach((data) => {
             if (data.data.filename === id) {
                 setAppName(data.data.name);
