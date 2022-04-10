@@ -9,6 +9,9 @@ const MyRadio = React.memo(({ props, values, setValues }) => {
     return (
         <Box sx={{ display: "flex", alignItems: "center", gap: "1em" }}>
             <Radio
+                sx={{
+                    ...props.sx,
+                }}
                 checked={values[props.group] === props.name}
                 onChange={(event) => {
                     let newValues = Object.assign({}, values);

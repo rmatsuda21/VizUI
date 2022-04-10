@@ -4,6 +4,9 @@ import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { useState } from "react";
+import socketInstace from "../../js/SocketProvider";
+
+const socket = socketInstace;
 
 function MySlider(props) {
     const [value, setValue] = useState(props.position);
@@ -23,7 +26,6 @@ function MySlider(props) {
     // }
 
     async function onSubmit() {
-      const socket = io();
       socket.emit("updateSliderValue", value);
       console.log("socket emit: updated slider val to ", value)
   }
@@ -52,6 +54,7 @@ function MySlider(props) {
                     // onChange={handleOnChange}
                     onChangeCommitted={handleOnChange}
                     sx={{
+                        ...props.sx,
                         "& .MuiSlider-track": {
                             border: "none",
                         },

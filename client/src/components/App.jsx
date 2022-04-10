@@ -4,33 +4,31 @@ import Edit from "../components/Edit";
 
 import { Route, Routes, useRoutes, BrowserRouter } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
-const { io } = require("socket.io-client");
-
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { useEffect } from "react";
 
-import { SnackbarProvider } from 'notistack';
+import { SnackbarProvider } from "notistack";
+import socketInstace from "../js/SocketProvider";
 
-const socket = io();
+const socket = socketInstace;
 
 const theme = createTheme({
     palette: {
         type: "dark",
         primary: {
-            main: "#3f51b5",
-            light: "#6574c3",
+            main: "#4e62d0",
         },
         secondary: {
             main: "#ff0080",
         },
         background: {
-            default: "#0a1929",
+            default: "#0A1E2F",
             paper: "#102841",
         },
         button: {
             default: "#6D7DDF",
-        }
+        },
     },
     typography: {
         fontFamily: "LeagueSpartan",
@@ -59,15 +57,15 @@ const theme = createTheme({
 function App() {
     const [apps, setApps] = useState([]);
 
-    console.log(apps)
+    console.log(apps);
 
     const deleteApp = (filename) => {
-        const newApps = apps.filter(app => {
-            return app.data.filename !== filename
-        })
+        const newApps = apps.filter((app) => {
+            return app.data.filename !== filename;
+        });
 
         setApps(newApps);
-    }
+    };
 
     useEffect(async () => {
         await new Promise((r) => setTimeout(r, 100));
@@ -77,7 +75,7 @@ function App() {
             .then((data) => data.json())
             .then((data) => {
                 if (!data.data) {
-                    setApps([])
+                    setApps([]);
                     return;
                 }
 
@@ -85,8 +83,8 @@ function App() {
                 console.log(data.data);
             })
             .catch((e) => {
-                console.log(e)
-                setApps([])
+                console.log(e);
+                setApps([]);
             });
 
         return () => {
@@ -97,26 +95,32 @@ function App() {
     return (
         <ThemeProvider theme={theme}>
             <SnackbarProvider maxSnack={5}>
-            <CssBaseline />
-            <BrowserRouter>
-                <Routes>
-                    <Route
-                        exact
-                        path="/"
-                        element={<Home socket={socket} apps={apps} deleteApp={deleteApp}/>}
-                    />
-                    <Route
-                        exact
-                        path="/view/:id"
-                        element={<View apps={apps} />}
-                    />
-                    <Route
-                        exact
-                        path="/edit/:id"
-                        element={<Edit apps={apps} />}
-                    />
-                </Routes>
-            </BrowserRouter>
+                <CssBaseline />
+                <BrowserRouter>
+                    <Routes>
+                        <Route
+                            exact
+                            path="/"
+                            element={
+                                <Home
+                                    socket={socket}
+                                    apps={apps}
+                                    deleteApp={deleteApp}
+                                />
+                            }
+                        />
+                        <Route
+                            exact
+                            path="/view/:id"
+                            element={<View apps={apps} />}
+                        />
+                        <Route
+                            exact
+                            path="/edit/:id"
+                            element={<Edit apps={apps} />}
+                        />
+                    </Routes>
+                </BrowserRouter>
             </SnackbarProvider>
         </ThemeProvider>
     );

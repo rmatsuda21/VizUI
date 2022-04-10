@@ -4,15 +4,15 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { HighContrast } from "react-dial-knob";
 import { useTheme } from "@mui/styles";
+import socketInstace from "../../js/SocketProvider";
 
+const socket = socketInstace;
 
 function MyDialKnob(props) {
     const [value, setValue] = useState(0);
     const [count, setCount] = React.useState(0);
 
     const theme = useTheme();
-
-    const socket = io();
 
     const countUpdate = () => {
         // if count is 1: mouseDown
@@ -27,7 +27,6 @@ function MyDialKnob(props) {
 
     async function onSubmit() {
         socket.emit("updateDialValue", value);
-        console.log("socket emit: updated Dial val to ", value)
     }
 
     return (
@@ -48,13 +47,12 @@ function MyDialKnob(props) {
                     step={1}
                     value={value}
                     theme={{
-                        defaultColor: theme.palette.primary.dark,
-                        activeColor: theme.palette.primary.main,
+                        defaultColor: theme.palette.primary.main,
+                        activeColor: theme.palette.primary.light,
                     }}
                     style={{
+                        ...props.sx,
                         position: "relative",
-                        margin: "100px auto",
-                        width: "200px",
                     }}
                     onValueChange={setValue}
                     onInteractionChange={() => {
