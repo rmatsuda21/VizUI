@@ -36,7 +36,8 @@ function MyButton(props) {
                 disabled={props.disable}
                 disableElevation={props.disableElevation}
                 sx={{
-                    bgcolor: "primary.light",
+                    ...props.sx,
+                    bgcolor: "primary.main",
                     "&:hover": { backgroundColor: "primary.light" },
                 }}
                 onClick={() => {

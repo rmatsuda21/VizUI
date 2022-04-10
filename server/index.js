@@ -15,7 +15,7 @@ require("dotenv").config();
 require("./src/config/cleanup.config");
 
 io.on("connection", (socket) => {
-    // console.log("User connected");
+    console.log("User connected");
     SOCKET = socket;
 
     socket.on("date", () => {

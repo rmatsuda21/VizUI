@@ -70,8 +70,16 @@ router.get("/db/write/:data", async (req, res) => {
 });
 
 router.delete("/db/delete/:filename", async (req, res) => {
+    const filename = req.params.filename
     try {
-        const removeRes = await db.removeFromCollection("applications", req.params.filename);
+        const removeRes = await db.removeFromCollection("applications", filename);
+        try {
+            fs.unlinkSync(appDir + '/uploads/JSON/' + filename + '.json')
+            fs.unlinkSync(appDir + '/uploads/UI/' + filename)
+            fs.rmSync(appDir + '/database/' + filename, { recursive: true, force: true })
+        } catch(e) {
+            console.log(e)
+        }
         res.status(200).send(removeRes);
     } catch(e) {
         res.status(400).send(e)
