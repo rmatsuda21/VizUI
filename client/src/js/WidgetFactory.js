@@ -63,6 +63,7 @@ export function getWidgets(parent, key = 0, dbName = "") {
             </Stack>
         );
     }
+    console.log(parent);
 
     let widgets = parseWidgets(parent);
     if (widgets == null) return null;
@@ -340,7 +341,7 @@ function parseTabs(tabs, tabWidgetName) {
     let parsedTabs = [];
     let tabNames = [];
     tabs.forEach((tab, index) => {
-        let tabContents = tab ? getWidgets(tab) : null;
+        let tabContents = tab.widget ? getWidgets(tab.widget) : null;
         parsedTabs.push(
             <MyTab
                 key={`${tabWidgetName}-${index}`}
