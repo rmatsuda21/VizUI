@@ -23,15 +23,17 @@ io.on("connection", (socket) => {
         socket.emit("date", new Date());
     });
 
-    socket.on("updateDialValue", (value) => {
-        console.log('server value: ' + value);
-    })
-
+    // socket.on("updateDialValue", value => {
+    //     console.log('server value: ' + value);
+    // });
+    
+    socket.on("updateDialValue", value => console.log(value))
 
     socket.on("disconnect", () => {
-        console.log("User disconnected");
+        // console.log("User disconnected");
     });
 });
+
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");

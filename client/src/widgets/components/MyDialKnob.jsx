@@ -5,10 +5,15 @@ import { Box } from "@mui/material";
 import { HighContrast } from "react-dial-knob";
 import { useTheme } from "@mui/styles";
 
+// import { useContext } from "react";
+// import WidgetContext from "../contexts/WidgetContext";
+
 
 function MyDialKnob(props) {
     const [value, setValue] = useState(0);
     const [count, setCount] = React.useState(0);
+
+    // const { socket } = useContext(WidgetContext);
 
     const theme = useTheme();
 
