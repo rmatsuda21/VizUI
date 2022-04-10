@@ -17,7 +17,6 @@ function MySlider(props) {
     function handleOnChange(e) {
         setValue(e.target.value);
         onSubmit();
-
     }
 
     // async function handleChangeCommit() {
@@ -26,19 +25,16 @@ function MySlider(props) {
     // }
 
     async function onSubmit() {
-      socket.emit("updateSliderValue", value);
-      console.log("socket emit: updated slider val to ", value)
-  }
+        socket.emit("updateSliderValue", value);
+        console.log("socket emit: updated slider val to ", value);
+    }
 
     return (
         <>
             {/* props.geometry contains props.geometry.x, y, width, and height */}
             {/* style = {{position: "absolute", left: props.geometry.x, top: props.geometry.y}} */}
             <Box id="wrapper">
-                <Typography
-                    variant="h6"
-                    sx={{ textAlign: "center" }}
-                >
+                <Typography variant="h6" sx={{ textAlign: "center" }}>
                     {props.name} {value}
                 </Typography>
                 <Slider

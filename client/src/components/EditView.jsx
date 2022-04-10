@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getEditWidgets } from "../js/EditWidgetFactory";
+import { TabContextProvider } from "../widgets/contexts/TabContext";
 
 export function EditView(props) {
     const [data, setData] = useState(null);
@@ -8,7 +9,7 @@ export function EditView(props) {
     const getWidgetProperty = (data) => {
         if (!data.ui) return;
 
-        
+
     }
 
     useEffect(async () => {
@@ -23,6 +24,8 @@ export function EditView(props) {
     let widgets = data ? getEditWidgets(data.ui.widget, 0, "hello", data) : <></>;
 
     return (
-        widgets
+        <TabContextProvider>
+            {widgets}
+        </TabContextProvider>
     );
 }

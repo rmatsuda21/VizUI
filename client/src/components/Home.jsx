@@ -189,8 +189,8 @@ function Home(props) {
                 color="success"
                 variant="contained"
                 size="large"
-                sx={{ fontSize: "1em", textTransform: "none"}}
-                startIcon={<AddCircleIcon/>}
+                sx={{ fontSize: "1em", textTransform: "none" }}
+                startIcon={<AddCircleIcon />}
             >
                 Create New App
             </Button>

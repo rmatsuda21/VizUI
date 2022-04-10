@@ -57,8 +57,6 @@ const theme = createTheme({
 function App() {
     const [apps, setApps] = useState([]);
 
-    console.log(apps);
-
     const deleteApp = (filename) => {
         const newApps = apps.filter((app) => {
             return app.data.filename !== filename;
@@ -78,9 +76,7 @@ function App() {
                     setApps([]);
                     return;
                 }
-
                 setApps(data.data);
-                console.log(data.data);
             })
             .catch((e) => {
                 console.log(e);

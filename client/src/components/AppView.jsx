@@ -14,8 +14,6 @@ function AppView(props) {
             .then((data) => setData(data));
     }, []);
 
-    console.log(data);
-
     var widgets = data ? getWidgets(data.ui.widget, 0, "hello") : [];
 
     return (

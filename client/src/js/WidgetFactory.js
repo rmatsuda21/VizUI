@@ -199,11 +199,16 @@ function widgetParser(className, name, properties, key, object, confetti) {
             // set default tab for tab context
 
             let [tabs, tabNames] = parseTabs(object.widget, name);
-            console.log(tabNames);
-            console.log(tabs);
             return (
-                <Box key={name} sx={{ display: "flex", flexDirection: "column" }}>
-                    <MyTabHeader key={name + 'header'} name={name} tabNames={tabNames} />
+                <Box
+                    key={name}
+                    sx={{ display: "flex", flexDirection: "column" }}
+                >
+                    <MyTabHeader
+                        key={name + "header"}
+                        name={name}
+                        tabNames={tabNames}
+                    />
                     <Box key={name + "tabs"}>{tabs}</Box>
                 </Box>
             );
