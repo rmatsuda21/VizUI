@@ -209,14 +209,17 @@ function widgetParser(className, name, properties, key, object, confetti) {
 
             let [tabs, tabNames] = parseTabs(object.widget, name);
             return (
-                <React.Fragment key={uuidv4()}>
+                <Box
+                    key={name}
+                    sx={{ display: "flex", flexDirection: "column" }}
+                >
                     <MyTabHeader
-                        key={uuidv4()}
+                        key={name + "header"}
                         name={name}
                         tabNames={tabNames}
                     />
-                    {tabs}
-                </React.Fragment>
+                    <Box key={name + "tabs"}>{tabs}</Box>
+                </Box>
             );
 
         case "QLineEdit": {
@@ -289,6 +292,9 @@ function parseWidget(widget, key = 0) {
     // let curButtonName = curButtonInfo.name;
     // let curButtons = curButtonInfo.buttons;
 
+    if (className === "QTabWidget")
+        return widgetParser(className, name, properties, key, widget, "");
+
     return (
         <Box
             key={uuidv4()}
@@ -296,9 +302,10 @@ function parseWidget(widget, key = 0) {
                 zIndex: 10,
                 pointerEvents: "",
                 borderRadius: 3,
+                transition: 'all .2s ease-in-out',
                 "&:hover": {
-                    bgcolor: "rgba(0, 0, 0, .5)",
-                    filter: "grayscale(30%)",
+                    bgcolor: "rgba(255, 255, 255, .1)",
+                    filter: "brightness(1.2)",
                     cursor: "pointer",
                 },
             }}
@@ -363,9 +370,13 @@ function parseTabs(tabs, tabWidgetName) {
     let parsedTabs = [];
     let tabNames = [];
     tabs.forEach((tab, index) => {
-        let tabContents = tab.widget ? getEditWidgets(tab.widget) : null;
+        let tabContents = tab ? getEditWidgets(tab) : null;
         parsedTabs.push(
-            <MyTab key={uuidv4()} group={tabWidgetName} index={index}>
+            <MyTab
+                key={`${tabWidgetName}-${index}`}
+                group={tabWidgetName}
+                index={index}
+            >
                 {tabContents}
             </MyTab>
         );

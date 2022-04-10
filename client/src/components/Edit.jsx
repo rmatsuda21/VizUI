@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import apis from "../js/api";
-import { CssBaseline, Typography } from "@mui/material";
+import { Button, CssBaseline, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { EditView } from "./EditView";
 
@@ -28,12 +28,15 @@ function View(props) {
 
     return (
         <Box sx={{ color: "white" }}>
+            <Box sx={{display: 'flex', alignItems: 'center'}}>
             <Typography
                 variant="h3"
                 sx={{ textAlign: "center", marginBlock: "1em" }}
             >
                 {appName}
             </Typography>
+            <Button variant="contained" sx={{height:'2rem'}}>HERE</Button>
+            </Box>
             <Box
                 sx={{
                     // backgroundColor: "#102841",

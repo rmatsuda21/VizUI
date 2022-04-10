@@ -7,8 +7,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
 import { useSnackbar } from "notistack";
 
@@ -51,7 +51,7 @@ const DeleteDialog = (props) => {
                     }}
                     color="error"
                     variant="contained"
-                    startIcon={<DeleteIcon/>}
+                    startIcon={<DeleteIcon />}
                 >
                     Delete
                 </Button>
@@ -175,7 +175,7 @@ const AppItem = (props) => {
                 color={"info"}
                 sx={{ width: "75%" }}
                 onClick={() => (window.location = `/edit/${data.filename}`)}
-                startIcon={<EditIcon/>}
+                startIcon={<EditIcon />}
             >
                 Edit
             </Button>
@@ -196,7 +196,7 @@ const AppItem = (props) => {
                     }}
                     onClick={handleDialogOpen}
                 >
-                    <DeleteIcon/>
+                    <DeleteIcon />
                 </Button>
             </Box>
         </Paper>
@@ -213,10 +213,10 @@ export function AppList(props) {
                 overflowX: "auto",
                 overflowY: "hidden",
                 msOverflowStyle: "none",
-                scrollbarWidth: "none", 
-                '&:-webkit-scrollbar': {
-                    display: "none"
-                }
+                scrollbarWidth: "none",
+                "&:-webkit-scrollbar": {
+                    display: "none",
+                },
             }}
         >
             {props.apps && props.apps.length === 0 ? (
