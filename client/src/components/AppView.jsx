@@ -18,19 +18,27 @@ function AppView(props) {
             .then((data) => data.json())
             .then((data) => setData(data));
 
+        socket.emit("loadWidgets", props.id)
+
+        socket.on("allWidgets", widgets => {
+            if (widgets.length > 0) {
+                let widgetState = {}
+                widgets.forEach(w => widgetState[w.id] = w.doc.data);
+                console.log(widgetState)
+                setWidgetVal(widgetState)
+            } 
+        })
+        
         socket.on("change", res => {
-            delete res.doc._id
-            delete res.doc._rev
             console.log(res.doc)
             setWidgetVal(res.doc)
         })
-        
-    }, []
-    );
+   
+    }, []);
 
     let widgets = data ? getWidgets(data.ui.widget) : [];
 
-    return (<WidgetContext.Provider value={{widgetVal, setWidgetVal, socket}}>
+    return (<WidgetContext.Provider value={{widgetVal, socket, appId: props.id}}>
                 {widgets}
             </WidgetContext.Provider>);
 }
