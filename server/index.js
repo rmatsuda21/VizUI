@@ -8,31 +8,30 @@ const server = http.createServer(app);
 const io = new Server(server);
 const PORT = process.env.PORT || 3001;
 
-const db = require("./src/utils/db");
+const PouchDB = require("pouchdb");
 const apiRouter = require("./src/routes/api.route");
 
 require("dotenv").config();
 require("./src/config/cleanup.config");
 
+//const db = new PouchDB('database/test')
 io.on("connection", (socket) => {
-    // console.log("User connected");
-    SOCKET = socket;
+    console.log("User connected");
+    // SOCKET = socket;
 
-    socket.on("date", () => {
-        console.log("GOT DATE");
-        socket.emit("date", new Date());
-    });
-
-    // socket.on("updateDialValue", value => {
-    //     console.log('server value: ' + value);
+    // socket.on("date", () => {
+    //     console.log("GOT DATE");
+    //     socket.emit("date", new Date());
     // });
     
     socket.on("updateDialValue", value => console.log(value))
+    socket.on("updateSliderValue", value => console.log(value))
 
     socket.on("disconnect", () => {
-        // console.log("User disconnected");
-    });
+        console.log("User disconnected");
+    }); 
 });
+
 
 
 app.use((req, res, next) => {
@@ -44,6 +43,7 @@ app.use((req, res, next) => {
     );
     next();
 });
+
 app.use(
     express.urlencoded({
         extended: true,
@@ -59,6 +59,13 @@ app.use((err, req, res, next) => {
     res.status(statusCode).json({ message: err.message });
 
     return;
+});
+
+app.get("/api/get-json/:id", (req, res) => {
+    const data = require(JSON_DESTINATION + `/${req.params.id}.json`);
+
+    res.header("Content-Type", "application/json");
+    res.send(JSON.stringify(data));
 });
 
 server.listen(PORT, () => {
