@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { uuid } from "uuidv4";
@@ -215,6 +215,24 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 />
             );
         }
+        case "QLabel":
+            return (
+                <Box sx={{ display: "flex", alignItems: "center"}}>
+                    <Typography variant="h6">{properties.text}</Typography>
+                </Box>
+                // <Typography
+                //     key={name}
+                //     tooltip={properties.toolTip}
+                //     confetti={confetti}
+                //     label={name}
+                //     name={name}
+                //     value={"IDK"}
+                //     geometry={
+                //         properties.geometry ? properties.geometry : undefined
+                //     }
+                //     variant={"contained"}
+                // />
+            );
         case "QTabWidget":
             // set default tab for tab context
 
