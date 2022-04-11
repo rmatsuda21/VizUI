@@ -35,7 +35,8 @@ function MySlider(props) {
                     variant="h6"
                     sx={{ textAlign: "center" }}
                 >
-                    {props.name} {value}
+                    
+                    {props.name}
                 </Typography>
                 <Slider
                     aria-label={props.name}
@@ -43,12 +44,13 @@ function MySlider(props) {
                     min={props.min}
                     max={props.max}
                     orientation={props.orientation}
-                    defaultValue={widgetVal[props.name] ? widgetVal[props.name] : 0}
                     step={props.interval}
                     valueLabelDisplay="auto"
                     marks={props.marks}
                     onChange={handleOnChange}
                     onChangeCommitted={handleOnChangeCommitted}
+                    defaultValue={widgetVal[props.name] ? widgetVal[props.name] : 50}
+
                     sx={{
                         "& .MuiSlider-track": {
                             border: "none",
