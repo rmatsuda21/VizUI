@@ -1,9 +1,11 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
+// import { SetTabContextValue, GetTabContextValue } from "../widgets/contexts/TabContext";
 import {
     MyButton,
     MyCheckbox,
     MyDial,
+    MyDialKnob,
     MyRadio,
     MySlider,
     MyTab,
@@ -16,9 +18,26 @@ var curButtonInfo = {
     name: null,
     buttons: [],
 };
+
+import { v4 as uuidv4 } from "uuid";
+import React, { useContext } from "react";
+import { SelectWidget } from "./SelectWidgetContext";
+
+let data = [];
+
+let propertyList;
+
 // Get child widgets from parent
 // If parent.layout exists, then it has a layout
-export function getEditWidgets(parent, key = 0, dbName = "") {
+export function getEditWidgets(
+    parent,
+    key = 0,
+    dbName = "",
+    d = null,
+    propertyList
+) {
+    if (d) data = d;
+
     if (!parent) return [];
 
     if (key == 0) {
@@ -27,14 +46,15 @@ export function getEditWidgets(parent, key = 0, dbName = "") {
     // Is Layout
     if ("layout" in parent) {
         let className = parent.layout["@_class"];
+        let name = parent.layout["@_name"];
 
         // Handle Grids
         if (className === "QGridLayout") {
-            let gridItems = parseGridItems(parent.layout.item);
+            let gridItems = parseGridItems(parent.layout.item, propertyList);
 
             return (
                 <Box
-                    key={key}
+                    key={uuidv4()}
                     sx={{ flexGrow: 1, justifyContent: "space-evenly" }}
                     display="grid"
                     gridTemplateColumns="repeat(auto-fill, 1fr)"
@@ -45,10 +65,10 @@ export function getEditWidgets(parent, key = 0, dbName = "") {
             );
         }
 
-        let items = parseItems(parent.layout.item);
+        let items = parseItems(parent.layout.item, propertyList);
         return (
             <Stack
-                key={key}
+                key={uuidv4()}
                 direction={className === "QHBoxLayout" ? "row" : "column"}
                 sx={{ width: "auto", justifyContent: "space-around" }}
                 gap={2}
@@ -58,14 +78,24 @@ export function getEditWidgets(parent, key = 0, dbName = "") {
         );
     }
 
-    let widgets = parseWidgets(parent);
+    let widgets = parseWidgets(parent, propertyList);
     if (widgets == null) return null;
 
-    return <>{widgets}</>;
+    return <React.Fragment key={uuidv4()}>{widgets}</React.Fragment>;
 }
 
 // Return JSX element from given widget data from json
-function widgetParser(className, name, properties, key, object, confetti) {
+function widgetParser(
+    className,
+    name,
+    properties,
+    key,
+    object,
+    confetti,
+    propertyList
+) {
+    if (propertyList) propertyList[name] = properties;
+
     switch (className) {
         case "QSlider":
             let interval = properties.singleStep || 1;
@@ -73,7 +103,8 @@ function widgetParser(className, name, properties, key, object, confetti) {
             let max = properties.maximum || 100;
             return (
                 <MySlider
-                    key={key}
+                    sx={{ pointerEvents: "none" }}
+                    key={uuidv4()}
                     name={name}
                     interval={interval}
                     min={min}
@@ -109,7 +140,8 @@ function widgetParser(className, name, properties, key, object, confetti) {
 
             return (
                 <MyTable
-                    key={key}
+                    sx={{ pointerEvents: "none" }}
+                    key={uuidv4()}
                     name={name}
                     columns={columnName}
                     data={tableInfo}
@@ -121,12 +153,13 @@ function widgetParser(className, name, properties, key, object, confetti) {
         case "QPushButton":
             return (
                 <MyButton
-                    key={key}
+                    key={name}
                     tooltip={properties.toolTip}
                     confetti={confetti}
                     label={name}
                     name={name}
                     value={"IDK"}
+                    text={properties.text}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -140,7 +173,8 @@ function widgetParser(className, name, properties, key, object, confetti) {
             let label = properties.text || name;
             return (
                 <MyRadio
-                    key={key}
+                    sx={{ pointerEvents: "none" }}
+                    key={uuidv4()}
                     group={group}
                     name={name}
                     label={label}
@@ -159,11 +193,10 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 disabled = !properties.checkable;
             }
             let defaultChecked = properties.checked || false;
-            console.log("defaultChecked: ");
-            console.log(defaultChecked);
             return (
                 <MyCheckbox
-                    key={key}
+                    sx={{ pointerEvents: "none" }}
+                    key={uuidv4()}
                     label={label}
                     disabled={disabled}
                     defaultChecked={defaultChecked}
@@ -177,12 +210,13 @@ function widgetParser(className, name, properties, key, object, confetti) {
             let min = properties.minimum || 0;
             let max = properties.maximum || 100;
             return (
-                <MyDial
-                    key={key}
+                <MyDialKnob
+                    sx={{ pointerEvents: "none" }}
+                    key={uuidv4()}
                     name={name}
                     min={min}
                     max={max}
-                    position={0}
+                    // position={0}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -191,15 +225,19 @@ function widgetParser(className, name, properties, key, object, confetti) {
         }
         case "QTabWidget":
             // set default tab for tab context
-
-            let [tabs, tabNames] = parseTabs(object.widget, name);
-            console.log(tabNames);
-            console.log(tabs);
+            let [tabs, tabNames] = parseTabs(object.widget, name, propertyList);
             return (
-                <>
-                    <MyTabHeader key={key} name={name} tabNames={tabNames} />
-                    {tabs}
-                </>
+                <Box
+                    key={uuidv4()}
+                    sx={{ display: "flex", flexDirection: "column" }}
+                >
+                    <MyTabHeader
+                        key={uuidv4() + "header"}
+                        name={name}
+                        tabNames={tabNames}
+                    />
+                    <Box key={uuidv4() + "tabs"}>{tabs}</Box>
+                </Box>
             );
 
         case "QLineEdit": {
@@ -207,19 +245,17 @@ function widgetParser(className, name, properties, key, object, confetti) {
             let disabled = properties.readOnly || false;
 
             return (
-                <>
-                    <MyTextField
-                        key={key}
-                        label={name}
-                        placeholder={placeholder}
-                        disabled={disabled}
-                    />
-                </>
+                <MyTextField
+                    key={uuidv4()}
+                    label={name}
+                    placeholder={placeholder}
+                    disabled={disabled}
+                />
             );
         }
 
         default:
-            return <p key={key}>{object["@_class"]}</p>;
+            return <p key={uuidv4()}>{object["@_class"]}</p>;
     }
 }
 
@@ -257,8 +293,12 @@ function parseProperties(properties) {
             case "orientation":
                 obj[key] = property.enum;
                 break;
+            case "maximumSize":
+                obj[key] = property.size;
+                break;
             default:
                 console.log("New property type: " + key);
+                console.log(property)
                 break;
         }
     });
@@ -266,7 +306,7 @@ function parseProperties(properties) {
 }
 
 // Parse individual widget
-function parseWidget(widget, key = 0) {
+function parseWidget(widget, key = 0, propertyList) {
     let name = widget["@_name"];
     let className = widget["@_class"];
     let properties = parseProperties(widget.property);
@@ -274,21 +314,89 @@ function parseWidget(widget, key = 0) {
     // let curButtonName = curButtonInfo.name;
     // let curButtons = curButtonInfo.buttons;
 
-    return widgetParser(className, name, properties, key, widget, "");
+    if (className === "QTabWidget")
+        return widgetParser(
+            className,
+            name,
+            properties,
+            key,
+            widget,
+            "",
+            propertyList
+        );
+
+    return (
+        <EditParent
+            name={name}
+            className={className}
+            properties={properties}
+            key={uuidv4()}
+            propertyList={propertyList}
+            widget={widget}
+        ></EditParent>
+    );
 }
 
+const EditParent = (props) => {
+    const { name, className, properties, widget, propertyList } = props;
+    const [setSelectedWidget, setDrawerOpen] = useContext(SelectWidget);
+    return (
+        <Box
+            key={uuidv4()}
+            sx={{
+                zIndex: 10,
+                pointerEvents: "all",
+                borderRadius: 3,
+                transition: "all .2s ease-in-out",
+                "&:hover": {
+                    bgcolor: "rgba(255, 255, 255, .1)",
+                    filter: "brightness(1.2)",
+                    cursor: "pointer",
+                },
+            }}
+            onClick={() => {
+                setSelectedWidget(props.name);
+                setDrawerOpen(true);
+            }}
+        >
+            {widgetParser(
+                className,
+                name,
+                properties,
+                "",
+                widget,
+                null,
+                propertyList
+            )}
+        </Box>
+    );
+};
+
 // Parse widgets within widget w/ no layout
-function parseWidgets(parent) {
+function parseWidgets(parent, propertyList) {
     // Is single widget, not container
     if (!("widget" in parent)) {
-        return parseWidget(parent, Math.floor(Math.random() * 100));
+        return parseWidget(
+            parent,
+            Math.floor(Math.random() * 100),
+            propertyList
+        );
     }
 
-    return parseWidget(parent.widget, Math.floor(Math.random() * 100));
+    let widgets = parent.widget;
+    if (!Array.isArray(widgets)) widgets = [widgets];
+
+    return widgets.map((widget) => {
+        return parseWidget(
+            widget,
+            Math.floor(Math.random() * 100),
+            propertyList
+        );
+    });
 }
 
 // Parse items for grid
-function parseGridItems(items) {
+function parseGridItems(items, propertyList) {
     if (!Array.isArray(items)) items = [items]; // Single item
 
     let ret = [];
@@ -304,9 +412,9 @@ function parseGridItems(items) {
                 gridColumn={`${col} / span ${colSpan}`}
                 gridRow={`${row} / span ${rowSpan}`}
                 sx={{ margin: "auto" }}
-                key={key}
+                key={uuidv4()}
             >
-                {getWidgets(item, key)}
+                {getEditWidgets(item, key, "", null, propertyList)}
             </Box>
         );
     });
@@ -314,24 +422,26 @@ function parseGridItems(items) {
 }
 
 // Parse items in containers
-function parseItems(items) {
+function parseItems(items, propertyList) {
     if (!Array.isArray(items)) items = [items]; // Single item
 
     let ret = [];
     items.forEach((item, key) => {
-        ret.push(getWidgets(item));
+        ret.push(getEditWidgets(item, key, "", null, propertyList));
     });
     return ret;
 }
 
 // Parse tabs in containers
-function parseTabs(tabs, tabWidgetName) {
+function parseTabs(tabs, tabWidgetName, propertyList) {
     if (!Array.isArray(tabs)) tabs = [tabs]; // Single item
 
     let parsedTabs = [];
     let tabNames = [];
     tabs.forEach((tab, index) => {
-        let tabContents = tab.widget ? getWidgets(tab.widget) : null;
+        let tabContents = tab
+            ? getEditWidgets(tab, 0, "", null, propertyList)
+            : null;
         parsedTabs.push(
             <MyTab
                 key={`${tabWidgetName}-${index}`}

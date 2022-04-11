@@ -7,6 +7,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+
 import { useSnackbar } from "notistack";
 
 const DeleteDialog = (props) => {
@@ -33,7 +36,7 @@ const DeleteDialog = (props) => {
             <DialogContent>
                 <DialogContentText
                     id="alert-dialog-description"
-                    sx={{ color: "info.main" }}
+                    sx={{ color: "primary.contrastText" }}
                 >
                     This action will be permanent!
                 </DialogContentText>
@@ -48,6 +51,7 @@ const DeleteDialog = (props) => {
                     }}
                     color="error"
                     variant="contained"
+                    startIcon={<DeleteIcon />}
                 >
                     Delete
                 </Button>
@@ -169,8 +173,9 @@ const AppItem = (props) => {
             <Button
                 variant="contained"
                 color={"info"}
-                sx={{ width: "75%" }}
+                sx={{ width: "75%", color: "primary.contrastText" }}
                 onClick={() => (window.location = `/edit/${data.filename}`)}
+                startIcon={<EditIcon />}
             >
                 Edit
             </Button>
@@ -184,13 +189,14 @@ const AppItem = (props) => {
                     color={"error"}
                     size="small"
                     sx={{
-                        fontSize: ".75em",
-                        height: "2.5em",
-                        paddingInline: 3,
+                        fontSize: ".5em",
+                        height: "4.5em",
+                        padding: 0,
+                        borderRadius: 10,
                     }}
                     onClick={handleDialogOpen}
                 >
-                    Delete
+                    <DeleteIcon />
                 </Button>
             </Box>
         </Paper>
@@ -204,8 +210,13 @@ export function AppList(props) {
                 display: "flex",
                 width: "85%",
                 minHeight: "350px",
-                overflowX: "scroll",
+                overflowX: "auto",
                 overflowY: "hidden",
+                msOverflowStyle: "none",
+                scrollbarWidth: "none",
+                "&:-webkit-scrollbar": {
+                    display: "none",
+                },
             }}
         >
             {props.apps && props.apps.length === 0 ? (

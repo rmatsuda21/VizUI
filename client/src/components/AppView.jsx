@@ -12,9 +12,10 @@ function AppView(props) {
     const [data, setData] = useState(null);
     const [widgetVal, setWidgetVal] = useState({})
     const [appName, setAppName] = useState("");
-
-    useEffect(() => {
-        fetch(`/api/get-json/${props.id}`)
+  
+    useEffect(async () => {
+        await new Promise((r) => setTimeout(r, 350));
+        await fetch(`/api/get-json/${props.id}`)
             .then((data) => data.json())
             .then((data) => setData(data));
         
@@ -35,7 +36,7 @@ function AppView(props) {
    
     }, []);
 
-    let widgets = data ? getWidgets(data.ui.widget) : [];
+    var widgets = data ? getWidgets(data.ui.widget, 0, "hello") : [];
 
     return (<WidgetContext.Provider value={{widgetVal, socket, appId: props.id}}>
                 {widgets}

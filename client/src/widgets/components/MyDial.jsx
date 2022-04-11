@@ -3,6 +3,9 @@ import "../stylesheets/MyDial.css";
 import CircularSlider from "@fseehawer/react-circular-slider";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
+import socketInstace from "../../js/SocketProvider";
+
+const socket = socketInstace;
 
 function MyDial(props) {
     const [value, setValue] = useState(0);
@@ -18,7 +21,6 @@ function MyDial(props) {
     }
 
     async function onSubmit() {
-        const socket = io();
         socket.emit("updateOldDialValue", value);
     }
 

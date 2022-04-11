@@ -10,7 +10,7 @@ const MyTabHeader = React.memo(({ props, values, setValues }) => {
     const { children, name, tabNames, ...other } = props;
 
     return (
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}>
             <Tabs
                 value={values[name] || 0}
                 onChange={(event, newValue) => {
@@ -28,6 +28,11 @@ const MyTabHeader = React.memo(({ props, values, setValues }) => {
                             label={tabName}
                             id={`simple-tab-${name}-${i}`}
                             aria-controls={`simple-tabpanel-${name}-${i}`}
+                            sx={{
+                                color: "primary.dark",
+                                bgcolor: "primary.light",
+                                "&.Mui-selected": { color: "primary.light", bgcolor: "primary.dark" },
+                            }}
                         />
                     );
                 })}
