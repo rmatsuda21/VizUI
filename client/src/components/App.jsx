@@ -16,6 +16,7 @@ const socket = io();
 
 const theme = createTheme({
     palette: {
+        mode: "dark",
         type: "dark",
         primary: {
             main: "#3f51b5",
@@ -66,8 +67,7 @@ function App() {
         )
             .then((data) => data.json())
             .then((data) => {
-                setApps(data.data);
-                console.log(data.data);
+                setApps(data.data); 
             })
             .catch((e) => console.log(e));
 
