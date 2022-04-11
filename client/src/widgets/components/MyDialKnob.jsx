@@ -5,20 +5,12 @@ import { Box } from "@mui/material";
 import { HighContrast } from "react-dial-knob";
 import { useTheme } from "@mui/styles";
 
-// import { useContext } from "react";
-// import WidgetContext from "../contexts/WidgetContext";
-
-
 function MyDialKnob(props) {
     const [value, setValue] = useState(0);
     const [count, setCount] = React.useState(0);
 
-    // const { socket } = useContext(WidgetContext);
-
     const theme = useTheme();
-
-    const socket = io();
-
+    console.log("THEME", theme);
     const countUpdate = () => {
         // if count is 1: mouseDown
         //if count is 0: mouseUp
@@ -31,8 +23,9 @@ function MyDialKnob(props) {
     };
 
     async function onSubmit() {
-        socket.emit("updateDialValue", value);
-        console.log("socket emit: updated Dial val to ", value)
+        // const socket = io();
+        // socket.emit("updateDialValue", value);
+        // console.log("socket emit: updated Dial val to ", value)
     }
 
     return (
