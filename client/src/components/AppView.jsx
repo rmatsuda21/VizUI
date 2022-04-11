@@ -12,9 +12,7 @@ function AppView(props) {
         await fetch(`/api/get-json/${props.id}`)
             .then((data) => data.json())
             .then((data) => setData(data));
-    }, []);
-
-    console.log(data);
+    }, []); 
 
     var widgets = data ? getWidgets(data.ui.widget, 0, "hello") : [];
 

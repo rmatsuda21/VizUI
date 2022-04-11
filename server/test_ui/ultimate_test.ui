@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>718</width>
-    <height>300</height>
+    <width>1186</width>
+    <height>670</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,161 +15,300 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0" rowspan="2">
-      <layout class="QVBoxLayout" name="verticalLayout">
-       <item>
-        <widget class="QPushButton" name="pushButton">
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0" rowspan="2">
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QPushButton" name="pushButton">
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_6">
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="2" colspan="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QPushButton" name="pushButton_7">
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_5">
+           <property name="text">
+            <string>PushButton</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="2" column="2">
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QSlider" name="horizontalSlider_3">
+           <property name="maximumSize">
+            <size>
+             <width>397</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="horizontalSlider_2">
+           <property name="maximumSize">
+            <size>
+             <width>397</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QTableWidget" name="tableWidget">
+           <row>
+            <property name="text">
+             <string>blue</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>New Row</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>New Row</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>New Row</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>New Row</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>New Row</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>New Row</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>New Row</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>New Row</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>New Row</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>New Row</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>New Row</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>wow</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>green</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>red</string>
+            </property>
+           </row>
+           <row>
+            <property name="text">
+             <string>pink</string>
+            </property>
+           </row>
+           <column>
+            <property name="text">
+             <string>model</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>make</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>price</string>
+            </property>
+           </column>
+           <item row="0" column="0">
+            <property name="text">
+             <string>escape</string>
+            </property>
+           </item>
+           <item row="0" column="1">
+            <property name="text">
+             <string>ford</string>
+            </property>
+           </item>
+           <item row="0" column="2">
+            <property name="text">
+             <string>700</string>
+            </property>
+           </item>
+           <item row="13" column="0">
+            <property name="text">
+             <string>nothin</string>
+            </property>
+           </item>
+           <item row="13" column="1">
+            <property name="text">
+             <string>g</string>
+            </property>
+           </item>
+           <item row="13" column="2">
+            <property name="text">
+             <string>is</string>
+            </property>
+           </item>
+           <item row="14" column="0">
+            <property name="text">
+             <string>good</string>
+            </property>
+           </item>
+           <item row="14" column="1">
+            <property name="text">
+             <string>except</string>
+            </property>
+           </item>
+           <item row="14" column="2">
+            <property name="text">
+             <string>for</string>
+            </property>
+           </item>
+           <item row="15" column="0">
+            <property name="text">
+             <string>b</string>
+            </property>
+           </item>
+           <item row="15" column="1">
+            <property name="text">
+             <string>o</string>
+            </property>
+           </item>
+           <item row="15" column="2">
+            <property name="text">
+             <string>ba</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="1" column="1">
+        <widget class="QPushButton" name="pushButton_3">
          <property name="text">
           <string>PushButton</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_2">
+       <item row="0" column="3">
+        <widget class="QPushButton" name="pushButton_8">
          <property name="text">
           <string>PushButton</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_6">
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="0" column="1" colspan="2">
-      <widget class="QPushButton" name="pushButton_4">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="3">
-      <widget class="QPushButton" name="pushButton_8">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2" colspan="2">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QPushButton" name="pushButton_7">
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_5">
-         <property name="text">
-          <string>PushButton</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="1" column="1">
-      <widget class="QPushButton" name="pushButton_3">
-       <property name="text">
-        <string>PushButton</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0">
-      <widget class="QDial" name="dial"/>
-     </item>
-     <item row="2" column="1">
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QTableWidget" name="tableWidget">
-         <row>
-          <property name="text">
-           <string>car 1</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>car 2</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>car 3</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>car 4</string>
-          </property>
-         </row>
-         <column>
-          <property name="text">
-           <string>model</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>make</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>price</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="2" column="2">
-      <layout class="QVBoxLayout" name="verticalLayout_3">
-       <item>
-        <widget class="QSlider" name="horizontalSlider">
-         <property name="maximumSize">
-          <size>
-           <width>397</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="horizontalSlider_3">
-         <property name="maximumSize">
-          <size>
-           <width>397</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="horizontalSlider_2">
-         <property name="maximumSize">
-          <size>
-           <width>397</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
+       <item row="2" column="1">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QRadioButton" name="radioButton">
+           <property name="text">
+            <string>RadioButton</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioButton_2">
+           <property name="text">
+            <string>RadioButton</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioButton_4">
+           <property name="text">
+            <string>RadioButton</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="radioButton_3">
+           <property name="text">
+            <string>RadioButton</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDial" name="dial"/>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QSlider" name="verticalSlider">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

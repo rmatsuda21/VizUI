@@ -16,11 +16,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import { AppList } from "./AppList";
-import { Dialog, DialogContent } from "@mui/material";
-import BasicTable from "./TestTable";
-import BasicRowEditingGrid from "./TestTable";
-import DataGridDemo from "./TestTable";
-import StartEditButtonGrid from "./TestTable";
+import { Dialog, DialogContent } from "@mui/material"; 
 
 const FormData = require("form-data");
 
@@ -238,11 +234,7 @@ function Home(props) {
                     />
                 </DialogContent>
             </Dialog>
-            <AppList apps={apps} />
-            {/* <Button variant="outlined" onClick={getDate}>
-                Date Please :3
-            </Button> */}
-            <StartEditButtonGrid></StartEditButtonGrid>
+            <AppList apps={apps} /> 
         </Box>
     );
 }
