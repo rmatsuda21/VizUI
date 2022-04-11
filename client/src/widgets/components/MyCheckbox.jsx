@@ -10,7 +10,7 @@ import WidgetContext from "../contexts/WidgetContext";
 function MyCheckbox(props) {
     // console.log(props.disabled);
     const {widgetVal, socket, appId} = useContext(WidgetContext);
-    const [checked, setchecked] = React.useState(widgetVal[props.name] ? widgetVal[props.name] : false);
+    const [checked, setchecked] = React.useState(widgetVal ? (widgetVal[props.name] ? widgetVal[props.name] : false) : false);
 
     function toggle(value){
         return !value;
@@ -46,7 +46,7 @@ function MyCheckbox(props) {
                                 console.log(checked);
 
                             }}
-                            defaultChecked={widgetVal[props.name] ? widgetVal[props.name] : props.defaultChecked}
+                            defaultChecked={widgetVal ? (widgetVal[props.name] ? widgetVal[props.name] : props.defaultChecked) : props.defaultChecked}
                         />
                     }
                     label={props.label}
