@@ -9,7 +9,7 @@ import { useContext } from "react";
 import WidgetContext from "../contexts/WidgetContext";
 
 function MySlider(props) {
-
+  
     const {widgetVal, socket, appId} = useContext(WidgetContext);
     const [value, setValue] = useState(props.position);
 

@@ -2,6 +2,8 @@ import React, { useEffect, useState, createContext } from "react";
 import { getWidgets } from "../js/WidgetFactory";
 const { io } = require("socket.io-client");
 import WidgetContext from "../widgets/contexts/WidgetContext";
+import { RadioContextProvider } from "../widgets/contexts/RadioContext";
+import { TabContextProvider } from "../widgets/contexts/TabContext";
 
 const socket = io();
 
@@ -30,7 +32,7 @@ function AppView(props) {
             console.log(res.doc)
             setWidgetVal(res.doc)
         })
-        
+   
     }, []);
 
     let widgets = data ? getWidgets(data.ui.widget) : [];
