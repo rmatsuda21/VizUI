@@ -26,25 +26,6 @@ function MySlider(props) {
         socket.emit("updateSliderValue", value);
     }
 
-    // // This function will handle the submission once the slider is released
-    // async function onSubmit() {
-    //     e.preventDefault();
-
-    //     // When a post request is sent to the create url, we'll add a new record to the database.
-    //     const newPosition = { data: value };
-
-    //     await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(newPosition),
-    //     }).catch((error) => {
-    //         window.alert(error);
-    //         return;
-    //     });
-    // }
-
     return (
         <>
             {/* props.geometry contains props.geometry.x, y, width, and height */}
