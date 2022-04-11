@@ -9,8 +9,12 @@ export const convertXML = (file) =>
         headers: { "Content-type": "multipart/form-data" },
     });
 
+export const updateJSON = (data, id) =>
+    api.post(`/update/${id}`, data);
+
 const apis = {
     convertXML,
+    updateJSON,
 };
 
 export default apis;
