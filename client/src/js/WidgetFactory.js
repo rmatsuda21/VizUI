@@ -1,6 +1,8 @@
 import { Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
+import { uuid } from "uuidv4";
+import OrderedDict from 'js-ordered-dict';
 // import { SetTabContextValue, GetTabContextValue } from "../widgets/contexts/TabContext";
 import {
     MyButton,
@@ -41,7 +43,7 @@ export function getWidgets(parent, key = 0, dbName = "") {
             return (
                 <Box
                     key={name}
-                    sx={{ flexGrow: 1, justifyContent: "space-evenly" }}
+                    sx={{ flexGrow: 1, justifyContent: "space-evenly", height: "100%" }}
                     display="grid"
                     gridTemplateColumns="repeat(auto-fill, 1fr)"
                     gap={2}
@@ -56,7 +58,7 @@ export function getWidgets(parent, key = 0, dbName = "") {
             <Stack
                 key={name}
                 direction={className === "QHBoxLayout" ? "row" : "column"}
-                sx={{ width: "auto", justifyContent: "space-around" }}
+                sx={{ width: "auto", justifyContent: "space-around", height: "100%" }}
                 gap={2}
             >
                 {items}
@@ -83,6 +85,8 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     key={name}
                     name={name}
                     interval={interval}
+                    orientation={properties.orientation}
+                    size={properties.size}
                     min={min}
                     max={max}
                     position={0}
@@ -92,34 +96,49 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 />
             );
         case "QTableWidget":
-            let columnName = []; // name of each column
-            let rowName = []; // name of each row
-            let tableInfo = {}; // dictionary of each row (key) with its data (value)
+            let columnName = []  // name of each column
+            let rowData = new OrderedDict(); // array of dicts that hold {column: value}
+            let columnDefs = [{ field: "rowNames", headerName: "", editable: false }]; // name of columns {field: value}
+            let defaultRow = {}; // holds {column names : ""}
 
             object.column.map((column) => {
-                columnName.push(column["property"].string);
+                var headerName = column["property"].string;
+                var field = headerName.replace(/\s/g, '').toLowerCase()
+                columnDefs.push({
+                    field: field,
+                    headerName: headerName,
+                    editable: true
+                });
+
+                columnName.push( column["property"].string );
+
+                defaultRow[column["property"].string] = "";
             });
-            object.row.map((row) => {
-                rowName.push(row["property"].string);
+
+            object.row.map((row, index) => {
+                rowData.set(index, {"id": index+1 , "rowNames": row["property"].string, ...defaultRow})
             });
-            let curRow = null;
-            object.item.map((tableData, i) => {
-                if (curRow == tableData["@_row"]) {
-                    tableInfo[rowName[curRow]].push(
-                        tableData["property"].string
-                    );
-                } else {
-                    curRow = tableData["@_row"];
-                    tableInfo[rowName[curRow]] = [tableData["property"].string];
-                }
-            });
+
+            if (object.item) {
+                object.item.map((tableData, i) => {
+                    let curRow = tableData["@_row"];
+                    let curCol = columnName[tableData["@_column"]];
+                    let value = tableData.property["string"];
+                    console.log(curRow, curCol, value);
+                    rowData.get(curRow)[curCol] = value;
+                });
+            }
+
+            console.log(name);
+            console.log(columnDefs);
+            console.log(rowData);
 
             return (
                 <MyTable
                     key={name}
                     name={name}
-                    columns={columnName}
-                    data={tableInfo}
+                    columnDefs = {columnDefs}
+                    rowData = {rowData.values()}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -247,6 +266,9 @@ function parseProperties(properties) {
             case "geometry":
                 obj[key] = property.rect;
                 break;
+            case "maximumSize":
+                obj[key] = property.size;
+                break;
             case "checkable":
             case "checked":
             case "readOnly":
@@ -265,7 +287,12 @@ function parseProperties(properties) {
                 obj[key] = property.number;
                 break;
             case "orientation":
-                obj[key] = property.enum;
+                if (property.enum == "Qt::Horizontal"){
+                    obj[key] = "horizontal";
+                }
+                else{
+                    obj[key] = "vertical";
+                }
                 break;
             default:
                 console.log("New property type: " + key);
@@ -313,8 +340,8 @@ function parseGridItems(items) {
             <Box
                 gridColumn={`${col} / span ${colSpan}`}
                 gridRow={`${row} / span ${rowSpan}`}
-                sx={{ margin: "auto" }}
                 key={name}
+                sx={{ margin: "auto", height: "100%" }}
             >
                 {getWidgets(item, key)}
             </Box>

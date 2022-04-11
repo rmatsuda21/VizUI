@@ -14,6 +14,32 @@ function MySlider(props) {
         margin: "10px 5px 0px 5px",
     };
 
+    // console.log(props.orientation)
+    props.orientation == 'vertical' 
+        ? sliderStyle = Object.assign(sliderStyle, {height: "calc(100% - 60px)", minHeight: "150px"}) 
+        : "";
+
+    let boxStyle = {
+        height: "calc(100% - 60px)",
+        display: "flex",
+        alignItems: "center"
+    }
+    props.orientation === "vertical" 
+        ? boxStyle = Object.assign(boxStyle, {flexDirection: "row" })
+        : boxStyle = Object.assign(boxStyle, {flexDirection: "column" }); 
+    console.log(boxStyle);
+
+    async function handleChangeCommit() {
+        const body = { data: value };
+        await fetch(`http://localhost:3001/testwrite/${test}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
+    }
+
     function handleOnChange(e) {
         setValue(e.target.value);
         onSubmit();
@@ -33,9 +59,12 @@ function MySlider(props) {
         <>
             {/* props.geometry contains props.geometry.x, y, width, and height */}
             {/* style = {{position: "absolute", left: props.geometry.x, top: props.geometry.y}} */}
-            <Box id="wrapper">
-                <Typography variant="h6" sx={{ textAlign: "center" }}>
-                    {props.name} {value}
+            <Box id="wrapper" sx={boxStyle}>
+                <Typography
+                    variant="h6"
+                    sx={{ textAlign: "center" }}
+                >
+                    {props.name} <br /> {value}
                 </Typography>
                 <Slider
                     aria-label={props.name}
