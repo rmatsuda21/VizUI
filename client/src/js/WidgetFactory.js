@@ -18,6 +18,7 @@ var curButtonInfo = {
     name: null,
     buttons: [],
 };
+
 // Get child widgets from parent
 // If parent.layout exists, then it has a layout
 export function getWidgets(parent, key = 0, dbName = "") {
