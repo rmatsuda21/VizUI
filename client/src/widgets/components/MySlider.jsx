@@ -18,21 +18,13 @@ function MySlider(props) {
     };
 
     function handleOnChange(e) {
-        // console.log(e.target.value)
         setValue(e.target.value);
-        widgetVal[props.name] = value;
     }
 
     function handleOnChangeCommitted() {
         const slider = {appId: appId, data: value, name: props.name}
-        console.log(slider)
         socket.emit("widget", slider);
     }
-
-//     async function handleOnChangeCommitted() {
-//       socket.emit("updateSliderValue", value);
-//       console.log("socket emit: updated slider val to ", value)
-//   }
 
     return (
         <>
@@ -52,7 +44,6 @@ function MySlider(props) {
                     min={props.min}
                     max={props.max}
                     orientation={props.orientation}
-                    // defaultValue={widgetVal[props.name] ? widgetVal[props.name] : 50}
                     step={props.interval}
                     valueLabelDisplay="auto"
                     marks={props.marks}
