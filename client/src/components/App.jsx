@@ -4,6 +4,7 @@ import Edit from "../components/Edit";
 
 import { Route, Routes, useRoutes, BrowserRouter } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
+
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -83,12 +84,8 @@ function App() {
                 console.log(e);
                 setApps([]);
             });
-
-        return () => {
-            socket.close();
-        };
     }, []);
-
+    
     return (
         <ThemeProvider theme={theme}>
             <SnackbarProvider maxSnack={5}>
