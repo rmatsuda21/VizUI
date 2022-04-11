@@ -54,7 +54,7 @@ router.post("/convert", upload.single("uiFile"), async (req, res) => {
 });
 
 router.post("/update/:id", async (req, res) => {
-    const data = req.body.data;
+    const data = req.body;
     console.log(data);
 
     try {
@@ -65,6 +65,7 @@ router.post("/update/:id", async (req, res) => {
 
         res.status(200).send("Wrote!");
     } catch (e) {
+        console.log("oh no")
         res.status(400).send(e);
     }
 });

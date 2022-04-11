@@ -9,11 +9,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { getEditWidgets } from "../js/EditWidgetFactory";
+import { saveWidgets } from "../js/SaveWidgetFactory";
 import { SelectWidget } from "../js/SelectWidgetContext";
 import CssTextField from "../mui-styled/CssTextField";
 import { TabContextProvider } from "../widgets/contexts/TabContext";
 
 import { useSnackbar } from "notistack";
+
+import {updateJSON} from "../js/api/index";
 
 const propertyList = {};
 
@@ -81,9 +84,9 @@ export function EditView(props) {
         );
     };
 
-    const WidgetForm = (props) => {
-        if (!props.properties) return [];
-        const keys = Object.keys(props.properties);
+    const WidgetForm = (p) => {
+        if (!p.properties) return [];
+        const keys = Object.keys(p.properties);
         return (
             <Box
                 component={"form"}
@@ -122,6 +125,25 @@ export function EditView(props) {
                         }
                     }
                     console.log(propertyList);
+
+                    const newJson = {...data};
+                    saveWidgets(newJson.ui.widget, propertyList)
+                    console.log(newJson);
+                    console.log(props.id);
+
+                    updateJSON(newJson, props.id);
+
+                    // var xhr = new XMLHttpRequest();
+                    // xhr.open(this.method, this.action, true);
+                    // xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
+
+                    // // send the collected data as JSON
+                    // xhr.send(JSON.stringify(newJson));
+
+                    // xhr.onloadend = function () {
+                    //     // done
+                    //     console.log("sent")
+                    // };
                 }}
                 sx={{
                     display: "flex",
@@ -132,7 +154,7 @@ export function EditView(props) {
                 }}
             >
                 {keys.map((key, indx) => {
-                    return getProperties(props.properties[key], indx, key);
+                    return getProperties(p.properties[key], indx, key);
                 })}
                 <Button
                     variant="contained"
