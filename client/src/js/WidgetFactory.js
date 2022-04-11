@@ -393,8 +393,8 @@ function parseTabs(tabs, tabWidgetName) {
     let parsedTabs = [];
     let tabNames = [];
     tabs.forEach((tab, index) => {
-        let tabContents = tab
-            ? getWidgets(tab, 0, "", null)
+        let tabContents = tab.widget
+            ? getWidgets(tab.widget, 0, "", null)
             : null;
         parsedTabs.push(
             <MyTab
