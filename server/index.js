@@ -14,33 +14,44 @@ const apiRouter = require("./src/routes/api.route");
 require("dotenv").config();
 require("./src/config/cleanup.config");
 
-//const db = new PouchDB('database/test')
-
-/*
-db.changes({
-    since: 'now',
-    live: true,
-    include_docs: true
-  }).on('change', function(change) {
-        io.sockets.emit("change", change)
-  }) 
-*/
 
 io.on("connection", socket => {
     console.log("Socket connected")
 
-    /*
-    socket.on("update", update => {
-        update._id = new Date().toISOString()
+    socket.on("widget", update => {
+        const db = new PouchDB(`database/${update.appId}`)
 
-        db.put(update, (err, result) => {
-            if (err) console.log(err)
-            else console.log(result)
-        })
+        widget = {
+            _id: update.name,
+            data: update.data
+        }
+
+        db.get(update.name).then(function (doc) {
+
+            widget._rev = doc._rev
+            db.put(widget)
+
+        }).catch(function (err) {
+
+            if (err.status == 404) db.put(widget)
+            else console.log(err)
+
+        });
     })
-    */
-   
-    socket.on("updateSliderValue", value => console.log(value))
+
+    socket.on("loadWidgets", appId => {
+        const db = new PouchDB(`database/${appId}`)
+
+        db.allDocs({
+            include_docs: true,
+            attachments: true
+        }).then(function (result) {
+            console.log(result)
+            socket.emit("allWidgets", result.rows)
+        }).catch(function (err) {
+            console.log(err);
+        });
+    })
 
     socket.on("disconnect", () => {
         console.log("User disconnected");
@@ -86,3 +97,40 @@ app.get("/api/get-json/:id", (req, res) => {
 server.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
+
+/*
+function mockSliderVals() {
+
+    db.allDocs({
+        include_docs: true,
+        attachments: true,
+        startkey: 'horizontalSlider',
+        endkey: 'horizontalSlider\ufff0'
+    }).then(function (result) {
+        
+        sliders = result.rows
+
+        console.log(sliders)
+
+        sliders.forEach(s => {
+            s.value = Math.floor(Math.random()*100) + 1 
+        })
+
+        console.log(sliders)
+
+        db.bulkDocs(sliders).then(function (result) {
+            
+            console.log(result)
+
+            }).catch(function (err) {
+            console.log(err);
+            });
+
+    }).catch(function (err) {
+        console.log(err);
+    });
+
+}
+
+setTimeout(mockSliderVals, 5000);
+*/

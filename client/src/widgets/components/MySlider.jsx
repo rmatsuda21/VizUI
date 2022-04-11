@@ -6,15 +6,18 @@ import { Box } from "@mui/material";
 import { useState } from "react";
 
 import { useContext } from "react";
-import WidgetContext from "../widget-context";
+import WidgetContext from "../contexts/WidgetContext";
 
 function MySlider(props) {
-    const { widgetVal, setWidgetVal, socket } = useContext(WidgetContext);
 
+    const {widgetVal, socket, appId} = useContext(WidgetContext);
     const [value, setValue] = useState(props.position);
+
     let sliderStyle = {
         margin: "10px 5px 0px 5px",
     };
+
+    console.log(widgetVal[props.name])
 
     function handleOnChange(e) {
         console.log(e.target.value)
@@ -22,8 +25,9 @@ function MySlider(props) {
     }
 
     function handleOnChangeCommitted() {
-        console.log("socket emit: updated slider val to ", value)
-        socket.emit("updateSliderValue", value);
+        const slider = {appId: appId, data: value, name: props.name}
+        console.log(slider)
+        socket.emit("widget", slider);
     }
 
     // // This function will handle the submission once the slider is released
@@ -62,7 +66,7 @@ function MySlider(props) {
                     min={props.min}
                     max={props.max}
                     orientation={props.orientation}
-                    defaultValue={props.position}
+                    defaultValue={widgetVal[props.name]}
                     step={props.interval}
                     valueLabelDisplay="auto"
                     marks={props.marks}
