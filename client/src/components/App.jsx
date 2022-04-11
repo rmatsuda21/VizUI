@@ -15,6 +15,7 @@ const socket = socketInstace;
 
 const theme = createTheme({
     palette: {
+        mode: "dark",
         type: "dark",
         primary: {
             main: "#4e62d0",
