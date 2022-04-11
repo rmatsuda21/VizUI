@@ -209,7 +209,6 @@ function Home(props) {
                 </DialogContent>
             </Dialog>
             <AppList apps={apps} deleteApp={props.deleteApp} />
-            <Button onClick={getDate}>Get Date</Button>
         </Box>
     );
 }

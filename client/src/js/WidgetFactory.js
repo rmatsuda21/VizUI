@@ -42,7 +42,7 @@ export function getWidgets(parent, key = 0, dbName = "") {
 
             return (
                 <Box
-                    key={name}
+                    key={uuidv4()}
                     sx={{ flexGrow: 1, justifyContent: "space-evenly", height: "100%" }}
                     display="grid"
                     gridTemplateColumns="repeat(auto-fill, 1fr)"
@@ -56,7 +56,7 @@ export function getWidgets(parent, key = 0, dbName = "") {
         let items = parseItems(parent.layout.item);
         return (
             <Stack
-                key={name}
+                key={uuidv4()}
                 direction={className === "QHBoxLayout" ? "row" : "column"}
                 sx={{ width: "auto", justifyContent: "space-around", height: "100%" }}
                 gap={2}
@@ -98,7 +98,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
         case "QTableWidget":
             let columnName = []  // name of each column
             let rowData = new OrderedDict(); // array of dicts that hold {column: value}
-            let columnDefs = [{ field: "rowNames", headerName: "", editable: false }]; // name of columns {field: value}
+            let columnDefs = [{ field: "rowNames", headerName: "rowID", editable: false }]; // name of columns {field: value}
             let defaultRow = {}; // holds {column names : ""}
 
             object.column.map((column) => {
@@ -162,7 +162,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
             );
         case "QRadioButton": {
             let group =
-                object.attribute.string["#text"] ||
+                object.attribute ? object.attribute.string["#text"] :
                 Math.random().toString(36).slice(2);
             let label = properties.text || name;
             return (
@@ -240,15 +240,15 @@ function widgetParser(className, name, properties, key, object, confetti) {
             let [tabs, tabNames] = parseTabs(object.widget, name);
             return (
                 <Box
-                    key={name}
+                    key={uuidv4()}
                     sx={{ display: "flex", flexDirection: "column" }}
                 >
                     <MyTabHeader
-                        key={name + "header"}
+                        key={uuidv4() + "header"}
                         name={name}
                         tabNames={tabNames}
                     />
-                    <Box key={name + "tabs"}>{tabs}</Box>
+                    <Box key={uuidv4() + "tabs"}>{tabs}</Box>
                 </Box>
             );
 
@@ -392,7 +392,9 @@ function parseTabs(tabs, tabWidgetName) {
     let parsedTabs = [];
     let tabNames = [];
     tabs.forEach((tab, index) => {
-        let tabContents = tab.widget ? getWidgets(tab.widget) : null;
+        let tabContents = tab
+            ? getWidgets(tab, 0, "", null)
+            : null;
         parsedTabs.push(
             <MyTab
                 key={`${tabWidgetName}-${index}`}
