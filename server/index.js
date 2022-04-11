@@ -14,7 +14,6 @@ const apiRouter = require("./src/routes/api.route");
 require("dotenv").config();
 require("./src/config/cleanup.config");
 
-
 io.on("connection", socket => {
     console.log("Socket connected")
 
@@ -52,6 +51,9 @@ io.on("connection", socket => {
             console.log(err);
         });
     })
+    
+    // socket.on("updateDialValue", value => console.log(value))
+    // socket.on("updateSliderValue", value => console.log(value))
 
     socket.on("disconnect", () => {
         console.log("User disconnected");
