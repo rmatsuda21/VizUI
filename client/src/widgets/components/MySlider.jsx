@@ -9,8 +9,10 @@ import { useContext } from "react";
 import WidgetContext from "../contexts/WidgetContext";
 
 function MySlider(props) {
-    const { widgetVal, setWidgetVal, socket } = useContext(WidgetContext);
+  
+    const {widgetVal, socket, appId} = useContext(WidgetContext);
     const [value, setValue] = useState(props.position);
+
     let sliderStyle = {
         margin: "10px 5px 0px 5px",
     };
@@ -20,10 +22,11 @@ function MySlider(props) {
         setValue(e.target.value);
     }
 
-    // async function handleChangeCommit() {
-    //   const mouseUpData = { data: value };
-    //   onSubmit();
-    // }
+    function handleOnChangeCommitted() {
+        const slider = {appId: appId, data: value, name: props.name}
+        console.log(slider)
+        socket.emit("widget", slider);
+    }
 
     async function handleOnChangeCommitted() {
       socket.emit("updateSliderValue", value);
@@ -47,7 +50,7 @@ function MySlider(props) {
                     min={props.min}
                     max={props.max}
                     orientation={props.orientation}
-                    defaultValue={props.position}
+                    defaultValue={widgetVal[props.name] ? widgetVal[props.name] : 50}
                     step={props.interval}
                     valueLabelDisplay="auto"
                     marks={props.marks}
