@@ -143,20 +143,20 @@ function Home(props) {
     const [fileName, setFileName] = useState("");
     const [dialogOpen, setDialogOpen] = useState(false);
 
-    useEffect(() => {
-        props.socket.on("date", (date) => {
-            console.log(date);
-        });
+    // useEffect(() => {
+    //     props.socket.on("date", (date) => {
+    //         console.log(date);
+    //     });
 
-        return () => {
-            props.socket.close();
-        };
-    }, []);
+    //     return () => {
+    //         props.socket.close();
+    //     };
+    // }, []);
 
-    const getDate = (e) => {
-        e.preventDefault();
-        props.socket.emit("date");
-    };
+    // const getDate = (e) => {
+    //     e.preventDefault();
+    //     props.socket.emit("date");
+    // };
 
     const handleFileInput = (e) => {
         e.preventDefault();
