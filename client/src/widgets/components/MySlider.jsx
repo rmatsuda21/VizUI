@@ -5,28 +5,26 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { useState } from "react";
 
+import { useContext } from "react";
+import WidgetContext from "../widget-context";
+
 function MySlider(props) {
+    const { widgetVal, setWidgetVal, socket } = useContext(WidgetContext);
+
     const [value, setValue] = useState(props.position);
     let sliderStyle = {
         margin: "10px 5px 0px 5px",
     };
 
     function handleOnChange(e) {
+        console.log(e.target.value)
         setValue(e.target.value);
-        onSubmit();
-
     }
 
-    // async function handleChangeCommit() {
-    //   const mouseUpData = { data: value };
-    //   onSubmit();
-    // }
-
-    async function onSubmit() {
-      const socket = io();
-      socket.emit("updateSliderValue", value);
-      console.log("socket emit: updated slider val to ", value)
-  }
+    function handleOnChangeCommitted() {
+        console.log("socket emit: updated slider val to ", value)
+        socket.emit("updateSliderValue", value);
+    }
 
     return (
         <>
@@ -49,8 +47,8 @@ function MySlider(props) {
                     step={props.interval}
                     valueLabelDisplay="auto"
                     marks={props.marks}
-                    // onChange={handleOnChange}
-                    onChangeCommitted={handleOnChange}
+                    onChange={handleOnChange}
+                    onChangeCommitted={handleOnChangeCommitted}
                     sx={{
                         "& .MuiSlider-track": {
                             border: "none",
