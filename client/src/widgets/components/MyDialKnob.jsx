@@ -4,10 +4,11 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { HighContrast } from "react-dial-knob";
 import { useTheme } from "@mui/styles";
+import socketInstace from "../../js/SocketProvider";
 
+const socket = socketInstace;
 import { useContext } from "react";
 import WidgetContext from "../contexts/WidgetContext";
-
 
 function MyDialKnob(props) {
     const {widgetVal, socket, appId} = useContext(WidgetContext);
@@ -58,13 +59,12 @@ function MyDialKnob(props) {
                     step={1}
                     value={value}
                     theme={{
-                        defaultColor: theme.palette.primary.dark,
-                        activeColor: theme.palette.primary.main,
+                        defaultColor: theme.palette.primary.main,
+                        activeColor: theme.palette.primary.light,
                     }}
                     style={{
+                        ...props.sx,
                         position: "relative",
-                        margin: "100px auto",
-                        width: "200px",
                     }}
                     onValueChange={setValue}
                     onInteractionChange={() => {

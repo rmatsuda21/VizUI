@@ -4,6 +4,9 @@ import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { useState } from "react";
+import socketInstace from "../../js/SocketProvider";
+
+const socket = socketInstace;
 
 import { useContext } from "react";
 import WidgetContext from "../contexts/WidgetContext";
@@ -16,6 +19,32 @@ function MySlider(props) {
     let sliderStyle = {
         margin: "10px 5px 0px 5px",
     };
+
+    // console.log(props.orientation)
+    props.orientation == 'vertical' 
+        ? sliderStyle = Object.assign(sliderStyle, {height: "calc(100% - 60px)", minHeight: "150px"}) 
+        : "";
+
+    let boxStyle = {
+        height: "calc(100% - 60px)",
+        display: "flex",
+        alignItems: "center"
+    }
+    props.orientation === "vertical" 
+        ? boxStyle = Object.assign(boxStyle, {flexDirection: "row" })
+        : boxStyle = Object.assign(boxStyle, {flexDirection: "column" }); 
+    // console.log(boxStyle);
+
+    async function handleChangeCommit() {
+        const body = { data: value };
+        await fetch(`http://localhost:3001/testwrite/${test}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body),
+        });
+    }
 
     function handleOnChange(e) {
         setValue(e.target.value);
@@ -30,13 +59,12 @@ function MySlider(props) {
         <>
             {/* props.geometry contains props.geometry.x, y, width, and height */}
             {/* style = {{position: "absolute", left: props.geometry.x, top: props.geometry.y}} */}
-            <Box id="wrapper">
+            <Box id="wrapper" sx={boxStyle}>
                 <Typography
                     variant="h6"
                     sx={{ textAlign: "center" }}
                 >
-                    
-                    {props.name}
+                    {props.name} <br /> {value}
                 </Typography>
                 <Slider
                     aria-label={props.name}
@@ -52,6 +80,7 @@ function MySlider(props) {
                     defaultValue={widgetVal[props.name] ? widgetVal[props.name] : 50}
 
                     sx={{
+                        ...props.sx,
                         "& .MuiSlider-track": {
                             border: "none",
                         },

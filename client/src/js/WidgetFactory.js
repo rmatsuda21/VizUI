@@ -1,5 +1,8 @@
-import { Stack } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import React from "react";
+import { uuid } from "uuidv4";
+import OrderedDict from 'js-ordered-dict';
 // import { SetTabContextValue, GetTabContextValue } from "../widgets/contexts/TabContext";
 import {
     MyButton,
@@ -19,6 +22,8 @@ var curButtonInfo = {
     buttons: [],
 };
 
+import { v4 as uuidv4 } from "uuid";
+
 // Get child widgets from parent
 // If parent.layout exists, then it has a layout
 export function getWidgets(parent, key = 0, dbName = "") {
@@ -37,8 +42,8 @@ export function getWidgets(parent, key = 0, dbName = "") {
 
             return (
                 <Box
-                    key={key}
-                    sx={{ flexGrow: 1, justifyContent: "space-evenly" }}
+                    key={uuidv4()}
+                    sx={{ flexGrow: 1, justifyContent: "space-evenly", height: "100%" }}
                     display="grid"
                     gridTemplateColumns="repeat(auto-fill, 1fr)"
                     gap={2}
@@ -51,20 +56,21 @@ export function getWidgets(parent, key = 0, dbName = "") {
         let items = parseItems(parent.layout.item);
         return (
             <Stack
-                key={key}
+                key={uuidv4()}
                 direction={className === "QHBoxLayout" ? "row" : "column"}
-                sx={{ width: "auto", justifyContent: "space-around" }}
+                sx={{ width: "auto", justifyContent: "space-around", height: "100%" }}
                 gap={2}
             >
                 {items}
             </Stack>
         );
     }
+    console.log(parent);
 
     let widgets = parseWidgets(parent);
     if (widgets == null) return null;
 
-    return <>{widgets}</>;
+    return <React.Fragment key={uuidv4()}>{widgets}</React.Fragment>;
 }
 
 // Return JSX element from given widget data from json
@@ -76,9 +82,11 @@ function widgetParser(className, name, properties, key, object, confetti) {
             let max = properties.maximum || 100;
             return (
                 <MySlider
-                    key={key}
+                    key={name}
                     name={name}
                     interval={interval}
+                    orientation={properties.orientation}
+                    size={properties.size}
                     min={min}
                     max={max}
                     position={0}
@@ -88,34 +96,49 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 />
             );
         case "QTableWidget":
-            let columnName = []; // name of each column
-            let rowName = []; // name of each row
-            let tableInfo = {}; // dictionary of each row (key) with its data (value)
+            let columnName = []  // name of each column
+            let rowData = new OrderedDict(); // array of dicts that hold {column: value}
+            let columnDefs = [{ field: "rowNames", headerName: "rowID", editable: false }]; // name of columns {field: value}
+            let defaultRow = {}; // holds {column names : ""}
 
             object.column.map((column) => {
-                columnName.push(column["property"].string);
+                var headerName = column["property"].string;
+                var field = headerName.replace(/\s/g, '').toLowerCase()
+                columnDefs.push({
+                    field: field,
+                    headerName: headerName,
+                    editable: true
+                });
+
+                columnName.push( column["property"].string );
+
+                defaultRow[column["property"].string] = "";
             });
-            object.row.map((row) => {
-                rowName.push(row["property"].string);
+
+            object.row.map((row, index) => {
+                rowData.set(index, {"id": index+1 , "rowNames": row["property"].string, ...defaultRow})
             });
-            let curRow = null;
-            object.item.map((tableData, i) => {
-                if (curRow == tableData["@_row"]) {
-                    tableInfo[rowName[curRow]].push(
-                        tableData["property"].string
-                    );
-                } else {
-                    curRow = tableData["@_row"];
-                    tableInfo[rowName[curRow]] = [tableData["property"].string];
-                }
-            });
+
+            if (object.item) {
+                object.item.map((tableData, i) => {
+                    let curRow = tableData["@_row"];
+                    let curCol = columnName[tableData["@_column"]];
+                    let value = tableData.property["string"];
+                    console.log(curRow, curCol, value);
+                    rowData.get(curRow)[curCol] = value;
+                });
+            }
+
+            console.log(name);
+            console.log(columnDefs);
+            console.log(rowData);
 
             return (
                 <MyTable
-                    key={key}
+                    key={name}
                     name={name}
-                    columns={columnName}
-                    data={tableInfo}
+                    columnDefs = {columnDefs}
+                    rowData = {rowData.values()}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -124,12 +147,13 @@ function widgetParser(className, name, properties, key, object, confetti) {
         case "QPushButton":
             return (
                 <MyButton
-                    key={key}
+                    key={name}
                     tooltip={properties.toolTip}
                     confetti={confetti}
                     label={name}
                     name={name}
                     value={"IDK"}
+                    text={properties.text}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -138,12 +162,12 @@ function widgetParser(className, name, properties, key, object, confetti) {
             );
         case "QRadioButton": {
             let group =
-                object.attribute.string["#text"] ||
+                object.attribute ? object.attribute.string["#text"] :
                 Math.random().toString(36).slice(2);
             let label = properties.text || name;
             return (
                 <MyRadio
-                    key={key}
+                    key={name}
                     group={group}
                     name={name}
                     label={label}
@@ -166,7 +190,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
             console.log(defaultChecked);
             return (
                 <MyCheckbox
-                    key={key}
+                    key={name}
                     label={label}
                     disabled={disabled}
                     defaultChecked={defaultChecked}
@@ -180,18 +204,8 @@ function widgetParser(className, name, properties, key, object, confetti) {
             let min = properties.minimum || 0;
             let max = properties.maximum || 100;
             return (
-                // <MyDial
-                //     key={key}
-                //     name={name}
-                //     min={min}
-                //     max={max}
-                //     position={0}
-                //     geometry={
-                //         properties.geometry ? properties.geometry : undefined
-                //     }
-                // />
                 <MyDialKnob
-                    key={key}
+                    key={name}
                     name={name}
                     min={min}
                     max={max}
@@ -202,17 +216,40 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 />
             );
         }
+        case "QLabel":
+            return (
+                <Box sx={{ display: "flex", alignItems: "center"}}>
+                    <Typography variant="h6">{properties.text}</Typography>
+                </Box>
+                // <Typography
+                //     key={name}
+                //     tooltip={properties.toolTip}
+                //     confetti={confetti}
+                //     label={name}
+                //     name={name}
+                //     value={"IDK"}
+                //     geometry={
+                //         properties.geometry ? properties.geometry : undefined
+                //     }
+                //     variant={"contained"}
+                // />
+            );
         case "QTabWidget":
             // set default tab for tab context
 
             let [tabs, tabNames] = parseTabs(object.widget, name);
-            console.log(tabNames);
-            console.log(tabs);
             return (
-                <>
-                    <MyTabHeader key={key} name={name} tabNames={tabNames} />
-                    {tabs}
-                </>
+                <Box
+                    key={uuidv4()}
+                    sx={{ display: "flex", flexDirection: "column" }}
+                >
+                    <MyTabHeader
+                        key={uuidv4() + "header"}
+                        name={name}
+                        tabNames={tabNames}
+                    />
+                    <Box key={uuidv4() + "tabs"}>{tabs}</Box>
+                </Box>
             );
 
         case "QLineEdit": {
@@ -220,19 +257,17 @@ function widgetParser(className, name, properties, key, object, confetti) {
             let disabled = properties.readOnly || false;
 
             return (
-                <>
-                    <MyTextField
-                        key={key}
-                        label={name}
-                        placeholder={placeholder}
-                        disabled={disabled}
-                    />
-                </>
+                <MyTextField
+                    key={name}
+                    label={name}
+                    placeholder={placeholder}
+                    disabled={disabled}
+                />
             );
         }
 
         default:
-            return <p key={key}>{object["@_class"]}</p>;
+            return <Typography variant="p" key={name}>{object["@_class"]}</Typography>;
     }
 }
 
@@ -249,6 +284,9 @@ function parseProperties(properties) {
         switch (key) {
             case "geometry":
                 obj[key] = property.rect;
+                break;
+            case "maximumSize":
+                obj[key] = property.size;
                 break;
             case "checkable":
             case "checked":
@@ -268,7 +306,12 @@ function parseProperties(properties) {
                 obj[key] = property.number;
                 break;
             case "orientation":
-                obj[key] = property.enum;
+                if (property.enum == "Qt::Horizontal"){
+                    obj[key] = "horizontal";
+                }
+                else{
+                    obj[key] = "vertical";
+                }
                 break;
             default:
                 console.log("New property type: " + key);
@@ -297,7 +340,12 @@ function parseWidgets(parent) {
         return parseWidget(parent, Math.floor(Math.random() * 100));
     }
 
-    return parseWidget(parent.widget, Math.floor(Math.random() * 100));
+    let widgets = parent.widget;
+    if (!Array.isArray(widgets)) widgets = [widgets];
+
+    return widgets.map((widget) => {
+        return parseWidget(widget, Math.floor(Math.random() * 100));
+    });
 }
 
 // Parse items for grid
@@ -316,8 +364,8 @@ function parseGridItems(items) {
             <Box
                 gridColumn={`${col} / span ${colSpan}`}
                 gridRow={`${row} / span ${rowSpan}`}
-                sx={{ margin: "auto" }}
-                key={key}
+                key={name}
+                sx={{ margin: "auto", height: "100%" }}
             >
                 {getWidgets(item, key)}
             </Box>
@@ -344,7 +392,9 @@ function parseTabs(tabs, tabWidgetName) {
     let parsedTabs = [];
     let tabNames = [];
     tabs.forEach((tab, index) => {
-        let tabContents = tab.widget ? getWidgets(tab.widget) : null;
+        let tabContents = tab
+            ? getWidgets(tab, 0, "", null)
+            : null;
         parsedTabs.push(
             <MyTab
                 key={`${tabWidgetName}-${index}`}

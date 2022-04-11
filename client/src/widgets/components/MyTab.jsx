@@ -3,19 +3,23 @@ import { Box } from "@mui/system";
 import { TabContext } from "../contexts/TabContext";
 import connectToContext from "../contexts/ConnectContext";
 
+import { v4 as uuidv4 } from "uuid";
+
 // use memo so it reloads on prop or context change
 const MyTab = React.memo(({ props, values, setValues }) => {
     const { children, group, index, ...other } = props;
 
     return (
-        <div
+        <Box
             role="tabpanel"
-            hidden={values[group] ? values[group] !== index : index !== 0}
+            style={{ display: values[group] ? (values[group] == index ? '' : 'none') : (index == 0 ? '' : 'none') }}
+            // hidden={values[group] ? values[group] !== index : index !== 0}
             id={`simple-tabpanel-${group}-${index}`}
             aria-labelledby={`simple-tab-${group}-${index}`}
+            key={uuidv4()}
         >
             <Box sx={{ p: 3 }}>{children}</Box>
-        </div>
+        </Box>
     );
 });
 

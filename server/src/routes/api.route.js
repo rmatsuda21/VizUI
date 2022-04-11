@@ -38,11 +38,35 @@ router.post("/convert", upload.single("uiFile"), async (req, res) => {
         path = req.file.path;
     parseUIFile(path, filename, JSON_DESTINATION);
 
-    await db.connectToDB('applications');
-    await db.appendToCollection("applications", {filename, modified: new Date().toISOString(), name: req.body.appName}, true);
+    await db.connectToDB("applications");
+    await db.appendToCollection(
+        "applications",
+        {
+            filename,
+            modified: new Date().toISOString(),
+            name: req.body.appName,
+        },
+        true
+    );
     await db.closeDB();
 
     res.redirect(`/view/${filename}`);
+});
+
+router.post("/update/:id", async (req, res) => {
+    const data = req.body.data;
+    console.log(data);
+
+    try {
+        fs.writeFileSync(
+            `${JSON_DESTINATION}/${req.params.id}.json`,
+            JSON.stringify(data)
+        );
+
+        res.status(200).send("Wrote!");
+    } catch (e) {
+        res.status(400).send(e);
+    }
 });
 
 router.get("/get-json/:id", async (req, res) => {
@@ -70,13 +94,27 @@ router.get("/db/write/:data", async (req, res) => {
 });
 
 router.delete("/db/delete/:filename", async (req, res) => {
+    const filename = req.params.filename;
     try {
-        const removeRes = await db.removeFromCollection("applications", req.params.filename);
+        const removeRes = await db.removeFromCollection(
+            "applications",
+            filename
+        );
+        try {
+            fs.unlinkSync(appDir + "/uploads/JSON/" + filename + ".json");
+            fs.unlinkSync(appDir + "/uploads/UI/" + filename);
+            fs.rmSync(appDir + "/database/" + filename, {
+                recursive: true,
+                force: true,
+            });
+        } catch (e) {
+            console.log(e);
+        }
         res.status(200).send(removeRes);
-    } catch(e) {
-        res.status(400).send(e)
+    } catch (e) {
+        res.status(400).send(e);
     }
-})
+});
 
 router.get("/db/query/:dbName/:collectionName", async (req, res) => {
     try {

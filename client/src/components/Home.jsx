@@ -1,27 +1,20 @@
 // import "../stylesheets/home.css";
 import React from "react";
 
-import apis from "../js/api";
-
 import Button from "@mui/material/Button";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
-
-import { Box, boxSizing } from "@mui/system";
+import { Box } from "@mui/system";
 import { useState } from "react";
 import { useEffect } from "react";
-import axios from "axios";
 import { AppList } from "./AppList";
 import { Dialog, DialogContent } from "@mui/material";
-import BasicTable from "./TestTable";
-import BasicRowEditingGrid from "./TestTable";
-import DataGridDemo from "./TestTable";
-import CssTextField from "../mui-styled/CssTextField"
-import StartEditButtonGrid from "./TestTable";
+import CssTextField from "../mui-styled/CssTextField";
+import socketInstace from "../js/SocketProvider";
 
-const FormData = require("form-data");
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+
+const socket = socketInstace;
 
 const styles = {
     mainContainer: {
@@ -30,7 +23,7 @@ const styles = {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        paddingBlock: "10em",
+        padding: "8em 0 5em 0",
         flexDirection: "column",
         border: "3px solid white",
         boxSizing: "border-box",
@@ -82,7 +75,7 @@ const FileUploadForm = (props) => {
                     alignItems: "center",
                     gap: 3,
                     backgroundColor: "primary.light",
-                    width: '100%',
+                    width: "100%",
                     padding: 2,
                     borderRadius: 3,
                 }}
@@ -186,6 +179,7 @@ function Home(props) {
                 variant="contained"
                 size="large"
                 sx={{ fontSize: "1em", textTransform: "none" }}
+                startIcon={<AddCircleIcon />}
             >
                 Create New App
             </Button>
@@ -203,11 +197,7 @@ function Home(props) {
                     />
                 </DialogContent>
             </Dialog>
-            <AppList apps={apps} deleteApp={props.deleteApp}/>
-            {/* <Button variant="outlined" onClick={getDate}>
-                Date Please :3
-            </Button> */}
-            {/* <StartEditButtonGrid></StartEditButtonGrid> */}
+            <AppList apps={apps} deleteApp={props.deleteApp} />
         </Box>
     );
 }
