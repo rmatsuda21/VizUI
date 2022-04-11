@@ -7,9 +7,13 @@ import { useTheme } from "@mui/styles";
 import socketInstace from "../../js/SocketProvider";
 
 const socket = socketInstace;
+import { useContext } from "react";
+import WidgetContext from "../contexts/WidgetContext";
 
 function MyDialKnob(props) {
-    const [value, setValue] = useState(0);
+    const {widgetVal, socket, appId} = useContext(WidgetContext);
+
+    const [value, setValue] = useState(widgetVal[props.name] ? widgetVal[props.name] : 0);
     const [count, setCount] = React.useState(0);
 
     const theme = useTheme();
@@ -19,15 +23,23 @@ function MyDialKnob(props) {
         //if count is 0: mouseUp
         if (count == 1) {
             setCount(count - 1);
-            onSubmit();
+            // widgetVal[props.name] = value;
+            handleOnChangeCommitted();
         } else {
             setCount(count + 1);
         }
     };
 
-    async function onSubmit() {
-        socket.emit("updateDialValue", value);
+    function handleOnChangeCommitted() {
+        const dial = {appId: appId, data: value, name: props.name}
+        console.log("client side emit: ", dial)
+        socket.emit("widget", dial);
     }
+
+    // async function onSubmit() {
+    //     socket.emit("updateDialValue", value);
+    //     console.log("socket emit: updated Dial val to ", value)
+    // }
 
     return (
         <>
@@ -58,11 +70,13 @@ function MyDialKnob(props) {
                     onInteractionChange={() => {
                         countUpdate();
                     }}
+                    // value={widgetVal[props.name] ? widgetVal[props.name] : value}
+
                 >
                     <Typography variant="p">
-                        MouseEvent:{count}
+                        {/* MouseEvent:{count}
                         <br />
-                        Value:{value}
+                        Value:{value} */}
                     </Typography>
                 </HighContrast>
             </Box>

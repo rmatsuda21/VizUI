@@ -136,17 +136,6 @@ function Home(props) {
     const [fileName, setFileName] = useState("");
     const [dialogOpen, setDialogOpen] = useState(false);
 
-    useEffect(() => {
-        socket.on("date", (date) => {
-            console.log(date);
-        });
-    }, []);
-
-    const getDate = (e) => {
-        e.preventDefault();
-        socket.emit("date");
-    };
-
     const handleFileInput = (e) => {
         e.preventDefault();
         // handle validations

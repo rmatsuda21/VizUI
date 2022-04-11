@@ -8,8 +8,14 @@ import socketInstace from "../../js/SocketProvider";
 
 const socket = socketInstace;
 
+import { useContext } from "react";
+import WidgetContext from "../contexts/WidgetContext";
+
 function MySlider(props) {
+  
+    const {widgetVal, socket, appId} = useContext(WidgetContext);
     const [value, setValue] = useState(props.position);
+
     let sliderStyle = {
         margin: "10px 5px 0px 5px",
     };
@@ -42,17 +48,11 @@ function MySlider(props) {
 
     function handleOnChange(e) {
         setValue(e.target.value);
-        // onSubmit();
     }
 
-    // async function handleChangeCommit() {
-    //   const mouseUpData = { data: value };
-    //   onSubmit();
-    // }
-
-    async function onSubmit() {
-        socket.emit("updateSliderValue", value);
-        console.log("socket emit: updated slider val to ", value);
+    function handleOnChangeCommitted() {
+        const slider = {appId: appId, data: value, name: props.name}
+        socket.emit("widget", slider);
     }
 
     return (
@@ -72,12 +72,13 @@ function MySlider(props) {
                     min={props.min}
                     max={props.max}
                     orientation={props.orientation}
-                    defaultValue={props.position}
                     step={props.interval}
                     valueLabelDisplay="auto"
                     marks={props.marks}
                     onChange={handleOnChange}
-                    // onChangeCommitted={handleOnChange}
+                    onChangeCommitted={handleOnChangeCommitted}
+                    defaultValue={widgetVal[props.name] ? widgetVal[props.name] : 50}
+
                     sx={{
                         ...props.sx,
                         "& .MuiSlider-track": {

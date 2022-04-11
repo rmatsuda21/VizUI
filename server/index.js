@@ -8,30 +8,62 @@ const server = http.createServer(app);
 const io = new Server(server);
 const PORT = process.env.PORT || 3001;
 
-const db = require("./src/utils/db");
+const PouchDB = require("pouchdb");
 const apiRouter = require("./src/routes/api.route");
 
 require("dotenv").config();
 require("./src/config/cleanup.config");
 
-io.on("connection", (socket) => {
-    console.log("User connected");
-    SOCKET = socket;
+io.on("connection", socket => {
+    // console.log("Socket connected")
 
-    socket.on("date", () => {
-        console.log("GOT DATE");
-        socket.emit("date", new Date());
-    });
+    socket.on("widget", update => {
+        const db = new PouchDB(`database/${update.appId}`)
 
-    socket.on("updateDialValue", (value) => {
-        console.log('server value: ' + value);
+        widget = {
+            _id: update.name,
+            data: update.data
+        }
+
+        console.log("widget updated :", widget)
+
+
+        db.get(update.name).then(function (doc) {
+
+            widget._rev = doc._rev
+            db.put(widget)
+
+        }).catch(function (err) {
+
+            if (err.status == 404) db.put(widget)
+            else console.log(err)
+
+        });
     })
 
+    socket.on("loadWidgets", appId => {
+        const db = new PouchDB(`database/${appId}`)
+
+        db.allDocs({
+            include_docs: true,
+            attachments: true
+        }).then(function (result) {
+            console.log(result)
+            socket.emit("allWidgets", result.rows)
+        }).catch(function (err) {
+            console.log(err);
+        });
+    })
+    
+    // socket.on("updateDialValue", value => console.log(value))
+    // socket.on("updateSliderValue", value => console.log(value))
 
     socket.on("disconnect", () => {
-        console.log("User disconnected");
-    });
+        // console.log("User disconnected");
+    }); 
 });
+
+
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
@@ -42,6 +74,7 @@ app.use((req, res, next) => {
     );
     next();
 });
+
 app.use(
     express.urlencoded({
         extended: true,
@@ -59,6 +92,50 @@ app.use((err, req, res, next) => {
     return;
 });
 
+app.get("/api/get-json/:id", (req, res) => {
+    const data = require(JSON_DESTINATION + `/${req.params.id}.json`);
+
+    res.header("Content-Type", "application/json");
+    res.send(JSON.stringify(data));
+});
+
 server.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
+
+/*
+function mockSliderVals() {
+
+    db.allDocs({
+        include_docs: true,
+        attachments: true,
+        startkey: 'horizontalSlider',
+        endkey: 'horizontalSlider\ufff0'
+    }).then(function (result) {
+        
+        sliders = result.rows
+
+        console.log(sliders)
+
+        sliders.forEach(s => {
+            s.value = Math.floor(Math.random()*100) + 1 
+        })
+
+        console.log(sliders)
+
+        db.bulkDocs(sliders).then(function (result) {
+            
+            console.log(result)
+
+            }).catch(function (err) {
+            console.log(err);
+            });
+
+    }).catch(function (err) {
+        console.log(err);
+    });
+
+}
+
+setTimeout(mockSliderVals, 5000);
+*/
