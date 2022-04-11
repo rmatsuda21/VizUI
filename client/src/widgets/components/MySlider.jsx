@@ -17,8 +17,6 @@ function MySlider(props) {
         margin: "10px 5px 0px 5px",
     };
 
-    console.log(widgetVal[props.name])
-
     function handleOnChange(e) {
         console.log(e.target.value)
         setValue(e.target.value);
@@ -66,7 +64,7 @@ function MySlider(props) {
                     min={props.min}
                     max={props.max}
                     orientation={props.orientation}
-                    defaultValue={widgetVal[props.name]}
+                    defaultValue={widgetVal[props.name] ? widgetVal[props.name] : 50}
                     step={props.interval}
                     valueLabelDisplay="auto"
                     marks={props.marks}
