@@ -27,7 +27,7 @@ function MySlider(props) {
     props.orientation === "vertical" 
         ? boxStyle = Object.assign(boxStyle, {flexDirection: "row" })
         : boxStyle = Object.assign(boxStyle, {flexDirection: "column" }); 
-    console.log(boxStyle);
+    // console.log(boxStyle);
 
     async function handleChangeCommit() {
         const body = { data: value };
