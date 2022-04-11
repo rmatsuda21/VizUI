@@ -6,7 +6,7 @@ import { Box } from "@mui/system";
 
 function MyCheckbox(props) {
     console.log(props.disabled);
-    const [checked, setchecked] = React.useState(0); 
+    const [checked, setchecked] = React.useState(0);
 
     async function onSubmit() {
         // const socket = io();
@@ -15,17 +15,27 @@ function MyCheckbox(props) {
     }
 
     return (
-        <Box sx={{ display: "flex", alignItems: "center", gap: "1em" }}>
+        <Box
+            sx={{
+                ...props.sx,
+                display: "flex",
+                alignItems: "center",
+                gap: "1em",
+            }}
+        >
             <FormGroup>
                 <FormControlLabel
                     disabled={props.disabled}
-
-                    control={<Checkbox value={props.label}
-                        onChange={(e) => {
-                            //socket emit to update checked boxes
-                            onSubmit();
-                        }}
-                        defaultChecked={props.defaultChecked}/>}
+                    control={
+                        <Checkbox
+                            value={props.label}
+                            onChange={(e) => {
+                                //socket emit to update checked boxes
+                                onSubmit();
+                            }}
+                            defaultChecked={props.defaultChecked}
+                        />
+                    }
                     label={props.label}
                 />
             </FormGroup>
