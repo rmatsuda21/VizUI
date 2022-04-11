@@ -12,8 +12,8 @@ const MyTab = React.memo(({ props, values, setValues }) => {
     return (
         <Box
             role="tabpanel"
-            style={{ display: values[group] ? (values[group] == index ? '' : 'none') : (index == 0 ? '' : 'none') }}
-            // hidden={values[group] ? values[group] !== index : index !== 0}
+            // style={{ display: values[group] ? (values[group] == index ? '' : 'none') : (index == 0 ? '' : 'none') }}
+            hidden={values[group] ? values[group] !== index : index !== 0}
             id={`simple-tabpanel-${group}-${index}`}
             aria-labelledby={`simple-tab-${group}-${index}`}
             key={uuidv4()}

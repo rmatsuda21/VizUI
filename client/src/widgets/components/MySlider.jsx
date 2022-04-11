@@ -54,6 +54,11 @@ function MySlider(props) {
         const slider = {appId: appId, data: value, name: props.name}
         socket.emit("widget", slider);
     }
+    console.log("me here")
+    console.log(widgetVal);
+    // console.log(widgetVal[props.name]);
+
+    let defaultValue = widgetVal ? (widgetVal[props.name] ? widgetVal[props.name] : 50) : 50;
 
     return (
         <>
@@ -77,7 +82,7 @@ function MySlider(props) {
                     marks={props.marks}
                     onChange={handleOnChange}
                     onChangeCommitted={handleOnChangeCommitted}
-                    defaultValue={widgetVal[props.name] ? widgetVal[props.name] : 50}
+                    defaultValue={defaultValue}
 
                     sx={{
                         ...props.sx,
