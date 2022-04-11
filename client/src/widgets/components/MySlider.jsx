@@ -18,7 +18,7 @@ function MySlider(props) {
     };
 
     function handleOnChange(e) {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         setValue(e.target.value);
     }
 
@@ -28,10 +28,10 @@ function MySlider(props) {
         socket.emit("widget", slider);
     }
 
-    async function handleOnChangeCommitted() {
-      socket.emit("updateSliderValue", value);
-      console.log("socket emit: updated slider val to ", value)
-  }
+//     async function handleOnChangeCommitted() {
+//       socket.emit("updateSliderValue", value);
+//       console.log("socket emit: updated slider val to ", value)
+//   }
 
     return (
         <>

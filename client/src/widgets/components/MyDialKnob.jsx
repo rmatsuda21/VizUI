@@ -13,7 +13,7 @@ function MyDialKnob(props) {
     const [value, setValue] = useState(0);
     const [count, setCount] = React.useState(0);
 
-    const { socket } = useContext(WidgetContext);
+    const {widgetVal, socket, appId} = useContext(WidgetContext);
 
     const theme = useTheme();
 
@@ -24,16 +24,22 @@ function MyDialKnob(props) {
         //if count is 0: mouseUp
         if (count == 1) {
             setCount(count - 1);
-            onSubmit();
+            handleOnChangeCommitted();
         } else {
             setCount(count + 1);
         }
     };
 
-    async function onSubmit() {
-        socket.emit("updateDialValue", value);
-        console.log("socket emit: updated Dial val to ", value)
+    function handleOnChangeCommitted() {
+        const dial = {appId: appId, data: value, name: props.name}
+        console.log("client side emit: ", dial)
+        socket.emit("widget", dial);
     }
+
+    // async function onSubmit() {
+    //     socket.emit("updateDialValue", value);
+    //     console.log("socket emit: updated Dial val to ", value)
+    // }
 
     return (
         <>
