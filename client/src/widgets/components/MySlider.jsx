@@ -16,6 +16,7 @@ function MySlider(props) {
     };
 
     function handleOnChange(e) {
+        console.log(e.target.value)
         setValue(e.target.value);
     }
 

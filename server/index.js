@@ -8,12 +8,13 @@ const server = http.createServer(app);
 const io = new Server(server);
 const PORT = process.env.PORT || 3001;
 
-const db = require("./src/utils/db");
+const PouchDB = require("pouchdb");
 const apiRouter = require("./src/routes/api.route");
 
 require("dotenv").config();
 require("./src/config/cleanup.config");
 
+//const db = new PouchDB('database/test')
 io.on("connection", (socket) => {
     console.log("User connected");
     // SOCKET = socket;
@@ -27,9 +28,10 @@ io.on("connection", (socket) => {
     socket.on("updateSliderValue", value => console.log(value))
 
     socket.on("disconnect", () => {
-        // console.log("User disconnected");
-    });
+        console.log("User disconnected");
+    }); 
 });
+
 
 
 app.use((req, res, next) => {
@@ -41,6 +43,7 @@ app.use((req, res, next) => {
     );
     next();
 });
+
 app.use(
     express.urlencoded({
         extended: true,
