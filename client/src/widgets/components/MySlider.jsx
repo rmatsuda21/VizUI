@@ -18,34 +18,13 @@ function MySlider(props) {
     };
 
     function handleOnChange(e) {
-        console.log(e.target.value)
         setValue(e.target.value);
     }
 
     function handleOnChangeCommitted() {
         const slider = {appId: appId, data: value, name: props.name}
-        console.log(slider)
         socket.emit("widget", slider);
     }
-
-    // // This function will handle the submission once the slider is released
-    // async function onSubmit() {
-    //     e.preventDefault();
-
-    //     // When a post request is sent to the create url, we'll add a new record to the database.
-    //     const newPosition = { data: value };
-
-    //     await fetch(`/dbwrite/${props.dbName}/${props.name}`, {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(newPosition),
-    //     }).catch((error) => {
-    //         window.alert(error);
-    //         return;
-    //     });
-    // }
 
     return (
         <>
@@ -64,7 +43,7 @@ function MySlider(props) {
                     min={props.min}
                     max={props.max}
                     orientation={props.orientation}
-                    defaultValue={widgetVal[props.name] ? widgetVal[props.name] : 50}
+                    defaultValue={widgetVal[props.name] ? widgetVal[props.name] : 0}
                     step={props.interval}
                     valueLabelDisplay="auto"
                     marks={props.marks}
