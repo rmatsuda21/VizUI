@@ -4,7 +4,7 @@ import Edit from "../components/Edit";
 
 import { Route, Routes, useRoutes, BrowserRouter } from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
-const { io } = require("socket.io-client");
+// const { io } = require("socket.io-client");
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
@@ -12,7 +12,7 @@ import { useEffect } from "react";
 
 import { SnackbarProvider } from 'notistack';
 
-const socket = io();
+// const socket = io();
 
 const theme = createTheme({
     palette: {
@@ -89,9 +89,9 @@ function App() {
                 setApps([])
             });
 
-        return () => {
-            socket.close();
-        };
+        // return () => {
+        //     socket.close();
+        // };
     }, []);
 
     return (
@@ -103,7 +103,7 @@ function App() {
                     <Route
                         exact
                         path="/"
-                        element={<Home socket={socket} apps={apps} deleteApp={deleteApp}/>}
+                        element={<Home apps={apps} deleteApp={deleteApp}/>}
                     />
                     <Route
                         exact

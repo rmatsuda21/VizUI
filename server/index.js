@@ -15,19 +15,16 @@ require("dotenv").config();
 require("./src/config/cleanup.config");
 
 io.on("connection", (socket) => {
-    // console.log("User connected");
-    SOCKET = socket;
+    console.log("User connected");
+    // SOCKET = socket;
 
-    socket.on("date", () => {
-        console.log("GOT DATE");
-        socket.emit("date", new Date());
-    });
-
-    // socket.on("updateDialValue", value => {
-    //     console.log('server value: ' + value);
+    // socket.on("date", () => {
+    //     console.log("GOT DATE");
+    //     socket.emit("date", new Date());
     // });
     
     socket.on("updateDialValue", value => console.log(value))
+    socket.on("updateSliderValue", value => console.log(value))
 
     socket.on("disconnect", () => {
         // console.log("User disconnected");
@@ -59,6 +56,13 @@ app.use((err, req, res, next) => {
     res.status(statusCode).json({ message: err.message });
 
     return;
+});
+
+app.get("/api/get-json/:id", (req, res) => {
+    const data = require(JSON_DESTINATION + `/${req.params.id}.json`);
+
+    res.header("Content-Type", "application/json");
+    res.send(JSON.stringify(data));
 });
 
 server.listen(PORT, () => {
