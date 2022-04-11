@@ -15,7 +15,7 @@ require("dotenv").config();
 require("./src/config/cleanup.config");
 
 io.on("connection", socket => {
-    console.log("Socket connected")
+    // console.log("Socket connected")
 
     socket.on("widget", update => {
         const db = new PouchDB(`database/${update.appId}`)
@@ -24,6 +24,9 @@ io.on("connection", socket => {
             _id: update.name,
             data: update.data
         }
+
+        console.log("widget updated :", widget)
+
 
         db.get(update.name).then(function (doc) {
 
@@ -56,7 +59,7 @@ io.on("connection", socket => {
     // socket.on("updateSliderValue", value => console.log(value))
 
     socket.on("disconnect", () => {
-        console.log("User disconnected");
+        // console.log("User disconnected");
     }); 
 });
 
