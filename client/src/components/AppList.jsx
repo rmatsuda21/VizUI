@@ -173,7 +173,7 @@ const AppItem = (props) => {
             <Button
                 variant="contained"
                 color={"info"}
-                sx={{ width: "75%" }}
+                sx={{ width: "75%", color: "primary.contrastText" }}
                 onClick={() => (window.location = `/edit/${data.filename}`)}
                 startIcon={<EditIcon />}
             >

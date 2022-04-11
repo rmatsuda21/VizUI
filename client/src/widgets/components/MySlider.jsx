@@ -42,7 +42,7 @@ function MySlider(props) {
 
     function handleOnChange(e) {
         setValue(e.target.value);
-        onSubmit();
+        // onSubmit();
     }
 
     // async function handleChangeCommit() {
@@ -76,8 +76,8 @@ function MySlider(props) {
                     step={props.interval}
                     valueLabelDisplay="auto"
                     marks={props.marks}
-                    // onChange={handleOnChange}
-                    onChangeCommitted={handleOnChange}
+                    onChange={handleOnChange}
+                    // onChangeCommitted={handleOnChange}
                     sx={{
                         ...props.sx,
                         "& .MuiSlider-track": {
