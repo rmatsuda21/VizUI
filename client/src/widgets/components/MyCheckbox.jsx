@@ -40,7 +40,6 @@ function MyCheckbox(props) {
                             checked={checked}
                             onChange={(e) => {
                                 //socket emit to update checked boxes
-                                //console.log(e.target.checked);
                                 setchecked(toggle)
                                 onSubmit();
                                 console.log(checked);
