@@ -191,6 +191,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
             return (
                 <MyCheckbox
                     key={name}
+                    name={name}
                     label={label}
                     disabled={disabled}
                     defaultChecked={defaultChecked}

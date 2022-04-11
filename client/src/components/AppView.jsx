@@ -12,9 +12,9 @@ function AppView(props) {
     const [widgetVal, setWidgetVal] = useState({});
     const [appName, setAppName] = useState("");
 
-    useEffect(async () => {
-        await new Promise((r) => setTimeout(r, 350));
-        await fetch(`/api/get-json/${props.id}`)
+    useEffect( () => {
+        // await new Promise((r) => setTimeout(r, 350));
+        fetch(`/api/get-json/${props.id}`)
             .then((data) => data.json())
             .then((data) => setData(data));
 
