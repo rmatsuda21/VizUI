@@ -11,22 +11,21 @@ function AppView(props) {
     const [widgetVal, setWidgetVal] = useState({})
     const [appName, setAppName] = useState("");
 
-    useEffect(async () => {
-        await fetch(`/api/get-json/${props.id}`)
+    useEffect(() => {
+        fetch(`/api/get-json/${props.id}`)
             .then((data) => data.json())
             .then((data) => setData(data));
-
+        
         socket.emit("loadWidgets", props.id)
 
         socket.on("allWidgets", widgets => {
             if (widgets.length > 0) {
                 let widgetState = {}
                 widgets.forEach(w => widgetState[w.id] = w.doc.data);
-                console.log(widgetState)
                 setWidgetVal(widgetState)
             } 
         })
-        
+
         socket.on("change", res => {
             console.log(res.doc)
             setWidgetVal(res.doc)
