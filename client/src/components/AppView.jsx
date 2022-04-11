@@ -25,7 +25,8 @@ function AppView(props) {
             setWidgetVal(res.doc)
         })
         
-    });
+    }, []
+    );
 
     let widgets = data ? getWidgets(data.ui.widget) : [];
 
