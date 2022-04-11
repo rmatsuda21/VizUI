@@ -47,7 +47,7 @@ function MyButton(props) {
                     // PostRequest();
                 }}
             >
-                {props.label}
+                {props.text}
             </Button>
             {props.tooltip === "confetti" ? (
                 <></>

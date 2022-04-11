@@ -153,13 +153,13 @@ function widgetParser(
         case "QPushButton":
             return (
                 <MyButton
-                    sx={{ pointerEvents: "none" }}
-                    key={uuidv4()}
+                    key={name}
                     tooltip={properties.toolTip}
                     confetti={confetti}
                     label={name}
                     name={name}
                     value={"IDK"}
+                    text={properties.text}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -225,7 +225,6 @@ function widgetParser(
         }
         case "QTabWidget":
             // set default tab for tab context
-
             let [tabs, tabNames] = parseTabs(object.widget, name, propertyList);
             return (
                 <Box

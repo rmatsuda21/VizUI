@@ -153,6 +153,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     label={name}
                     name={name}
                     value={"IDK"}
+                    text={properties.text}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -248,7 +249,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
         }
 
         default:
-            return <p key={name}>{object["@_class"]}</p>;
+            return <Typography variant="p" key={name}>{object["@_class"]}</Typography>;
     }
 }
 
@@ -321,7 +322,12 @@ function parseWidgets(parent) {
         return parseWidget(parent, Math.floor(Math.random() * 100));
     }
 
-    return parseWidget(parent.widget, Math.floor(Math.random() * 100));
+    let widgets = parent.widget;
+    if (!Array.isArray(widgets)) widgets = [widgets];
+
+    return widgets.map((widget) => {
+        return parseWidget(widget, Math.floor(Math.random() * 100));
+    });
 }
 
 // Parse items for grid
