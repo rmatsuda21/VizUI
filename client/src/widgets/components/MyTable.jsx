@@ -18,7 +18,7 @@ function CustomToolbar() {
       <GridToolbarColumnsButton />
       <GridToolbarFilterButton />
       <GridToolbarDensitySelector /> 
-      <GridToolbarExport />   
+      <GridToolbarExport printOptions={{ disableToolbatButton: true }}/>   
       <Tooltip title="Double-click table cell to edit" arrow>
         <IconButton
           sx={{ marginLeft: "auto" }}
