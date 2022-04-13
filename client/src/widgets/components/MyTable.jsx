@@ -10,7 +10,8 @@ import {
   GridToolbarFilterButton,
   GridToolbarExport,
   GridToolbarDensitySelector
-} from "@mui/x-data-grid";  
+} from "@mui/x-data-grid"; 
+import WidgetContext from "../contexts/WidgetContext";
 
 function CustomToolbar() {
   return (
@@ -36,8 +37,12 @@ function CustomToolbar() {
 }
 
 function MyTable(props) {
+    const {widgetVal, socket, appId} = React.useContext(WidgetContext);
+
     const columns = props.columnDefs
-    const rows = props.rowData
+
+    const updatedRows = widgetVal[props.name]
+    const rows = widgetVal[props.name] ? widgetVal[props.name] : props.rowData
 
     return (
         <div style={{ height:"100%"}}>
@@ -50,7 +55,17 @@ function MyTable(props) {
             onCellEditStop={(params, event) => {
               // use for taking values into database 
               // params holds the data of the cell that was updated
-              // should make sure that it is updated  
+              // should make sure that it is updated 
+              const update = {
+                appId: appId,
+                name: props.name,
+                data: {
+                  row: params.row,
+                  field: params.field,
+                  newValue: event.target.value
+                }
+              }
+              socket.emit("widget", update) 
             }}
             components={{
               Toolbar: CustomToolbar

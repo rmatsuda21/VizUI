@@ -5,9 +5,6 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { useState } from "react";
 import socketInstace from "../../js/SocketProvider";
-
-const socket = socketInstace;
-
 import { useContext } from "react";
 import WidgetContext from "../contexts/WidgetContext";
 
@@ -34,17 +31,6 @@ function MySlider(props) {
         ? boxStyle = Object.assign(boxStyle, {flexDirection: "row" })
         : boxStyle = Object.assign(boxStyle, {flexDirection: "column" }); 
     // console.log(boxStyle);
-
-    async function handleChangeCommit() {
-        const body = { data: value };
-        await fetch(`http://localhost:3001/testwrite/${test}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-        });
-    }
 
     function handleOnChange(e) {
         setValue(e.target.value);

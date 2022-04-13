@@ -15,7 +15,7 @@ require("dotenv").config();
 require("./src/config/cleanup.config");
 
 io.on("connection", socket => {
-    // console.log("Socket connected")
+    console.log("Socket connected")
 
     socket.on("widget", update => {
         const db = new PouchDB(`database/${update.appId}`)
@@ -25,17 +25,41 @@ io.on("connection", socket => {
             data: update.data
         }
 
-        console.log("widget updated :", widget)
-
-
         db.get(update.name).then(function (doc) {
 
             widget._rev = doc._rev
+
+            if (typeof update.data === 'object') {
+
+                let rows = doc.data
+                let newRow = true
+
+                rows.forEach(r => {
+                    if (r.id == update.data.row.id) {
+                        r[update.data.field] = update.data.newValue
+                        newRow = false
+                    }
+                });
+
+                if (newRow) rows.append(update.data.row)
+                widget.data = rows
+            }
+
+            console.log(widget)
             db.put(widget)
 
         }).catch(function (err) {
 
-            if (err.status == 404) db.put(widget)
+            if (err.status == 404) {
+
+                if (typeof update.data === 'object') {
+                    newRow = update.data.row
+                    newRow[update.data.field] = update.data.newValue
+                    widget.data = [newRow]
+                } 
+
+                db.put(widget)
+            } 
             else console.log(err)
 
         });

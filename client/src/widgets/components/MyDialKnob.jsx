@@ -4,9 +4,6 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { HighContrast } from "react-dial-knob";
 import { useTheme } from "@mui/styles";
-import socketInstace from "../../js/SocketProvider";
-
-const socket = socketInstace;
 import { useContext } from "react";
 import WidgetContext from "../contexts/WidgetContext";
 
