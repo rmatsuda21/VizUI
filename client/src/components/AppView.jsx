@@ -5,7 +5,7 @@ import WidgetContext from "../widgets/contexts/WidgetContext";
 import { RadioContextProvider } from "../widgets/contexts/RadioContext";
 import { TabContextProvider } from "../widgets/contexts/TabContext";
 
-const socket = io();
+const socket = io()
 
 function AppView(props) {
     const [data, setData] = useState(null);
@@ -29,9 +29,10 @@ function AppView(props) {
             }
         });
 
-        socket.on("change", (res) => {
-            console.log(res.doc);
-            setWidgetVal(res.doc);
+        socket.on("change", change => {
+            const widgetState = widgetVal
+            widgetState[change._id] = change.data
+            setWidgetVal(widgetState)
         });
     }, []);
 

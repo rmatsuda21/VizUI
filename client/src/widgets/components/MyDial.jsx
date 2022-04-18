@@ -3,9 +3,6 @@ import "../stylesheets/MyDial.css";
 import CircularSlider from "@fseehawer/react-circular-slider";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
-import socketInstace from "../../js/SocketProvider";
-
-const socket = socketInstace;
 
 function MyDial(props) {
     const [value, setValue] = useState(0);
@@ -15,14 +12,14 @@ function MyDial(props) {
         margin: "10px 5px 0px 5px",
     };
 
-    function updatePos(e) {
-        set.value(e.target.value);
-        onSubmit();
-    }
+    // function updatePos(e) {
+    //     set.value(e.target.value);
+    //     onSubmit();
+    // }
 
-    async function onSubmit() {
-        socket.emit("updateOldDialValue", value);
-    }
+    // async function onSubmit() {
+    //     socket.emit("updateOldDialValue", value);
+    // }
 
     // // This function will handle the submission once the slider is released
     // async function onSubmit(e) {

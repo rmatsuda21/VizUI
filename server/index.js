@@ -14,6 +14,7 @@ const apiRouter = require("./src/routes/api.route");
 require("dotenv").config();
 require("./src/config/cleanup.config");
 
+
 io.on("connection", socket => {
     console.log("Socket connected")
 
@@ -41,11 +42,10 @@ io.on("connection", socket => {
                     }
                 });
 
-                if (newRow) rows.append(update.data.row)
+                if (newRow) rows.push(update.data.row)
                 widget.data = rows
             }
 
-            console.log(widget)
             db.put(widget)
 
         }).catch(function (err) {
@@ -63,27 +63,42 @@ io.on("connection", socket => {
             else console.log(err)
 
         });
+        
+        //io.to(update.appId).emit("change", widget)
     })
 
     socket.on("loadWidgets", appId => {
+        socket.join(appId)
+        console.log(io.sockets.clients(appId))
+
         const db = new PouchDB(`database/${appId}`)
 
         db.allDocs({
             include_docs: true,
             attachments: true
         }).then(function (result) {
-            console.log(result)
             socket.emit("allWidgets", result.rows)
         }).catch(function (err) {
             console.log(err);
         });
+
+        /*
+        db.changes({
+            since: 'now',
+            live: true,
+            include_docs: true
+        }).on('change', function (change) {
+            console.log(change)
+            socket.emit("allWidgets", change)
+        }).on('error', function (err) {
+            console.log(err)
+        });
+        */
+
     })
-    
-    // socket.on("updateDialValue", value => console.log(value))
-    // socket.on("updateSliderValue", value => console.log(value))
 
     socket.on("disconnect", () => {
-        // console.log("User disconnected");
+        console.log("User disconnected");
     }); 
 });
 

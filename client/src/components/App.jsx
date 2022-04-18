@@ -10,9 +10,6 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 import { SnackbarProvider } from "notistack";
-import socketInstace from "../js/SocketProvider";
-
-const socket = socketInstace;
 
 const theme = createTheme({
     palette: {
@@ -97,7 +94,6 @@ function App() {
                             path="/"
                             element={
                                 <Home
-                                    socket={socket}
                                     apps={apps}
                                     deleteApp={deleteApp}
                                 />

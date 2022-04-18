@@ -10,11 +10,8 @@ import { useEffect } from "react";
 import { AppList } from "./AppList";
 import { Dialog, DialogContent } from "@mui/material";
 import CssTextField from "../mui-styled/CssTextField";
-import socketInstace from "../js/SocketProvider";
 
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-
-const socket = socketInstace;
 
 const styles = {
     mainContainer: {
