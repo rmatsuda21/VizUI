@@ -2,10 +2,13 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 
-
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:3000",
+    },
+});
 const PORT = process.env.PORT || 3001;
 
 const PouchDB = require("pouchdb");
@@ -14,56 +17,53 @@ const apiRouter = require("./src/routes/api.route");
 require("dotenv").config();
 require("./src/config/cleanup.config");
 
-io.on("connection", socket => {
-    // console.log("Socket connected")
+io.on("connection", (socket) => {
+    console.log("Socket connected")
 
-    socket.on("widget", update => {
-        const db = new PouchDB(`database/${update.appId}`)
+    socket.on("widget", (update) => {
+        const db = new PouchDB(`database/${update.appId}`);
 
         widget = {
             _id: update.name,
-            data: update.data
-        }
+            data: update.data,
+        };
 
-        console.log("widget updated :", widget)
+        console.log("widget updated :", widget);
 
+        db.get(update.name)
+            .then(function (doc) {
+                widget._rev = doc._rev;
+                db.put(widget);
+            })
+            .catch(function (err) {
+                if (err.status == 404) db.put(widget);
+                else console.log(err);
+            });
+    });
 
-        db.get(update.name).then(function (doc) {
-
-            widget._rev = doc._rev
-            db.put(widget)
-
-        }).catch(function (err) {
-
-            if (err.status == 404) db.put(widget)
-            else console.log(err)
-
-        });
-    })
-
-    socket.on("loadWidgets", appId => {
-        const db = new PouchDB(`database/${appId}`)
+    socket.on("loadWidgets", (appId) => {
+        const db = new PouchDB(`database/${appId}`);
 
         db.allDocs({
             include_docs: true,
-            attachments: true
-        }).then(function (result) {
-            console.log(result)
-            socket.emit("allWidgets", result.rows)
-        }).catch(function (err) {
-            console.log(err);
-        });
-    })
-    
+            attachments: true,
+        })
+            .then(function (result) {
+                console.log(result);
+                socket.emit("allWidgets", result.rows);
+            })
+            .catch(function (err) {
+                console.log(err);
+            });
+    });
+
     // socket.on("updateDialValue", value => console.log(value))
     // socket.on("updateSliderValue", value => console.log(value))
 
     socket.on("disconnect", () => {
         // console.log("User disconnected");
-    }); 
+    });
 });
-
-
 
 app.use((req, res, next) => {
     res.header("Access-Control-Allow-Origin", "*");
