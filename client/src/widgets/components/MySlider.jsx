@@ -6,12 +6,13 @@ import { Box } from "@mui/material";
 import { useState } from "react";
 import { useContext } from "react";
 import WidgetContext from "../contexts/WidgetContext";
+import socket from "../contexts/SocketProvider";
 
 function MySlider(props) {
   
-    const {widgetVal, socket, appId} = useContext(WidgetContext);
-    const [value, setValue] = useState(props.position);
-
+    const {widgetVal, appId} = useContext(WidgetContext);
+    const [value, setValue] = useState(0);
+    
     let sliderStyle = {
         margin: "10px 5px 0px 5px",
     };
@@ -37,7 +38,7 @@ function MySlider(props) {
 
     function handleOnChangeCommitted() {
         const slider = {appId: appId, data: value, name: props.name}
-        socket.emit("widget", slider);
+        socket.emit("widget", {w: slider, widgets: widgetVal});
     }
 
     return (
@@ -62,7 +63,7 @@ function MySlider(props) {
                     marks={props.marks}
                     onChange={handleOnChange}
                     onChangeCommitted={handleOnChangeCommitted}
-                    defaultValue={widgetVal[props.name] ? widgetVal[props.name] : 50}
+                    defaultValue={widgetVal[props.name] ? widgetVal[props.name] : 0}
 
                     sx={{
                         ...props.sx,

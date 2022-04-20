@@ -65,7 +65,7 @@ export function getWidgets(parent, key = 0, dbName = "") {
             </Stack>
         );
     }
-    console.log(parent);
+    //console.log(parent);
 
     let widgets = parseWidgets(parent);
     if (widgets == null) return null;

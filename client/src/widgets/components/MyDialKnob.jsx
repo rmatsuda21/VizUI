@@ -6,9 +6,10 @@ import { HighContrast } from "react-dial-knob";
 import { useTheme } from "@mui/styles";
 import { useContext } from "react";
 import WidgetContext from "../contexts/WidgetContext";
+import socket from "../contexts/SocketProvider";
 
 function MyDialKnob(props) {
-    const {widgetVal, socket, appId} = useContext(WidgetContext);
+    const {widgetVal, appId} = useContext(WidgetContext);
 
     const [value, setValue] = useState(widgetVal[props.name] ? widgetVal[props.name] : 0);
     const [count, setCount] = React.useState(0);
@@ -29,8 +30,8 @@ function MyDialKnob(props) {
 
     function handleOnChangeCommitted() {
         const dial = {appId: appId, data: value, name: props.name}
-        console.log("client side emit: ", dial)
-        socket.emit("widget", dial);
+        console.log(widgetVal)
+        socket.emit("widget", {w: dial, widgets: widgetVal});
     }
 
     // async function onSubmit() {
