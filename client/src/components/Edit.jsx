@@ -3,9 +3,10 @@ import JSConfetti from "js-confetti";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import apis from "../js/api";
-import { Button, CssBaseline, Typography } from "@mui/material";
+import { Button, CssBaseline, Typography, IconButton } from "@mui/material";
 import { Box } from "@mui/system";
 import { EditView } from "./EditView";
 
@@ -28,15 +29,19 @@ function View(props) {
 
     return (
         <Box sx={{ color: "white" }}>
-            <Box sx={{display: 'flex', alignItems: 'center'}}>
+            <IconButton
+                sx={{position: "fixed", margin: "0 0 0 30px", left: "0"}}
+                href="/">
+                <ArrowBackIcon></ArrowBackIcon>
+            </IconButton>
+            
             <Typography
                 variant="h3"
                 sx={{ textAlign: "center", marginBlock: "1em" }}
             >
-                {appName}
+                Editing {appName}
             </Typography>
-            <Button variant="contained" sx={{height:'2rem'}}>HERE</Button>
-            </Box>
+            {/* <Button variant="contained" sx={{height:'2rem'}}>HERE</Button> */}
             <Box
                 sx={{
                     // backgroundColor: "#102841",
