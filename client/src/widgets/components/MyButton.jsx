@@ -1,5 +1,5 @@
 import "../stylesheets/MyButton.css";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 
@@ -10,20 +10,6 @@ function MyButton(props) {
         // Dealing with name field changes to update our state
         setCount(count + 1);
     };
-
-    async function onSubmit() {
-        fetch("/test", { method: "POST" })
-            .then(function (response) {
-                if (response.ok) {
-                    console.log("Click clack");
-                    return;
-                }
-                throw new Error("Request failed.");
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    }
 
     return (
         <Box sx={{ display: "flex", alignItems: "center", gap: "1em" }}>

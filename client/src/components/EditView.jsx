@@ -29,7 +29,7 @@ export function EditView(props) {
 
     useEffect(async () => {
         await new Promise((r) => setTimeout(r, 500));
-        await fetch(`/api/get-json/${props.id}`)
+        await fetch(`http://localhost:3001/api/get-json/${props.id}`)
             .then((d) => d.json())
             .then((d) => setData(d));
     }, []);

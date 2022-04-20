@@ -49,7 +49,7 @@ const FileUploadForm = (props) => {
     return (
         <Box
             component="form"
-            action="/api/convert"
+            action="http://localhost:3001/api/convert"
             encType="multipart/form-data"
             method="post"
             sx={{

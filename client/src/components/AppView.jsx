@@ -5,19 +5,14 @@ import WidgetContext from "../widgets/contexts/WidgetContext";
 import { RadioContextProvider } from "../widgets/contexts/RadioContext";
 import { TabContextProvider } from "../widgets/contexts/TabContext";
 
-const socket = io();
+const socket = io('http://localhost:3001/');
 
 function AppView(props) {
     const [data, setData] = useState(null);
     const [widgetVal, setWidgetVal] = useState({});
     const [appName, setAppName] = useState("");
 
-    useEffect( () => {
-        // await new Promise((r) => setTimeout(r, 350));
-        fetch(`/api/get-json/${props.id}`)
-            .then((data) => data.json())
-            .then((data) => setData(data));
-
+    useEffect(async () => {
         socket.emit("loadWidgets", props.id);
 
         socket.on("allWidgets", (widgets) => {
@@ -32,6 +27,11 @@ function AppView(props) {
             console.log(res.doc);
             setWidgetVal(res.doc);
         });
+
+        await new Promise((r) => setTimeout(r, 350));
+        fetch(`http://localhost:3001/api/get-json/${props.id}`)
+            .then((data) => data.json())
+            .then((data) => setData(data));
     }, []);
 
     var widgets = data ? getWidgets(data.ui.widget, 0, "hello") : [];
