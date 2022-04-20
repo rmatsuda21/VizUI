@@ -12,6 +12,7 @@ import {
   GridToolbarDensitySelector
 } from "@mui/x-data-grid"; 
 import WidgetContext from "../contexts/WidgetContext";
+import socket from "../contexts/SocketProvider";
 
 function CustomToolbar() {
   return (
@@ -37,7 +38,7 @@ function CustomToolbar() {
 }
 
 function MyTable(props) {
-    const {widgetVal, socket, appId} = React.useContext(WidgetContext);
+    const {widgetVal, appId} = React.useContext(WidgetContext);
 
     const columns = props.columnDefs
 
@@ -55,7 +56,8 @@ function MyTable(props) {
             onCellEditStop={(params, event) => {
               // use for taking values into database 
               // params holds the data of the cell that was updated
-              // should make sure that it is updated 
+              // should make sure that it is updated
+              console.log(params) 
               const update = {
                 appId: appId,
                 name: props.name,
@@ -65,7 +67,7 @@ function MyTable(props) {
                   newValue: event.target.value
                 }
               }
-              socket.emit("widget", update) 
+              socket.emit("widget", {w: update, widgets: widgetVal}) 
             }}
             components={{
               Toolbar: CustomToolbar

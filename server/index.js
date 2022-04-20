@@ -50,9 +50,9 @@ io.on("connection", socket => {
 
             if (err.status == 404) {
 
-                if (typeof update.data === 'object') {
-                    newRow = update.data.row
-                    newRow[update.data.field] = update.data.newValue
+                if (typeof update.w.data === 'object') {
+                    newRow = update.w.data.row
+                    newRow[update.w.data.field] = update.w.data.newValue
                     widget.data = [newRow]
                 } 
 
@@ -64,6 +64,7 @@ io.on("connection", socket => {
 
         const updatedWidgets = update.widgets
         updatedWidgets[update.w.name] = widget.data
+        console.log(updatedWidgets)
         socket.broadcast.to(update.w.appId).emit("change", updatedWidgets);
     })
 
@@ -82,7 +83,7 @@ io.on("connection", socket => {
         });
 
         /* changes go undetected for some reason
-
+        
         db.changes({
             since: 'now',
             live: true,
