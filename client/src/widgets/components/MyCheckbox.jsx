@@ -20,6 +20,7 @@ function MyCheckbox(props) {
         const checkbox = {appId: appId, data: checked, name: props.name}
         console.log("client side emit: ", checkbox)
         socket.emit("widget", checkbox);
+        widgetVal[prop.name] = checked;
     }
 
     return (
