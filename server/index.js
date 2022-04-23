@@ -29,7 +29,11 @@ io.on("connection", socket => {
 
             widget._rev = doc._rev
 
+<<<<<<< HEAD
             if (typeof update.w.data === 'object') {
+=======
+            if ("field" in update.data) {
+>>>>>>> temp2
 
                 let rows = doc.data
                 let newRow = true
@@ -41,7 +45,7 @@ io.on("connection", socket => {
                     }
                 });
 
-                if (newRow) rows.push(update.w.data.row)
+                if (newRow) rows.push(update.data.row)
                 widget.data = rows
             }
 
@@ -51,11 +55,7 @@ io.on("connection", socket => {
 
             if (err.status == 404) {
 
-                if (typeof update.w.data === 'object') {
-                    newRow = update.w.data.row
-                    newRow[update.w.data.field] = update.w.data.newValue
-                    widget.data = [newRow]
-                } 
+                //console.log(widget)
 
                 db.put(widget)
             } 
@@ -100,7 +100,10 @@ io.on("connection", socket => {
         });
         */
     })
+<<<<<<< HEAD
     
+=======
+>>>>>>> temp2
 
     socket.on("disconnect", () => {
         console.log("User disconnected");

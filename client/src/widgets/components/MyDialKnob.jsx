@@ -30,8 +30,7 @@ function MyDialKnob(props) {
 
     function handleOnChangeCommitted() {
         const dial = {appId: appId, data: value, name: props.name}
-        console.log(widgetVal)
-        socket.emit("widget", {w: dial, widgets: widgetVal});
+        socket.emit("widget", dial);
     }
 
     // async function onSubmit() {
