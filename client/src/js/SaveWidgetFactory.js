@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import React from "react";
 import { uuid } from "uuidv4";
 import OrderedDict from 'js-ordered-dict';
-// import { SetTabContextValue, GetTabContextValue } from "../widgets/contexts/TabContext";
+
 import {
     MyButton,
     MyCheckbox,
@@ -26,51 +26,23 @@ import { v4 as uuidv4 } from "uuid";
 
 // Get child widgets from parent
 // If parent.layout exists, then it has a layout
-export function getWidgets(parent, key = 0, dbName = "") {
-    if (!parent) return [];
+export function saveWidgets(curJson, newProperties) {
+    if (!curJson) return [];
 
-    if (key == 0) {
-        key = Math.floor(Math.random() * 100);
-    }
     // Is Layout
-    if ("layout" in parent) {
-        let className = parent.layout["@_class"];
+    if ("layout" in curJson) {
+        let className = curJson.layout["@_class"];
 
         // Handle Grids
         if (className === "QGridLayout") {
-            let gridItems = parseGridItems(parent.layout.item);
-
-            return (
-                <Box
-                    key={uuidv4()}
-                    sx={{ flexGrow: 1, justifyContent: "space-evenly", height: "100%" }}
-                    display="grid"
-                    gridTemplateColumns="repeat(auto-fill, 1fr)"
-                    gap={2}
-                >
-                    {gridItems}
-                </Box>
-            );
+            saveGridItems(curJson.layout.item, newProperties);
         }
 
-        let items = parseItems(parent.layout.item);
-        return (
-            <Stack
-                key={uuidv4()}
-                direction={className === "QHBoxLayout" ? "row" : "column"}
-                sx={{ width: "auto", justifyContent: "space-around", height: "100%" }}
-                gap={2}
-            >
-                {items}
-            </Stack>
-        );
+        saveItems(curJson.layout.item, newProperties);
     }
-    //console.log(parent);
+    // console.log(curJson);
 
-    let widgets = parseWidgets(parent);
-    if (widgets == null) return null;
-
-    return <React.Fragment key={uuidv4()}>{widgets}</React.Fragment>;
+    saveRegularWidgets(curJson, newProperties);
 }
 
 // Return JSX element from given widget data from json
@@ -98,7 +70,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
         case "QTableWidget":
             let columnName = []  // name of each column
             let rowData = new OrderedDict(); // array of dicts that hold {column: value}
-            let columnDefs = [{ field: "rowNames", headerName: "rowID", editable: false }]; // name of columns {field: value}
+            let columnDefs = [{ field: "rowNames", headerName: "", editable: false }]; // name of columns {field: value}
             let defaultRow = {}; // holds {column names : ""}
 
             object.column.map((column) => {
@@ -125,13 +97,13 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     let curCol = columnName[tableData["@_column"]];
                     let value = tableData.property["string"];
                     console.log(curRow, curCol, value);
-                    rowData.get(curRow)[curCol] = value.toString();
+                    rowData.get(curRow)[curCol] = value;
                 });
             }
 
-            console.log(name);
-            console.log(columnDefs);
-            console.log(rowData);
+            // console.log(name);
+            // console.log(columnDefs);
+            // console.log(rowData);
 
             return (
                 <MyTable
@@ -162,7 +134,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
             );
         case "QRadioButton": {
             let group =
-                object.attribute ? object.attribute.string["#text"] :
+                object.attribute.string["#text"] ||
                 Math.random().toString(36).slice(2);
             let label = properties.text || name;
             return (
@@ -186,12 +158,11 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 disabled = !properties.checkable;
             }
             let defaultChecked = properties.checked || false;
-            console.log("defaultChecked: ");
-            console.log(defaultChecked);
+            // console.log("defaultChecked: ");
+            // console.log(defaultChecked);
             return (
                 <MyCheckbox
                     key={name}
-                    name={name}
                     label={label}
                     disabled={disabled}
                     defaultChecked={defaultChecked}
@@ -222,18 +193,6 @@ function widgetParser(className, name, properties, key, object, confetti) {
                 <Box sx={{ display: "flex", alignItems: "center"}}>
                     <Typography variant="h6">{properties.text}</Typography>
                 </Box>
-                // <Typography
-                //     key={name}
-                //     tooltip={properties.toolTip}
-                //     confetti={confetti}
-                //     label={name}
-                //     name={name}
-                //     value={"IDK"}
-                //     geometry={
-                //         properties.geometry ? properties.geometry : undefined
-                //     }
-                //     variant={"contained"}
-                // />
             );
         case "QTabWidget":
             // set default tab for tab context
@@ -241,15 +200,15 @@ function widgetParser(className, name, properties, key, object, confetti) {
             let [tabs, tabNames] = parseTabs(object.widget, name);
             return (
                 <Box
-                    key={uuidv4()}
+                    key={name}
                     sx={{ display: "flex", flexDirection: "column" }}
                 >
                     <MyTabHeader
-                        key={uuidv4() + "header"}
+                        key={name + "header"}
                         name={name}
                         tabNames={tabNames}
                     />
-                    <Box key={uuidv4() + "tabs"}>{tabs}</Box>
+                    <Box key={name + "tabs"}>{tabs}</Box>
                 </Box>
             );
 
@@ -273,45 +232,59 @@ function widgetParser(className, name, properties, key, object, confetti) {
 }
 
 // Return object of properties from json
-function parseProperties(properties) {
-    if (!properties) return {};
+function saveProperties(properties, newProperties) {
+    
+    // console.log("saving properties")
+    if (!properties) return;
+    if (!newProperties) return;
+    // console.log("saving properties actually")
 
     // single property
     if (!Array.isArray(properties)) properties = [properties];
 
-    var obj = {};
     Array.prototype.forEach.call(properties, (property) => {
+        // console.log("trying to save property")
         let key = property["@_name"];
+        if (!(key in newProperties)) {
+            console.log("key not in properties!")
+            console.log(newProperties)
+            return;
+        }
+        console.log(key)
+
         switch (key) {
-            case "geometry":
-                obj[key] = property.rect;
-                break;
             case "maximumSize":
-                obj[key] = property.size;
+                // size
+                property.size = newProperties[key];                   
                 break;
             case "checkable":
             case "checked":
             case "readOnly":
-                obj[key] = property.bool;
+                // bool
+                property.bool = newProperties[key];
                 break;
             case "windowTitle":
             case "toolTip":
             case "text":
             case "placeholderText":
-                obj[key] = property.string;
+                // string
+                property.string = newProperties[key];
                 break;
             case "singleStep":
             case "minimum":
             case "maximum":
             case "currentIndex":
-                obj[key] = property.number;
+                // number
+                console.log("setting max?")
+                property.number = newProperties[key];
                 break;
             case "orientation":
-                if (property.enum == "Qt::Horizontal"){
-                    obj[key] = "horizontal";
+                // horizontal/vertical
+                if (newProperties[key] == "horizontal"){
+                    property.enum = "Qt::Horizontal";
                 }
                 else{
-                    obj[key] = "vertical";
+                    property.enum = "Qt::Vertical";
                 }
                 break;
             default:
@@ -319,71 +292,56 @@ function parseProperties(properties) {
                 break;
         }
     });
-    return obj;
 }
 
-// Parse individual widget
-function parseWidget(widget, key = 0) {
+// Save individual widget properties
+function saveWidget(widget, properties) {
     let name = widget["@_name"];
-    let className = widget["@_class"];
-    let properties = parseProperties(widget.property);
-    let attributes = widget.attribute;
+
+    if (name in properties) {
+        saveProperties(widget.property, properties[name]);
+    }
+
+    // let className = widget["@_class"];
+    // let properties = parseProperties(widget.property);
+    // let attributes = widget.attribute;
     // let curButtonName = curButtonInfo.name;
     // let curButtons = curButtonInfo.buttons;
 
-    return widgetParser(className, name, properties, key, widget, "");
+    // return widgetParser(className, name, properties, key, widget, "");
 }
 
 // Parse widgets within widget w/ no layout
-function parseWidgets(parent) {
+function saveRegularWidgets(curJson, properties) {
     // Is single widget, not container
-    if (!("widget" in parent)) {
-        return parseWidget(parent, Math.floor(Math.random() * 100));
+    if (!("widget" in curJson)) {
+        return saveWidget(curJson, properties);
     }
 
-    let widgets = parent.widget;
+    let widgets = curJson.widget;
     if (!Array.isArray(widgets)) widgets = [widgets];
 
-    return widgets.map((widget) => {
-        return parseWidget(widget, Math.floor(Math.random() * 100));
+    widgets.forEach((widget, key) => {
+        saveWidgets(widget, properties);
     });
 }
 
-// Parse items for grid
-function parseGridItems(items) {
+// Save items for grid
+function saveGridItems(items, properties) {
     if (!Array.isArray(items)) items = [items]; // Single item
 
-    let ret = [];
     items.forEach((item, key) => {
-        const row = Number.parseInt(item["@_row"]) + 1;
-        const col = Number.parseInt(item["@_column"]) + 1;
-
-        const colSpan = "@_colspan" in item ? item["@_colspan"] : "1";
-        const rowSpan = "@_rowspan" in item ? item["@_rowspan"] : "1";
-
-        ret.push(
-            <Box
-                gridColumn={`${col} / span ${colSpan}`}
-                gridRow={`${row} / span ${rowSpan}`}
-                key={name}
-                sx={{ margin: "auto", height: "100%" }}
-            >
-                {getWidgets(item, key)}
-            </Box>
-        );
+        saveWidgets(item, properties);
     });
-    return ret;
 }
 
 // Parse items in containers
-function parseItems(items) {
+function saveItems(items, properties) {
     if (!Array.isArray(items)) items = [items]; // Single item
 
-    let ret = [];
     items.forEach((item, key) => {
-        ret.push(getWidgets(item));
+        saveWidgets(item, properties);
     });
-    return ret;
 }
 
 // Parse tabs in containers
@@ -393,9 +351,7 @@ function parseTabs(tabs, tabWidgetName) {
     let parsedTabs = [];
     let tabNames = [];
     tabs.forEach((tab, index) => {
-        let tabContents = tab.widget
-            ? getWidgets(tab.widget, 0, "", null)
-            : null;
+        let tabContents = tab.widget ? saveWidgets(tab.widget) : null;
         parsedTabs.push(
             <MyTab
                 key={`${tabWidgetName}-${index}`}

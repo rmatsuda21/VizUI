@@ -11,7 +11,7 @@ import socket from "../contexts/SocketProvider";
 function MyDialKnob(props) {
     const {widgetVal, appId} = useContext(WidgetContext);
 
-    const [value, setValue] = useState(widgetVal[props.name] ? widgetVal[props.name] : 0);
+    const [value, setValue] = useState( widgetVal ? (widgetVal[props.name] ? widgetVal[props.name] : 0) : 0);
     const [count, setCount] = React.useState(0);
 
     const theme = useTheme();

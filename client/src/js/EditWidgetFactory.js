@@ -19,6 +19,7 @@ var curButtonInfo = {
     buttons: [],
 };
 
+import OrderedDict from 'js-ordered-dict';
 import { v4 as uuidv4 } from "uuid";
 import React, { useContext } from "react";
 import { SelectWidget } from "./SelectWidgetContext";
@@ -107,6 +108,8 @@ function widgetParser(
                     key={uuidv4()}
                     name={name}
                     interval={interval}
+                    orientation={properties.orientation}
+                    size={properties.size}
                     min={min}
                     max={max}
                     position={0}
@@ -116,35 +119,46 @@ function widgetParser(
                 />
             );
         case "QTableWidget":
-            let columnName = []; // name of each column
-            let rowName = []; // name of each row
-            let tableInfo = {}; // dictionary of each row (key) with its data (value)
+            let columnName = []  // name of each column
+            let rowData = new OrderedDict(); // array of dicts that hold {column: value}
+            let columnDefs = [{ field: "rowNames", headerName: "", editable: false }]; // name of columns {field: value}
+            let defaultRow = {}; // holds {column names : ""}
 
             object.column.map((column) => {
-                columnName.push(column["property"].string);
+                var headerName = column["property"].string;
+                var field = headerName.replace(/\s/g, '').toLowerCase()
+                columnDefs.push({
+                    field: field,
+                    headerName: headerName,
+                    editable: true
+                });
+
+                columnName.push( column["property"].string );
+
+                defaultRow[column["property"].string] = "";
             });
-            object.row.map((row) => {
-                rowName.push(row["property"].string);
+
+            object.row.map((row, index) => {
+                rowData.set(index, {"id": index+1 , "rowNames": row["property"].string, ...defaultRow})
             });
-            let curRow = null;
-            object.item.map((tableData, i) => {
-                if (curRow == tableData["@_row"]) {
-                    tableInfo[rowName[curRow]].push(
-                        tableData["property"].string
-                    );
-                } else {
-                    curRow = tableData["@_row"];
-                    tableInfo[rowName[curRow]] = [tableData["property"].string];
-                }
-            });
+
+            if (object.item) {
+                object.item.map((tableData, i) => {
+                    let curRow = tableData["@_row"];
+                    let curCol = columnName[tableData["@_column"]];
+                    let value = tableData.property["string"];
+                    console.log(curRow, curCol, value);
+                    rowData.get(curRow)[curCol] = value;
+                });
+            }
 
             return (
                 <MyTable
                     sx={{ pointerEvents: "none" }}
                     key={uuidv4()}
                     name={name}
-                    columns={columnName}
-                    data={tableInfo}
+                    columnDefs={columnDefs}
+                    rowData = {rowData.values()}
                     geometry={
                         properties.geometry ? properties.geometry : undefined
                     }
@@ -291,7 +305,12 @@ function parseProperties(properties) {
                 obj[key] = property.number;
                 break;
             case "orientation":
-                obj[key] = property.enum;
+                if (property.enum == "Qt::Horizontal"){
+                    obj[key] = "horizontal";
+                }
+                else{
+                    obj[key] = "vertical";
+                }
                 break;
             case "maximumSize":
                 obj[key] = property.size;
@@ -340,6 +359,7 @@ function parseWidget(widget, key = 0, propertyList) {
 const EditParent = (props) => {
     const { name, className, properties, widget, propertyList } = props;
     const [setSelectedWidget, setDrawerOpen] = useContext(SelectWidget);
+    console.log(name)
     return (
         <Box
             key={uuidv4()}
@@ -439,8 +459,8 @@ function parseTabs(tabs, tabWidgetName, propertyList) {
     let parsedTabs = [];
     let tabNames = [];
     tabs.forEach((tab, index) => {
-        let tabContents = tab
-            ? getEditWidgets(tab, 0, "", null, propertyList)
+        let tabContents = tab.widget
+            ? getEditWidgets(tab.widget, 0, "", null, propertyList)
             : null;
         parsedTabs.push(
             <MyTab

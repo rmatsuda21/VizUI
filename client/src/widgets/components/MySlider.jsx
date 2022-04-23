@@ -38,8 +38,10 @@ function MySlider(props) {
 
     function handleOnChangeCommitted() {
         const slider = {appId: appId, data: value, name: props.name}
-        socket.emit("widget", {w: slider, widgets: widgetVal});
+        socket.emit("widget", slider);
     }
+
+    let defaultValue = widgetVal ? (widgetVal[props.name] ? widgetVal[props.name] : 0) : 0;
 
     return (
         <>
@@ -63,7 +65,7 @@ function MySlider(props) {
                     marks={props.marks}
                     onChange={handleOnChange}
                     onChangeCommitted={handleOnChangeCommitted}
-                    defaultValue={widgetVal[props.name] ? widgetVal[props.name] : 0}
+                    defaultValue={defaultValue}
 
                     sx={{
                         ...props.sx,

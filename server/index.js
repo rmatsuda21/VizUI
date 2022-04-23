@@ -29,11 +29,7 @@ io.on("connection", socket => {
 
             widget._rev = doc._rev
 
-<<<<<<< HEAD
-            if (typeof update.w.data === 'object') {
-=======
             if ("field" in update.data) {
->>>>>>> temp2
 
                 let rows = doc.data
                 let newRow = true
