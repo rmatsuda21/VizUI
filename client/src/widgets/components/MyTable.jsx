@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
@@ -40,9 +40,22 @@ function MyTable(props) {
     const {widgetVal, socket, appId} = React.useContext(WidgetContext);
 
     const columns = props.columnDefs
-
-    const updatedRows = widgetVal[props.name]
     const rows = widgetVal[props.name] ? widgetVal[props.name] : props.rowData
+
+    useEffect(() => {
+      let isMounted = true; 
+      console.log(widgetVal[props.name])
+      console.log(props.rowData)
+
+      if (isMounted && !widgetVal[props.name]) {
+        
+        const table = {appId: appId, data: rows, name: props.name}
+        socket.emit("widget", table)
+      }
+
+      return () => { isMounted = false };
+    }, []);   
+    
 
     return (
         <div style={{ height:"100%"}}>
@@ -55,17 +68,19 @@ function MyTable(props) {
             onCellEditStop={(params, event) => {
               // use for taking values into database 
               // params holds the data of the cell that was updated
-              // should make sure that it is updated 
-              const update = {
-                appId: appId,
-                name: props.name,
-                data: {
-                  row: params.row,
-                  field: params.field,
-                  newValue: event.target.value
+              // should make sure that it is updated
+              if (event.target.value) {
+                const update = {
+                  appId: appId,
+                  name: props.name,
+                  data: {
+                    row: params.row,
+                    field: params.field,
+                    newValue: event.target.value
+                  }
                 }
+                socket.emit("widget", update) 
               }
-              socket.emit("widget", update) 
             }}
             components={{
               Toolbar: CustomToolbar

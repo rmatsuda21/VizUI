@@ -29,7 +29,7 @@ io.on("connection", socket => {
 
             widget._rev = doc._rev
 
-            if (typeof update.data === 'object') {
+            if ("field" in update.data) {
 
                 let rows = doc.data
                 let newRow = true
@@ -41,22 +41,17 @@ io.on("connection", socket => {
                     }
                 });
 
-                if (newRow) rows.append(update.data.row)
+                if (newRow) rows.push(update.data.row)
                 widget.data = rows
             }
 
-            console.log(widget)
             db.put(widget)
 
         }).catch(function (err) {
 
             if (err.status == 404) {
 
-                if (typeof update.data === 'object') {
-                    newRow = update.data.row
-                    newRow[update.data.field] = update.data.newValue
-                    widget.data = [newRow]
-                } 
+                //console.log(widget)
 
                 db.put(widget)
             } 
@@ -72,18 +67,14 @@ io.on("connection", socket => {
             include_docs: true,
             attachments: true
         }).then(function (result) {
-            console.log(result)
             socket.emit("allWidgets", result.rows)
         }).catch(function (err) {
             console.log(err);
         });
     })
-    
-    // socket.on("updateDialValue", value => console.log(value))
-    // socket.on("updateSliderValue", value => console.log(value))
 
     socket.on("disconnect", () => {
-        // console.log("User disconnected");
+        console.log("User disconnected");
     }); 
 });
 
