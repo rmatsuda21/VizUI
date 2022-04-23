@@ -13,39 +13,35 @@ const io = new Server(server);
 const PORT = process.env.PORT || 3001;
 
 
-
 io.on("connection", socket => {
     console.log("Socket connected")
 
     socket.on("widget", update => {
-        const db = new PouchDB(`database/${update.w.appId}`)
+        const db = new PouchDB(`database/${update.appId}`)
 
         widget = {
-            _id: update.w.name,
-            data: update.w.data
+            _id: update.name,
+            data: update.data
         }
 
-        db.get(update.w.name).then(function (doc) {
+        db.get(update.name).then(function (doc) {
 
             widget._rev = doc._rev
 
-            if ("field" in update.data) {
+            if (typeof update.data === "object" && "field" in update.data) {
 
-                let rows = doc.data
-                let newRow = true
+                const rows = doc.data
 
                 rows.forEach(r => {
-                    if (r.id == update.w.data.row.id) {
-                        r[update.w.data.field] = update.w.data.newValue
-                        newRow = false
+                    if (r.id == update.data.row.id) {
+                        r[update.data.field] = update.data.newValue
                     }
                 });
 
-                if (newRow) rows.push(update.data.row)
                 widget.data = rows
             }
 
-            db.put(widget)
+            if (!Array.isArray(update.data)) db.put(widget)
 
         }).catch(function (err) {
 
@@ -59,19 +55,19 @@ io.on("connection", socket => {
 
         });
 
+        /*
         const updatedWidgets = update.widgets
-        updatedWidgets[update.w.name] = widget.data
+        updatedWidgets[update.name] = widget.data
         console.log(updatedWidgets)
-        socket.broadcast.to(update.w.appId).emit("change", updatedWidgets);
+        socket.broadcast.to(update.appId).emit("change", updatedWidgets);
+        */
     })
 
     socket.on("loadWidgets", appId => {
-        socket.join(appId)
-        console.log(io.sockets.clients(appId))
+        // socket.join(appId)
+        // console.log(io.sockets.clients(appId))
 
         const db = new PouchDB(`database/${appId}`)
-
-        socket.join(appId)
 
         db.allDocs({
             include_docs: true,
@@ -96,10 +92,6 @@ io.on("connection", socket => {
         });
         */
     })
-<<<<<<< HEAD
-    
-=======
->>>>>>> temp2
 
     socket.on("disconnect", () => {
         console.log("User disconnected");

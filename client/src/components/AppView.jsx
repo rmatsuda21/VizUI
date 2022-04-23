@@ -22,6 +22,7 @@ function AppView(props) {
             if (widgets.length > 0) {
                 let widgetState = {};
                 widgets.forEach((w) => (widgetState[w.id] = w.doc.data));
+                console.log(widgetState)
                 setWidgetVal(widgetState);
             }
         });

@@ -9,10 +9,11 @@ import WidgetContext from "../contexts/WidgetContext";
 import socket from "../contexts/SocketProvider";
 
 function MySlider(props) {
-  
+
     const {widgetVal, appId} = useContext(WidgetContext);
-    const [value, setValue] = useState(0);
-    
+    const defaultValue = widgetVal[props.name] ? widgetVal[props.name] : 0;
+    const [value, setValue] = useState(defaultValue);
+
     let sliderStyle = {
         margin: "10px 5px 0px 5px",
     };
@@ -40,8 +41,6 @@ function MySlider(props) {
         const slider = {appId: appId, data: value, name: props.name}
         socket.emit("widget", slider);
     }
-
-    let defaultValue = widgetVal ? (widgetVal[props.name] ? widgetVal[props.name] : 0) : 0;
 
     return (
         <>

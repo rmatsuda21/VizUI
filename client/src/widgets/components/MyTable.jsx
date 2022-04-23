@@ -44,17 +44,8 @@ function MyTable(props) {
     const rows = widgetVal[props.name] ? widgetVal[props.name] : props.rowData
 
     useEffect(() => {
-      let isMounted = true; 
-      console.log(widgetVal[props.name])
-      console.log(props.rowData)
-
-      if (isMounted && !widgetVal[props.name]) {
-        
-        const table = {appId: appId, data: rows, name: props.name}
-        socket.emit("widget", table)
-      }
-
-      return () => { isMounted = false };
+      const table = {appId: appId, data: rows, name: props.name}
+      socket.emit("widget", table)
     }, []);   
     
 
