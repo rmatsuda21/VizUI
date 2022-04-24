@@ -6,10 +6,11 @@ import { Box } from "@mui/system";
 
 import { useContext } from "react";
 import WidgetContext from "../contexts/WidgetContext";
+import socket from "../contexts/SocketProvider";
 
 function MyCheckbox(props) {
     // console.log(props.disabled);
-    const {widgetVal, socket, appId} = useContext(WidgetContext);
+    const {widgetVal, appId} = useContext(WidgetContext);
     // const [checked, setchecked] = React.useState(widgetVal ? (widgetVal[props.name] ? widgetVal[props.name] : false) : false);
     const [checked, setchecked] = React.useState(widgetVal ? !widgetVal[props.name] : true);
 
