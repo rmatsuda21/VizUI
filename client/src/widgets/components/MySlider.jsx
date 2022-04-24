@@ -4,17 +4,15 @@ import Slider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
 import { Box } from "@mui/material";
 import { useState } from "react";
-import socketInstace from "../../js/SocketProvider";
-
-const socket = socketInstace;
-
 import { useContext } from "react";
 import WidgetContext from "../contexts/WidgetContext";
+import socket from "../contexts/SocketProvider";
 
 function MySlider(props) {
-  
-    const {widgetVal, socket, appId} = useContext(WidgetContext);
-    const [value, setValue] = useState(props.position);
+
+    const {widgetVal, appId} = useContext(WidgetContext);
+    const defaultValue = widgetVal[props.name] ? widgetVal[props.name] : 0;
+    const [value, setValue] = useState(defaultValue);
 
     let sliderStyle = {
         margin: "10px 5px 0px 5px",
@@ -35,17 +33,6 @@ function MySlider(props) {
         : boxStyle = Object.assign(boxStyle, {flexDirection: "column" }); 
     // console.log(boxStyle);
 
-    async function handleChangeCommit() {
-        const body = { data: value };
-        await fetch(`http://localhost:3001/testwrite/${test}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-        });
-    }
-
     function handleOnChange(e) {
         setValue(e.target.value);
     }
@@ -54,11 +41,6 @@ function MySlider(props) {
         const slider = {appId: appId, data: value, name: props.name}
         socket.emit("widget", slider);
     }
-    console.log("me here")
-    console.log(widgetVal);
-    // console.log(widgetVal[props.name]);
-
-    let defaultValue = widgetVal ? (widgetVal[props.name] ? widgetVal[props.name] : 50) : 50;
 
     return (
         <>

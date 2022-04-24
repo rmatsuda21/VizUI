@@ -65,7 +65,7 @@ export function getWidgets(parent, key = 0, dbName = "") {
             </Stack>
         );
     }
-    console.log(parent);
+    //console.log(parent);
 
     let widgets = parseWidgets(parent);
     if (widgets == null) return null;
@@ -125,7 +125,7 @@ function widgetParser(className, name, properties, key, object, confetti) {
                     let curCol = columnName[tableData["@_column"]];
                     let value = tableData.property["string"];
                     console.log(curRow, curCol, value);
-                    rowData.get(curRow)[curCol] = value;
+                    rowData.get(curRow)[curCol] = value.toString();
                 });
             }
 

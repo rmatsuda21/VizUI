@@ -1,11 +1,9 @@
 import React, { useEffect, useState, createContext } from "react";
 import { getWidgets } from "../js/WidgetFactory";
-const { io } = require("socket.io-client");
 import WidgetContext from "../widgets/contexts/WidgetContext";
 import { RadioContextProvider } from "../widgets/contexts/RadioContext";
 import { TabContextProvider } from "../widgets/contexts/TabContext";
-
-const socket = io();
+import socket from "../widgets/contexts/SocketProvider";
 
 function AppView(props) {
     const [data, setData] = useState(null);
@@ -24,13 +22,14 @@ function AppView(props) {
             if (widgets.length > 0) {
                 let widgetState = {};
                 widgets.forEach((w) => (widgetState[w.id] = w.doc.data));
+                console.log(widgetState)
                 setWidgetVal(widgetState);
             }
         });
 
-        socket.on("change", (res) => {
-            console.log(res.doc);
-            setWidgetVal(res.doc);
+        socket.on("change", change => {
+            console.log(change)
+            setWidgetVal(change)
         });
     }, []);
 
@@ -40,7 +39,7 @@ function AppView(props) {
         <TabContextProvider>
             <RadioContextProvider>
                 <WidgetContext.Provider
-                    value={{ widgetVal, socket, appId: props.id }}
+                    value={{ widgetVal, appId: props.id }}
                 >
                     {widgets}
                 </WidgetContext.Provider>

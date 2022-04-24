@@ -1,21 +1,20 @@
 const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
-
-
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server);
-const PORT = process.env.PORT || 3001;
-
 const PouchDB = require("pouchdb");
 const apiRouter = require("./src/routes/api.route");
 
 require("dotenv").config();
 require("./src/config/cleanup.config");
 
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
+const PORT = process.env.PORT || 3001;
+
+
 io.on("connection", socket => {
-    // console.log("Socket connected")
+    console.log("Socket connected")
 
     socket.on("widget", update => {
         const db = new PouchDB(`database/${update.appId}`)
@@ -25,44 +24,79 @@ io.on("connection", socket => {
             data: update.data
         }
 
-        console.log("widget updated :", widget)
-
-
         db.get(update.name).then(function (doc) {
 
             widget._rev = doc._rev
-            db.put(widget)
+
+            if (typeof update.data === "object" && "field" in update.data) {
+
+                const rows = doc.data
+
+                rows.forEach(r => {
+                    if (r.id == update.data.row.id) {
+                        r[update.data.field] = update.data.newValue
+                    }
+                });
+
+                widget.data = rows
+            }
+
+            if (!Array.isArray(update.data)) db.put(widget)
 
         }).catch(function (err) {
 
-            if (err.status == 404) db.put(widget)
+            if (err.status == 404) {
+
+                //console.log(widget)
+
+                db.put(widget)
+            } 
             else console.log(err)
 
         });
+
+        /*
+        const updatedWidgets = update.widgets
+        updatedWidgets[update.name] = widget.data
+        console.log(updatedWidgets)
+        socket.broadcast.to(update.appId).emit("change", updatedWidgets);
+        */
     })
 
     socket.on("loadWidgets", appId => {
+        // socket.join(appId)
+        // console.log(io.sockets.clients(appId))
+
         const db = new PouchDB(`database/${appId}`)
 
         db.allDocs({
             include_docs: true,
             attachments: true
         }).then(function (result) {
-            console.log(result)
             socket.emit("allWidgets", result.rows)
         }).catch(function (err) {
             console.log(err);
         });
+
+        /* changes go undetected for some reason
+        
+        db.changes({
+            since: 'now',
+            live: true,
+            include_docs: true
+        }).on('change', function (change) {
+            console.log(change)
+            io.to(appId).emit("change", change);
+        }).on('error', function (err) {
+            console.log(err)
+        });
+        */
     })
-    
-    // socket.on("updateDialValue", value => console.log(value))
-    // socket.on("updateSliderValue", value => console.log(value))
 
     socket.on("disconnect", () => {
-        // console.log("User disconnected");
+        console.log("User disconnected");
     }); 
 });
-
 
 
 app.use((req, res, next) => {
