@@ -1,9 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {  Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import CssTextField from "../../mui-styled/CssTextField";
+import WidgetContext from "../contexts/WidgetContext";
+import socket from "../contexts/SocketProvider";
+
 
 function MyTextField(props) {
+
+    const {widgetVal, appId} = useContext(WidgetContext);
 
     return (
         <Box sx={{ display: "flex", alignItems: "center", gap: "1em" }}>
@@ -13,8 +18,12 @@ function MyTextField(props) {
                 label={props.label}
                 autoComplete="off"
                 placeholder={props.placeholder}
+                defaultValue={widgetVal[props.label] ? widgetVal[props.label] : ""}
                 disabled={props.disabled}
-                // onChange={}
+                onChange={event => {
+                    const textField = {appId: appId, data: event.target.value, name: props.label}
+                    socket.emit("widget", textField);
+                }}
             />
         </Box>
     );
