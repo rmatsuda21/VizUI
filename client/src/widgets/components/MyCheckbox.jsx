@@ -10,10 +10,11 @@ import WidgetContext from "../contexts/WidgetContext";
 function MyCheckbox(props) {
     // console.log(props.disabled);
     const {widgetVal, socket, appId} = useContext(WidgetContext);
-    const [checked, setchecked] = React.useState(widgetVal ? (widgetVal[props.name] ? widgetVal[props.name] : false) : false);
+    // const [checked, setchecked] = React.useState(widgetVal ? (widgetVal[props.name] ? widgetVal[props.name] : false) : false);
+    const [checked, setchecked] = React.useState(widgetVal ? !widgetVal[props.name] : true);
 
-    function toggle(value){
-        return !value;
+    function toggle(x){
+        return !x;
       }
 
     async function onSubmit() {
@@ -38,14 +39,15 @@ function MyCheckbox(props) {
                         <Checkbox
                             value={props.label}
                             checked={checked}
+                            
                             onChange={(e) => {
                                 //socket emit to update checked boxes
-                                setchecked(toggle)
+                                console.log("before toggle: ", checked);
+                                setchecked(toggle(checked))
                                 onSubmit();
-                                console.log(checked);
-
+                                console.log("after toggle: ",checked);
                             }}
-                            defaultChecked={widgetVal ? (widgetVal[props.name] ? widgetVal[props.name] : props.defaultChecked) : props.defaultChecked}
+                            // defaultChecked={widgetVal ? (widgetVal[props.name] ? widgetVal[props.name] : props.defaultChecked) : props.defaultChecked}
                         />
                     }
                     label={props.label}
