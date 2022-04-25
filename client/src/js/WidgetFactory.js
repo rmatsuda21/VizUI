@@ -390,11 +390,13 @@ function parseItems(items) {
 function parseTabs(tabs, tabWidgetName) {
     if (!Array.isArray(tabs)) tabs = [tabs]; // Single item
 
+    console.log('DAWDNWADLMAWLKDAW',tabs)
+
     let parsedTabs = [];
     let tabNames = [];
     tabs.forEach((tab, index) => {
-        let tabContents = tab.widget
-            ? getWidgets(tab.widget, 0, "", null)
+        let tabContents = tab
+            ? getWidgets(tab, 0, "", null)
             : null;
         parsedTabs.push(
             <MyTab

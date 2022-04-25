@@ -50,7 +50,7 @@ router.post("/convert", upload.single("uiFile"), async (req, res) => {
     );
     await db.closeDB();
 
-    res.redirect(`/view/${filename}`);
+    res.redirect(`http://localhost:3000/view/${filename}`);
 });
 
 router.post("/update/:id", async (req, res) => {

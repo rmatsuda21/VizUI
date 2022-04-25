@@ -51,7 +51,7 @@ function MySlider(props) {
                     variant="h6"
                     sx={{ textAlign: "center" }}
                 >
-                    {props.name} <br /> {value}
+                    {props.name}
                 </Typography>
                 <Slider
                     aria-label={props.name}

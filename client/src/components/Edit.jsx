@@ -1,5 +1,4 @@
 // import "../stylesheets/view.css";
-import JSConfetti from "js-confetti";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -11,8 +10,6 @@ import { Box } from "@mui/system";
 import { EditView } from "./EditView";
 
 const { Component } = require("react");
-
-const confetticanvas = new JSConfetti();
 
 function View(props) {
     const { id } = useParams();
@@ -50,7 +47,7 @@ function View(props) {
                     // padding: "3em",
                 }}
             >
-                <EditView id={id} confetti={confetticanvas} />
+                <EditView id={id} confetti={null} />
             </Box>
         </Box>
     );

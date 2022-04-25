@@ -9,15 +9,19 @@ require("./src/config/cleanup.config");
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+    cors: {
+        origin: "http://localhost:3000",
+    },
+});
 const PORT = process.env.PORT || 3001;
 
 
 io.on("connection", socket => {
     console.log("Socket connected")
 
-    socket.on("widget", update => {
-        const db = new PouchDB(`database/${update.appId}`)
+    socket.on("widget", (update) => {
+        const db = new PouchDB(`database/${update.appId}`);
 
         widget = {
             _id: update.name,
@@ -50,7 +54,7 @@ io.on("connection", socket => {
                 //console.log(widget)
 
                 db.put(widget)
-            } 
+            }
             else console.log(err)
 
         });
@@ -79,7 +83,7 @@ io.on("connection", socket => {
         });
 
         /* changes go undetected for some reason
-        
+
         db.changes({
             since: 'now',
             live: true,
@@ -95,7 +99,7 @@ io.on("connection", socket => {
 
     socket.on("disconnect", () => {
         console.log("User disconnected");
-    }); 
+    });
 });
 
 
@@ -146,19 +150,19 @@ function mockSliderVals() {
         startkey: 'horizontalSlider',
         endkey: 'horizontalSlider\ufff0'
     }).then(function (result) {
-        
+
         sliders = result.rows
 
         console.log(sliders)
 
         sliders.forEach(s => {
-            s.value = Math.floor(Math.random()*100) + 1 
+            s.value = Math.floor(Math.random()*100) + 1
         })
 
         console.log(sliders)
 
         db.bulkDocs(sliders).then(function (result) {
-            
+
             console.log(result)
 
             }).catch(function (err) {

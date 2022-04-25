@@ -459,8 +459,8 @@ function parseTabs(tabs, tabWidgetName, propertyList) {
     let parsedTabs = [];
     let tabNames = [];
     tabs.forEach((tab, index) => {
-        let tabContents = tab.widget
-            ? getEditWidgets(tab.widget, 0, "", null, propertyList)
+        let tabContents = tab
+            ? getEditWidgets(tab, 0, "", null, propertyList)
             : null;
         parsedTabs.push(
             <MyTab
