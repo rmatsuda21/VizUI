@@ -1,8 +1,12 @@
 import "@testing-library/jest-dom";
 import { render, fireEvent, screen } from "@testing-library/react";
-import { MyButton } from "../../widgets/components";
+import { MyTab } from "../../widgets/components";
 
 test("renders correctly", () => {
-    render(<MyButton text={"Test"} />);
+    render(
+        <MyTab name={"Test"}>
+            <h1>Test</h1>
+        </MyTab>
+    );
     expect(screen.getByText("Test")).toBeInTheDocument();
 });
