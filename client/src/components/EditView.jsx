@@ -16,7 +16,7 @@ import { TabContextProvider } from "../widgets/contexts/TabContext";
 
 import { useSnackbar } from "notistack";
 
-import {updateJSON} from "../js/api/index";
+import { updateJSON } from "../js/api/index";
 
 const propertyList = {};
 
@@ -87,6 +87,12 @@ export function EditView(props) {
     const WidgetForm = (p) => {
         if (!p.properties) return [];
         const keys = Object.keys(p.properties);
+        if (keys.length === 0)
+            return (
+                <Typography variant="h3" sx={{ textAlign: "center" }}>
+                    No Properties Available!
+                </Typography>
+            );
         return (
             <Box
                 component={"form"}
@@ -126,8 +132,8 @@ export function EditView(props) {
                     }
                     console.log(propertyList);
 
-                    const newJson = {...data};
-                    saveWidgets(newJson.ui.widget, propertyList)
+                    const newJson = { ...data };
+                    saveWidgets(newJson.ui.widget, propertyList);
                     console.log(newJson);
                     console.log(props.id);
 
