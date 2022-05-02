@@ -9,9 +9,10 @@ import WidgetContext from "../contexts/WidgetContext";
 import socket from "../contexts/SocketProvider";
 
 function MySlider(props) {
-
-    const {widgetVal, appId} = useContext(WidgetContext);
-    const defaultValue = widgetVal[props.name] ? widgetVal[props.name] : 0;
+    const { widgetVal, appId } = useContext(WidgetContext);
+    let defaultValue = 0;
+    if (widgetVal)
+        defaultValue = widgetVal[props.name] ? widgetVal[props.name] : 0;
     const [value, setValue] = useState(defaultValue);
 
     let sliderStyle = {
@@ -19,18 +20,21 @@ function MySlider(props) {
     };
 
     // console.log(props.orientation)
-    props.orientation == 'vertical' 
-        ? sliderStyle = Object.assign(sliderStyle, {height: "calc(100% - 60px)", minHeight: "150px"}) 
+    props.orientation == "vertical"
+        ? (sliderStyle = Object.assign(sliderStyle, {
+              height: "calc(100% - 60px)",
+              minHeight: "150px",
+          }))
         : "";
 
     let boxStyle = {
         height: "calc(100% - 60px)",
         display: "flex",
-        alignItems: "center"
-    }
-    props.orientation === "vertical" 
-        ? boxStyle = Object.assign(boxStyle, {flexDirection: "row" })
-        : boxStyle = Object.assign(boxStyle, {flexDirection: "column" }); 
+        alignItems: "center",
+    };
+    props.orientation === "vertical"
+        ? (boxStyle = Object.assign(boxStyle, { flexDirection: "row" }))
+        : (boxStyle = Object.assign(boxStyle, { flexDirection: "column" }));
     // console.log(boxStyle);
 
     function handleOnChange(e) {
@@ -38,7 +42,7 @@ function MySlider(props) {
     }
 
     function handleOnChangeCommitted() {
-        const slider = {appId: appId, data: value, name: props.name}
+        const slider = { appId: appId, data: value, name: props.name };
         socket.emit("widget", slider);
     }
 
@@ -47,10 +51,7 @@ function MySlider(props) {
             {/* props.geometry contains props.geometry.x, y, width, and height */}
             {/* style = {{position: "absolute", left: props.geometry.x, top: props.geometry.y}} */}
             <Box id="wrapper" sx={boxStyle}>
-                <Typography
-                    variant="h6"
-                    sx={{ textAlign: "center" }}
-                >
+                <Typography variant="h6" sx={{ textAlign: "center" }}>
                     {props.name}
                 </Typography>
                 <Slider
@@ -65,7 +66,6 @@ function MySlider(props) {
                     onChange={handleOnChange}
                     onChangeCommitted={handleOnChangeCommitted}
                     defaultValue={defaultValue}
-
                     sx={{
                         ...props.sx,
                         "& .MuiSlider-track": {

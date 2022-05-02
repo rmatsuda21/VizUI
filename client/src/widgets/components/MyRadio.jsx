@@ -8,17 +8,18 @@ import socket from "../contexts/SocketProvider";
 
 // use memo so it reloads on prop or context change
 const MyRadio = React.memo(({ props, values, setValues }) => {
-
-    const {widgetVal, appId} = useContext(WidgetContext);
+    const { widgetVal, appId } = useContext(WidgetContext);
 
     useEffect(() => {
-        
-        if (widgetVal[props.group]) {
-            const defaultVal = {}
-            defaultVal[props.group] =  widgetVal[props.group]
-            setValues(defaultVal)
+        if (widgetVal) {
+            if (widgetVal[props.group]) {
+                const defaultVal = {};
+                defaultVal[props.group] = widgetVal
+                    ? widgetVal[props.group]
+                    : "";
+                setValues(defaultVal);
+            }
         }
-        
     }, []);
 
     return (
@@ -28,13 +29,16 @@ const MyRadio = React.memo(({ props, values, setValues }) => {
                     ...props.sx,
                 }}
                 checked={values[props.group] === props.name}
-                onChange={event => {
-                    
+                onChange={(event) => {
                     let newValues = Object.assign({}, values);
                     newValues[props.group] = event.target.value;
                     setValues(newValues);
 
-                    const radio = {appId: appId, data: event.target.value, name: props.group}
+                    const radio = {
+                        appId: appId,
+                        data: event.target.value,
+                        name: props.group,
+                    };
                     socket.emit("widget", radio);
                 }}
                 value={props.name}
